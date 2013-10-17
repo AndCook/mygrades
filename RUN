@@ -1,0 +1,1 @@
+PYTHONPATH=/home/newalth/django-mygrades:/home/newalth/mygrades:/home/newalth/mygrades/mygrades:. python manage.py runserver 127.0.0.1:62069
