@@ -1,0 +1,6 @@
+# ignore .idea directory
+/.idea
+
+# ignore these files used by server
+manage.py
+RUN
