@@ -1,9 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>MyGrades</title>
-</head>
-<body>
-    <p>Howdy</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/home-stylesheet.css" />
+    <script src="/static/javascript/home.js"></script>
+{% endblock %}
+
+{% block base_content %}
+
+    <h1>Howdy</h1>
+
+{%  endblock %}

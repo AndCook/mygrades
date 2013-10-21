@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>My Gradebook</title>
+
+        <!-- jquery-ui stylesheet -->
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <!-- jquery library file -->
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <!-- jquery-ui library file -->
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <!-- jquery-color library file -->
+		<!--script type="text/javascript" src="/static/javascript/jquery-color.js"></script-->
+
+        <link rel="stylesheet" type="text/css" href="/static/css/base-stylesheet.css" />
+		<!--script type="text/javascript" src="/static/javascript/home-script.js"></script-->
+
+        {% block extra_head %}{% endblock %}
+	</head>
+
+	<body>
+
+        <div id="header">
+            <div id="header-wrapper">
+                <ul>
+                    <li>
+                        <a href="/home/" class="header-link">
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/report-card/" class="header-link">
+                            Report Card
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/semester-overview/" class="header-link">
+                            Semester Overview
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/course-detail/" class="header-link">
+                            Course Detail
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="middle-section">
+            <div id="main-wrapper">
+                {% block base_content %}{% endblock %}
+            </div>
+        </div>
+
+        <div id="footer">
+
+        </div>
+
+    </body>
+
+</html>
