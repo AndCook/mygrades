@@ -3,30 +3,11 @@
 {% block extra_head %}
     <link rel="stylesheet" type="text/css" href="/static/css/course-detail-stylesheet.css" />
     <script src="/static/javascript/course-detail.js"></script>
+
+    <script type="text/javascript" src="/static/javascript/jquery-tablesorter.js"></script>
 {% endblock %}
 
 {% block base_content %}
-
-    <div id="add-course-dialog-form" title="Add new course">
-		<p class="validate-tips">All form fields are required.</p>
-
-		<form>
-			<fieldset>
-				<label for="number">
-					Course Number (ex. "PSY 301" or "M 408L")
-				</label>
-				<input type="text" name="number" id="number" class="text" />
-				<label for="name">
-					Course Name (ex. "Intro to Psych" or "Integral Calculus")
-				</label>
-				<input type="text" name="name" id="name" class="text" />
-				<label for="instructor">
-					Course Instructor (ex. "John Smith" or "Dr. Lin")
-				</label>
-				<input type="text" name="instructor" id="instructor" class="text" />
-			</fieldset>
-		</form>
-	</div><!-- end add-course-dialog-form div -->
 
     <div id="add-assignment-dialog-form" title="Add new assignment">
 		<p class="validate-tips">All form fields are required.</p>
@@ -49,73 +30,79 @@
 		</form>
 	</div><!-- end add-assignment-dialog-form div -->
 
-    <div id="left">
-        <h1>{{ selected_semester }}</h1>
+    <h1>{{ selected_course.number }}: {{ selected_course.name }}</h1>
 
-        {% if courses %}
-            <ul id="sortable-courselist">
-                {% for course in courses %}
-                    <li class="course">
-                        <p>{{ course.number }}: {{ course.name }}</p>
-                        <p style="display: inline-block">{{ course.instructor }}</p>
-                        <div class="delete-edit-buttons">
+    {% if categories %}
+        <table id="categories-table" class="sortable-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Awarded Points</th>
+                    <th>Possible Points</th>
+                    <th>Percentage</th>
+                    <th>Worth</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.awardedPoints }}</td>
+                        <td>{{ category.possiblePoints }}</td>
+                        <td>{{ category.percentage }}</td>
+                        <td>{{ category.worth }} %</td>
+                        <td>
                             <img class="edit-button" src="/static/images/edit.png"/>
                             <img class="delete-button" src="/static/images/delete.png"/>
-                        </div>
-                    </li>
+                        </td>
+                    </tr>
                 {% endfor %}
-            </ul>
-        {% else %}
-            <div class="course">
-                <p>No classes added for this semester</p>
-            </div>
-        {% endif %}
+            </tbody>
+        </table>
+    {% endif %}
 
-        <div class="add-course-div">
-            <img class="add-course-button" src="/static/images/add.png"/>
-            <p style="display: inline-block">Add category for this semseter</p>
+    {% if assignments %}
+        <table id="assignments-table" class="sortable-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Awarded Points</th>
+                    <th>Possible Points</th>
+                    <th>Percentage</th>
+                    <th>Category</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assignments %}
+                    <tr>
+                        <td>{{ assignment.date }}10 / 16</td>
+                        <td>{{ assignment.name }}</td>
+                        <td>{{ assignment.awardedPoints }}</td>
+                        <td>{{ assignment.possiblePoints }}</td>
+                        <td>{{ assignment.percentage }} %</td>
+                        <td>{{ assignment.category.name }}</td>
+                        <td>
+                            <img class="edit-button" src="/static/images/edit.png"/>
+                            <img class="delete-button" src="/static/images/delete.png"/>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="add-assignment-div">
+            <img class="add-assignment-button" src="/static/images/add.png"/>
+            <p style="display: inline-block">Add assignment for this course</p>
         </div>
-    </div><!-- end left div -->
+    {% else %}
+        <div class="add-assignment-div">
+            <p style="margin-bottom: 10px">No assignments added for this category</p>
+            <img class="add-assignment-button" src="/static/images/add.png"/>
+            <p style="display: inline-block">Add assignment for this course</p>
+        </div>
+    {% endif %}
 
-    <div id="right">
-        <h1>{{ selected_course.number }}: {{ selected_course.name }}</h1>
-        {% if categories %}
-            {% for category in categories %}
-                <div class="category">
-                    <p>{{ category.name }}</p>
-                    <p style="text-align: right">{{ category.worth }} %</p>
-                </div>
-                {% if category.has_assignments %}
-                    <ul class="sortable-assignmentlist">
-                        {% for assign in category.assignments %}
-                            <li class="assignment">
-                                <p style="width: 50%">{{ assign.name }}</p>
-                                <p style="text-align: right; width: 17.5%">{{ assign.awardedPoints }} / {{ assign.possiblePoints }}</p>
-                                <p style="text-align: right; width: 17.5%">{{ assign.percentage }} %</p>
-
-                                <div class="delete-edit-buttons">
-                                    <img class="edit-button" src="/static/images/edit.png"/>
-                                    <img class="delete-button" src="/static/images/delete.png"/>
-                                </div>
-                             </li>
-                        {% endfor %}
-                    </ul>
-
-                    <div class="add-assignment-div">
-                        <img class="add-assignment-button" src="/static/images/add.png"/>
-                        <p style="display: inline-block">Add assignment for this category</p>
-                    </div>
-                {% else %}
-                    <div class="add-assignment-div">
-                        <p style="margin-bottom: 10px">No assignments added for this category</p>
-                        <img class="add-assignment-button" src="/static/images/add.png"/>
-                        <p style="display: inline-block">Add assignment for this category</p>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            <p>Nutin' yet</p>
-        {% endif %}
-    </div><!-- end right div -->
-
-{%  endblock %}
+{% endblock %}
