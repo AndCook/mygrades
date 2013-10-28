@@ -11,20 +11,19 @@ def report_card(request):
 
 
 def semester_overview(request):
-    return render_to_response('semester-overview.html')
+    semesters = Semester.objects.all()
+    courses = Course.objects.all()
+    return render_to_response('semester-overview.html',
+                              {'selected_semester': semesters[0],
+                               'courses': courses})
 
 
 def course_detail(request):
-    semesters = Semester.objects.all()
     courses = Course.objects.all()
-    categories = Category.objects.filter(course=courses[0])
-    for cat in categories:
-        cat.assignments = Assignment.objects.filter(category=cat)
-        cat.has_assignments = (len(cat.assignments) > 0)
+    categories = Category.objects.all()
+    assignments = Assignment.objects.all()
 
     return render_to_response('course-detail.html',
-                              {'selected_semester': semesters[0],
-                               'semesters': semesters,
-                               'selected_course': courses[0],
-                               'courses': courses,
-                               'categories': categories})
+                              {'selected_course': courses[0],
+                               'categories': categories,
+                               'assignments': assignments})
