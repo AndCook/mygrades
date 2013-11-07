@@ -4,56 +4,114 @@
 		<title>My Gradebook</title>
 
         <!-- jquery-ui stylesheet -->
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <link rel='stylesheet' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' />
         <!-- jquery library file -->
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src='http://code.jquery.com/jquery-1.9.1.js'></script>
         <!-- jquery-ui library file -->
-        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
         <!-- jquery-color library file -->
-		<!--script type="text/javascript" src="/static/javascript/jquery-color.js"></script-->
+		<!--script type='text/javascript' src='/static/javascript/jquery-color.js'></script-->
 
-        <link rel="stylesheet" type="text/css" href="/static/css/base-stylesheet.css" />
-		<!--script type="text/javascript" src="/static/javascript/home-script.js"></script-->
+        <link rel='stylesheet' type='text/css' href='/static/css/base-stylesheet.css' />
+		<script type='text/javascript' src='/static/javascript/base.js'></script>
 
         {% block extra_head %}{% endblock %}
 	</head>
 
 	<body>
 
-        <div id="header">
-            <div id="header-wrapper">
-                <ul>
-                    <li>
-                        <a href="/home/" class="header-link">
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/report-card/" class="header-link">
-                            Report Card
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/semester-overview/" class="header-link">
-                            Semester Overview
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/course-detail/" class="header-link">
-                            Course Detail
-                        </a>
-                    </li>
-                </ul>
+        <div id='header'>
+            <div id='header-wrapper'>
+                <div id='left-header'>
+                    <ul>
+                        <li>
+                            <a href='/' class='header-link'>
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href='/about/' class='header-link'>
+                                About
+                            </a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a href='/gradebook/report-card/' class='header-link'>
+                                    Report Card
+                                </a>
+                            </li>
+                            <li>
+                                <a href='/gradebook/semester-overview/' class='header-link'>
+                                    Semester Overview
+                                </a>
+                            </li>
+                            <li>
+                                <a href='/gradebook/course-detail/' class='header-link'>
+                                    Course Detail
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div id='right-header'>
+                    <ul>
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a class='header-link'>
+                                    Logout
+                                </a>
+                            </li>
+                            <li>
+                                <a class='header-link'>
+                                    Accounts
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <div id='login-button'>
+                                    <a class='header-link'>
+                                        Login
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <div id='signup-button'>
+                                    <a class='header-link'>
+                                        Sign Up
+                                    </a>
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
-        </div>
+        </div><!-- end header -->
 
-        <div id="middle-section">
-            <div id="main-wrapper">
+        <div id='login-dialog-form' title='Login'>
+            <form method='post' action='/accounts/login/' name='login_form'>{% csrf_token %}
+                <p class='validate-tips'></p>
+                {% for field in login_form %}
+                    <div class='form-label-input-row'>{{ field.label_tag }}:{{ field }}</div>
+                {% endfor %}
+            </form>
+        </div><!-- end login-dialog-form div -->
+
+        <div id='signup-dialog-form' title='Sign up'>
+            <form method='post' action='/accounts/signup/' name='signup_form'>{% csrf_token %}
+                <p class='validate-tips'></p>
+                {% for field in signup_form %}
+                    <div class='form-label-input-row'>{{ field.label_tag }}:{{ field }}</div>
+                {% endfor %}
+            </form>
+        </div><!-- end signup-dialog-form div -->
+
+        <div id='middle-section'>
+            <div id='main-wrapper'>
                 {% block base_content %}{% endblock %}
             </div>
         </div>
 
-        <div id="footer">
+        <div id='footer'>
 
         </div>
 

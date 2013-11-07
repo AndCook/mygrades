@@ -36,6 +36,14 @@ h1 {
     margin: 0 auto;
 }
 
+#left-header {
+    float: left;
+}
+
+#right-header {
+    float: right;
+}
+
 #header-wrapper ul {
     margin: 0;
     padding: 0;
@@ -85,4 +93,53 @@ h1 {
     margin-bottom: -10px;
     background-color: #222222;
     clear: both;
+}
+
+
+
+
+.ui-button {
+    margin: 0;
+    padding: 0 10px;
+
+    line-height: 45px;
+    display: inline-block;
+
+    background: none;
+    border: none;
+
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+
+    /*The next 5 lines make the text unselectable*/
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.ui-dialog {
+    font-size: .825em;
+}
+
+label, input {
+	display: inline-block;
+}
+
+.form-label-input-row {
+    display: block;
+}
+
+input.text {
+	margin-bottom:12px;
+	width:95%;
+	padding: .4em;
+}
+
+fieldset {
+	padding:0;
+	border:0;
+	margin-top:25px;
 }

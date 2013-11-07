@@ -3,14 +3,13 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('mygrades.views',
+                       url(r'^$', 'home'),
+                       url(r'^about/$', 'about'),
 
-    url(r'^$', 'mygrades.views.home', name='home'),
+                       url(r'^accounts/', include('accounts.urls')),
 
-    url(r'^home/', 'mygrades.views.home', name='home'),
-    url(r'^report-card/', 'mygrades.views.report_card', name='report-card'),
-    url(r'^semester-overview/', 'mygrades.views.semester_overview', name='semester-overview'),
-    url(r'^course-detail/', 'mygrades.views.course_detail', name='course-detail'),
+                       url(r'^gradebook/', include('gradebook.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+                       url(r'^admin/', include(admin.site.urls)),
 )
