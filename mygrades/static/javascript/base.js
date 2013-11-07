@@ -24,7 +24,7 @@ $(function() {
         }
 	});
 
-	$( "#login-button" ).button().click(function() {
+	$( "#login-button" ).click(function() {
 		$( "#login-dialog-form" ).dialog( "open" );
 	});
 });
@@ -55,7 +55,7 @@ $(function() {
         }
     });
 
-	$( "#signup-button" ).button().click(function() {
+	$( "#signup-button" ).click(function() {
 		$( "#signup-dialog-form" ).dialog( "open" );
 	});
 });

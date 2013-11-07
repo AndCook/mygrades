@@ -68,18 +68,14 @@
                             </li>
                         {% else %}
                             <li>
-                                <div id='login-button'>
-                                    <a class='header-link'>
-                                        Login
-                                    </a>
-                                </div>
+                                <a id='login-button' class='header-link'>
+                                    Login
+                                </a>
                             </li>
                             <li>
-                                <div id='signup-button'>
-                                    <a class='header-link'>
-                                        Sign Up
-                                    </a>
-                                </div>
+                                <a id='signup-button' class='header-link'>
+                                    Sign Up
+                                </a>
                             </li>
                         {% endif %}
                     </ul>
@@ -90,18 +86,28 @@
         <div id='login-dialog-form' title='Login'>
             <form method='post' action='/accounts/login/' name='login_form'>{% csrf_token %}
                 <p class='validate-tips'></p>
-                {% for field in login_form %}
-                    <div class='form-label-input-row'>{{ field.label_tag }}:{{ field }}</div>
-                {% endfor %}
+                <table><tbody>
+                    {% for field in login_form %}
+                        <tr>
+                            <td>{{ field.label_tag }}</td>
+                            <td>{{ field }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody></table>
             </form>
         </div><!-- end login-dialog-form div -->
 
         <div id='signup-dialog-form' title='Sign up'>
             <form method='post' action='/accounts/signup/' name='signup_form'>{% csrf_token %}
                 <p class='validate-tips'></p>
-                {% for field in signup_form %}
-                    <div class='form-label-input-row'>{{ field.label_tag }}:{{ field }}</div>
-                {% endfor %}
+                <table><tbody>
+                    {% for field in signup_form %}
+                        <tr>
+                            <td>{{ field.label_tag }}</td>
+                            <td>{{ field }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody></table>
             </form>
         </div><!-- end signup-dialog-form div -->
 

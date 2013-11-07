@@ -3,7 +3,6 @@
 }*/
 
 body {
-
     background-color: #eeeeee;
     font-family: sans-serif;
 }
@@ -75,55 +74,26 @@ h1 {
 
 .header-link:hover {
     background-color: #333333;
+    cursor: pointer;
 }
 
 #main-wrapper {
     width: 75%;
     height: 1000px;
     margin: 0 auto;
-    /*margin-top: -21px;*/
+    margin-top: -21px;
     position: relative;
     background-color: white;
 }
 
 #footer {
-    width: 110%;
-    height: 50px;
-    margin-left: -10px;
-    margin-bottom: -10px;
+    height: 45px;
     background-color: #222222;
+    display: block;
     clear: both;
 }
 
 
-
-.ui-button {
-    margin: 0;
-    padding: 0 10px;
-
-    line-height: 45px;
-    display: inline-block;
-
-    background: none;
-    border: none;
-
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-
-    /*The next 5 lines make the text unselectable*/
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-/* The following are used for the popup dialog boxes */
-/* .ui-dialog
-   label, input
-   input.text
-   fieldset
-   */
 
 .ui-dialog {
     font-size: .825em;
@@ -147,4 +117,12 @@ fieldset {
 	padding:0;
 	border:0;
 	margin-top:25px;
+}
+
+form table {
+    width: 100%;
+}
+
+form table tbody tr td {
+    text-align: right;
 }
