@@ -57,13 +57,13 @@
                     <ul>
                         {% if user.is_authenticated %}
                             <li>
-                                <a class='header-link'>
+                                <a href='/accounts/logout/' class='header-link'>
                                     Logout
                                 </a>
                             </li>
                             <li>
                                 <a class='header-link'>
-                                    Accounts
+                                    {{ user.username }}
                                 </a>
                             </li>
                         {% else %}

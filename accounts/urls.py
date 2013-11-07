@@ -5,5 +5,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('accounts.views',
                        url(r'^login/$', 'my_login'),
-                       url(r'^signup', 'signup')
+                       url(r'^signup', 'my_signup'),
+                       url(r'^logout/$', 'my_logout'),
 )

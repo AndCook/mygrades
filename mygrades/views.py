@@ -11,4 +11,3 @@ def about(request):
 
 def base_form_context_processor(request):
     return {'login_form': AuthenticationForm, 'signup_form': UserCreateForm}
-
