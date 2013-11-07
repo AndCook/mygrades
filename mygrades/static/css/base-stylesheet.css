@@ -97,7 +97,6 @@ h1 {
 
 
 
-
 .ui-button {
     margin: 0;
     padding: 0 10px;
@@ -119,6 +118,12 @@ h1 {
     -moz-user-select: none;
     -ms-user-select: none;
 }
+/* The following are used for the popup dialog boxes */
+/* .ui-dialog
+   label, input
+   input.text
+   fieldset
+   */
 
 .ui-dialog {
     font-size: .825em;
