@@ -99,8 +99,9 @@ h1 {
     font-size: .825em;
 }
 
-label, input {
+input {
 	display: inline-block;
+    color: #999999;
 }
 
 .form-label-input-row {
