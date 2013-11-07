@@ -100,14 +100,9 @@
         <div id='signup-dialog-form' title='Sign up'>
             <form method='post' action='/accounts/signup/' name='signup_form'>{% csrf_token %}
                 <p class='validate-tips'></p>
-                <table><tbody>
                     {% for field in signup_form %}
-                        <tr>
-                            <td>{{ field.label_tag }}</td>
-                            <td>{{ field }}</td>
-                        </tr>
+                        {{ field }}
                     {% endfor %}
-                </tbody></table>
             </form>
         </div><!-- end signup-dialog-form div -->
 
