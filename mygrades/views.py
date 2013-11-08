@@ -1,7 +1,6 @@
-from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from mygrades.forms import UserCreateForm
+from mygrades.forms import UserCreateForm, LoginForm
 
 
 def home(request):
@@ -13,4 +12,5 @@ def about(request):
 
 
 def base_form_context_processor(request):
-    return {'login_form': AuthenticationForm, 'signup_form': UserCreateForm}
+    return {'login_form': LoginForm, 'signup_form': UserCreateForm}
+

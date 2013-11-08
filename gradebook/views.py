@@ -1,14 +1,15 @@
 from django.shortcuts import render_to_response
 from gradebook.models import Semester, Course, Category, Assignment
 from django.http import HttpResponseRedirect, Http404
+from django.template import RequestContext
 
 
 def report_card(request):
-    return render_to_response('report-card.html')
+    return render_to_response('report-card.html', RequestContext(request))
 
 
 def semester_overview(request):
-    return render_to_response('semester-overview.html')
+    return render_to_response('semester-overview.html', RequestContext(request))#{'user': request.user})
 
 
 def course_detail(request):
@@ -27,7 +28,8 @@ def course_detail(request):
             cat.has_assignments = (len(cat.assignments) > 0)
 
         return render_to_response('course-detail.html',
-                                  {'selected_semester': selected_semester,
+                                  {'user': request.user,
+                                   'selected_semester': selected_semester,
                                    'semesters': semesters,
                                    'selected_course': selected_course,
                                    'courses': courses,

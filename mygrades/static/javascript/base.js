@@ -4,8 +4,7 @@ $(function() {
 
 	$( "#login-dialog-form" ).dialog({
 		autoOpen: false,
-		height: 400,
-		width: 400,
+		width: 350,
 		modal: true,
 		buttons: {
 			'Login': {
@@ -35,8 +34,7 @@ $(function() {
 
 	$( "#signup-dialog-form" ).dialog({
 		autoOpen: false,
-		height: 400,
-		width: 400,
+		width: 350,
 		modal: true,
 		buttons: {
 			"Sign Up": {

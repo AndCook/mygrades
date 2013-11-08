@@ -85,24 +85,21 @@
 
         <div id='login-dialog-form' title='Login'>
             <form method='post' action='/accounts/login/' name='login_form'>{% csrf_token %}
+                <h2>Login</h2>
                 <p class='validate-tips'></p>
-                <table><tbody>
-                    {% for field in login_form %}
-                        <tr>
-                            <td>{{ field.label_tag }}</td>
-                            <td>{{ field }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody></table>
+                {% for field in login_form %}
+                    {{ field }}
+                {% endfor %}
             </form>
         </div><!-- end login-dialog-form div -->
 
         <div id='signup-dialog-form' title='Sign up'>
             <form method='post' action='/accounts/signup/' name='signup_form'>{% csrf_token %}
+                <h2>Sign Up</h2>
                 <p class='validate-tips'></p>
-                    {% for field in signup_form %}
-                        {{ field }}
-                    {% endfor %}
+                {% for field in signup_form %}
+                    {{ field }}
+                {% endfor %}
             </form>
         </div><!-- end signup-dialog-form div -->
 

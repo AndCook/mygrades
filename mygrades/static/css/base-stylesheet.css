@@ -99,6 +99,18 @@ h1 {
     font-size: .825em;
 }
 
+.ui-dialog-titlebar {
+    display: none;
+}
+
+.ui-dialog h2 {
+    color: #555555;
+    font-size: 2em;
+    text-align: center;
+    margin: 5px auto;
+    display: block;
+}
+
 input {
     width: 80%;
     height: 2em;
