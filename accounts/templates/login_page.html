@@ -1,7 +1,23 @@
 {% extends 'base.html' %}
 
+{% block extra_head %}
+    <link rel='stylesheet' type='text/css' href='/static/css/login_page_stylesheet.css' />
+    <script type='text/javascript' src='/static/javascript/login_page_script.js'></script>
+{% endblock %}
+
 {% block base_content %}
 
-    {{ login_form }}
+    <div id='login-div'>
+        <form method='post' action='/accounts/login/' name='login_form'>{% csrf_token %}
+            <h2 class='form-title'>Login</h2>
+            <p class='validate-tips'></p>
+            {% for field in login_form %}
+                {{ field }}
+            {% endfor %}
+            <div style="border-top: 1px #aaaaaa solid; width: 98%; margin: 0 auto">
+                <input type="submit" value="Login" style="margin-right: 7.5%"/>
+            </div>
+        </form>
+    </div>
 
 {% endblock %}

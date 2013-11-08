@@ -25,6 +25,7 @@ $(function() {
 
 	$( "#login-button" ).click(function() {
 		$( "#login-dialog-form" ).dialog( "open" );
+        $('input').blur();
 	});
 });
 
@@ -55,5 +56,6 @@ $(function() {
 
 	$( "#signup-button" ).click(function() {
 		$( "#signup-dialog-form" ).dialog( "open" );
+        $('input').blur();
 	});
 });

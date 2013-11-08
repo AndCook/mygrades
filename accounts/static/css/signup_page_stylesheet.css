@@ -1,0 +1,16 @@
+#signup-div {
+    width: 350px;
+    margin: auto;
+    top: 50px;
+
+    border: 1px #aaaaaa solid;
+    border-radius: 5px;
+
+    position: relative;
+}
+
+input[type=submit] {
+    width: 6em;
+    margin: 15px auto;
+    display: block;
+}

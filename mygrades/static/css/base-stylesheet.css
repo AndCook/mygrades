@@ -81,7 +81,6 @@ h1 {
     width: 75%;
     height: 1000px;
     margin: 0 auto;
-    margin-top: -21px;
     position: relative;
     background-color: white;
 }
@@ -103,7 +102,7 @@ h1 {
     display: none;
 }
 
-.ui-dialog h2 {
+.form-title {
     color: #555555;
     font-size: 2em;
     text-align: center;
@@ -121,10 +120,14 @@ input {
     line-height: 2em;
 
     border: 1px #aaaaaa solid;
-    border-radius: 5px;
+    border-radius: 2px;
 
     display: block;
     color: #999999;
+}
+
+input:focus {
+    border-color: white;
 }
 
 input.text {

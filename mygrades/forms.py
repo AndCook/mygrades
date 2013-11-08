@@ -12,6 +12,7 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=254,
                                widget=forms.TextInput(
                                    attrs={'value': 'Username',
+                                          'autocomplete': 'off',
                                           'onfocus': "if(this.value==this.defaultValue)this.value='';",
                                           'onblur': "if(this.value=='')this.value=this.defaultValue;"}),
     )
@@ -103,22 +104,26 @@ class UserCreateForm(forms.ModelForm):
 
     first_name = forms.CharField(widget=forms.TextInput(
         attrs={'value': 'First Name',
+               'autocomplete': 'off',
                'onfocus': "if(this.value==this.defaultValue)this.value='';",
                'onblur': "if(this.value=='')this.value=this.defaultValue;"}
     ))
     last_name = forms.CharField(widget=forms.TextInput(
         attrs={'value': 'Last Name',
+               'autocomplete': 'off',
                'onfocus': "if(this.value==this.defaultValue)this.value='';",
                'onblur': "if(this.value=='')this.value=this.defaultValue;"}
     ))
     email = forms.EmailField(widget=forms.TextInput(
         attrs={'value': 'Email',
+               'autocomplete': 'off',
                'onfocus': "if(this.value==this.defaultValue)this.value='';",
                'onblur': "if(this.value=='')this.value=this.defaultValue;"}
     ))
     username = forms.RegexField(label="Username", max_length=30,
                                 widget=forms.TextInput(
                                     attrs={'value': 'Username',
+                                           'autocomplete': 'off',
                                            'onfocus': "if(this.value==this.defaultValue)this.value='';",
                                            'onblur': "if(this.value=='')this.value=this.defaultValue;"}),
                                 regex=r'^[\w.@+-]+$',

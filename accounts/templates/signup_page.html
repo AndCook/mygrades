@@ -1,7 +1,26 @@
 {% extends 'base.html' %}
 
+{% block extra_head %}
+    <link rel='stylesheet' type='text/css' href='/static/css/signup_page_stylesheet.css' />
+    <script type='text/javascript' src='/static/javascript/signup_page_script.js'></script>
+{% endblock %}
+
 {% block base_content %}
 
-    {{ signup_form }}
+    <div id='signup-div'>
+        <form method='post' action='/accounts/signup/' name='signup_form'>{% csrf_token %}
+            <h2 class='form-title'>Sign Up</h2>
+            <p class='validate-tips'></p>
+            {% for field in signup_form %}
+                {% for error in field.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+                {{ field }}
+            {% endfor %}
+            <div style="border-top: 1px #aaaaaa solid; width: 98%; margin: 0 auto">
+                <input type="submit" value="Sign Up" style="margin-right: 7.5%"/>
+            </div>
+        </form>
+    </div>
 
 {% endblock %}
