@@ -5,6 +5,7 @@ $(function() {
 	$( "#login-dialog-form" ).dialog({
 		autoOpen: false,
 		width: 350,
+        resizable: false,
 		modal: true,
 		buttons: {
 			'Login': {
@@ -36,6 +37,7 @@ $(function() {
 	$( "#signup-dialog-form" ).dialog({
 		autoOpen: false,
 		width: 350,
+        resizable: false,
 		modal: true,
 		buttons: {
 			"Sign Up": {
@@ -58,4 +60,35 @@ $(function() {
 		$( "#signup-dialog-form" ).dialog( "open" );
         $('input').blur();
 	});
+});
+
+$(function() {
+    var accBut = $('#account-button')
+    var dropdown = $('#account-dropdown')
+    var posLeft = accBut.offset().left + accBut.width() + 20 - dropdown.width();
+    var posTop = accBut.offset().top + accBut.height();
+    dropdown.css('left', posLeft)
+    dropdown.css('top', posTop)
+
+    accBut.mouseenter(function() {
+        dropdown.css('display', 'block');
+    });
+
+    accBut.mouseleave(function() {
+        dropdown.css('display', 'none');
+    });
+
+    dropdown.mouseenter(function() {
+        dropdown.css('display', 'block');
+    })
+
+    dropdown.mouseleave(function() {
+        dropdown.css('display', 'none');
+    })
+});
+
+// enable tooltips everywhere
+// to use a tooltip include a title tag on inputs
+$(function() {
+    $( document ).tooltip();
 });

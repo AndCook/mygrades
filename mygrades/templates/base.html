@@ -12,8 +12,8 @@
         <!-- jquery-color library file -->
 		<!--script type='text/javascript' src='/static/javascript/jquery-color.js'></script-->
 
-        <link rel='stylesheet' type='text/css' href='/static/css/base-stylesheet.css' />
-		<script type='text/javascript' src='/static/javascript/base.js'></script>
+        <link rel='stylesheet' type='text/css' href='/static/css/base_stylesheet.css' />
+		<script type='text/javascript' src='/static/javascript/base_script.js'></script>
 
         {% block extra_head %}{% endblock %}
 	</head>
@@ -36,17 +36,17 @@
                         </li>
                         {% if user.is_authenticated %}
                             <li>
-                                <a href='/gradebook/report-card/' class='header-link'>
-                                    Report Card
+                                <a href='/gradebook/overview/' class='header-link'>
+                                    Overview
                                 </a>
                             </li>
                             <li>
-                                <a href='/gradebook/semester-overview/' class='header-link'>
-                                    Semester Overview
+                                <a href='/gradebook/semester_detail/' class='header-link'>
+                                    Semester Detail
                                 </a>
                             </li>
                             <li>
-                                <a href='/gradebook/course-detail/' class='header-link'>
+                                <a href='/gradebook/course_detail/' class='header-link'>
                                     Course Detail
                                 </a>
                             </li>
@@ -57,12 +57,7 @@
                     <ul>
                         {% if user.is_authenticated %}
                             <li>
-                                <a href='/accounts/logout/' class='header-link'>
-                                    Logout
-                                </a>
-                            </li>
-                            <li>
-                                <a class='header-link'>
+                                <a id='account-button' class='header-link'>
                                     {{ user.username }}
                                 </a>
                             </li>
@@ -83,8 +78,14 @@
             </div>
         </div><!-- end header -->
 
+        <div id="account-dropdown">
+            <a class='dropdown-link' href="/account/settings/">Account Settings</a>
+            <a class='dropdown-link' href="/account/change_password/">Change Password</a>
+            <a class='dropdown-link' href="/account/logout/">Logout</a>
+        </div>
+
         <div id='login-dialog-form' title='Login'>
-            <form method='post' action='/accounts/login/' name='login_form'>{% csrf_token %}
+            <form method='post' action='/account/login/' name='login_form'>{% csrf_token %}
                 <h2 class='form-title'>Login</h2>
                 <p class='validate-tips'></p>
                 {% for field in login_form %}
@@ -94,7 +95,7 @@
         </div><!-- end login-dialog-form div -->
 
         <div id='signup-dialog-form' title='Sign up'>
-            <form method='post' action='/accounts/signup/' name='signup_form'>{% csrf_token %}
+            <form method='post' action='/account/signup/' name='signup_form'>{% csrf_token %}
                 <h2 class='form-title'>Sign Up</h2>
                 <p class='validate-tips'></p>
                 {% for field in signup_form %}

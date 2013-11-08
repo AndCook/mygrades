@@ -3,7 +3,7 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('accounts.views',
+urlpatterns = patterns('account.views',
                        url(r'^login_page/$', 'login_page'),
                        url(r'^signup_page/$', 'signup_page'),
                        url(r'^login/$', 'my_login'),

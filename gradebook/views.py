@@ -4,12 +4,12 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
 @login_required
-def report_card(request):
-    return render_to_response('report-card.html', RequestContext(request))
+def overview(request):
+    return render_to_response('overview.html', RequestContext(request))
 
 @login_required
-def semester_overview(request):
-    return render_to_response('semester-overview.html', RequestContext(request))
+def semester_detail(request):
+    return render_to_response('semester_detail.html', RequestContext(request))
 
 @login_required
 def course_detail(request):
@@ -26,7 +26,7 @@ def course_detail(request):
         cat.assignments = Assignment.objects.filter(category=cat)
         cat.has_assignments = (len(cat.assignments) > 0)
 
-    return render_to_response('course-detail.html',
+    return render_to_response('course_detail.html',
                               {'user': request.user,
                                'selected_semester': selected_semester,
                                'semesters': semesters,

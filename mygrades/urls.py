@@ -7,7 +7,7 @@ urlpatterns = patterns('mygrades.views',
                        url(r'^$', 'home'),
                        url(r'^about/$', 'about'),
 
-                       url(r'^accounts/', include('accounts.urls')),
+                       url(r'^account/', include('account.urls')),
 
                        url(r'^gradebook/', include('gradebook.urls')),
 

@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_change
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 
-from accounts.forms import UserCreateForm, ChangePasswordForm, ChangeSettingsForm
+from account.forms import UserCreateForm, ChangePasswordForm, ChangeSettingsForm
 
 
 def my_signup(request):
@@ -24,7 +24,7 @@ def my_signup(request):
 
             login(request, user)
 
-            return HttpResponseRedirect('/gradebook/report_card')
+            return HttpResponseRedirect('/gradebook/overview/')
         return render_to_response('signup_page.html', {'signup_form': form}, RequestContext(request))
     return Http404
 
@@ -37,9 +37,9 @@ def my_login(request):
         user = authenticate(username=username, password=password)
         if user is not None and user.is_active:
             login(request, user)
-            return HttpResponseRedirect('/gradebook/report_card/')
+            return HttpResponseRedirect('/gradebook/overview/')
         else:
-            return HttpResponseRedirect('/accounts/login_page/')
+            return HttpResponseRedirect('/account/login_page/')
 
     return Http404
 
@@ -50,9 +50,9 @@ def my_change_password(request):
 
         if form.is_valid():
             password_change(request)
-            return HttpResponseRedirect('/accounts/settings/')
+            return HttpResponseRedirect('/account/settings/')
         else:
-            return HttpResponseRedirect('/accounts/change_password/')
+            return HttpResponseRedirect('/account/change_password/')
 
     return Http404
 

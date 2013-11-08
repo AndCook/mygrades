@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from accounts.forms import UserCreateForm, LoginForm
+from account.forms import UserCreateForm, LoginForm
 
 
 def home(request):
