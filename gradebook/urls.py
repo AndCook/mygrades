@@ -4,7 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('gradebook.views',
-                       url(r'^report-card/', 'report_card', name='report-card'),
-                       url(r'^semester-overview/', 'semester_overview', name='semester-overview'),
-                       url(r'^course-detail/', 'course_detail', name='course-detail'),
+                       url(r'^report_card/', 'report_card'),
+                       url(r'^semester_overview/', 'semester_overview'),
+                       url(r'^course_detail/', 'course_detail'),
 )

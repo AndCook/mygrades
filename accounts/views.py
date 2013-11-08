@@ -1,7 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, Http404
-from mygrades.forms import UserCreateForm
+from mygrades.forms import UserCreateForm, LoginForm
 from django.contrib.auth.models import User
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 
 def my_signup(request):
@@ -33,9 +35,13 @@ def my_login(request):
             login(request, user)
             return HttpResponseRedirect('/gradebook/report-card/')
         else:
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/accounts/login_page/')
 
     return Http404
+
+
+def login_page(request):
+    return render_to_response('login_page.html', {'login_form': LoginForm}, RequestContext(request))
 
 
 def my_logout(request):
