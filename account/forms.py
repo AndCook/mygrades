@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, get_user_model
 from django.utils.text import capfirst
-from django.contrib.auth.forms import SetPasswordForm
 
 
 class LoginForm(forms.Form):
@@ -239,16 +238,18 @@ class ChangeSettingsForm(forms.Form):
         )
 
 
-class ChangePasswordForm(SetPasswordForm):
+class UpdatePasswordForm(forms.Form):
     """
-    A form that lets a user change his/her password by entering
-    their old password.
+    A form that creates a user, with no privileges, from the given username and
+    password.
     """
-    error_messages = dict(SetPasswordForm.error_messages, **{
+    error_messages = {
+        'password_mismatch': "The two password fields didn't match.",
         'password_incorrect': "Your old password was entered incorrectly. "
                                 "Please enter it again.",
-    })
-    old_password = forms.CharField(label="Password",
+    }
+
+    password1 = forms.CharField(label="Password",
                                 widget=forms.PasswordInput(
                                     attrs={'value': 'Password',
                                            'type': 'text',
@@ -259,6 +260,45 @@ class ChangePasswordForm(SetPasswordForm):
                                                      "this.value=this.defaultValue;"
                                                      "this.type='text'; }"}),
                                 )
+    password2 = forms.CharField(label="Password confirmation",
+                                widget=forms.PasswordInput(
+                                    attrs={'value': 'Password Confirmation',
+                                           'type': 'text',
+                                           'onfocus': "if(this.value==this.defaultValue) {"
+                                                      "this.value='';"
+                                                      "this.type='password'; }",
+                                           'onblur': "if(this.value=='') {"
+                                                     "this.value=this.defaultValue;"
+                                                     "this.type='text'; }"}),
+                                help_text="Enter the same password as above, for verification."
+                                )
+
+    old_password = forms.CharField(label="Old Password",
+                                widget=forms.PasswordInput(
+                                    attrs={'value': 'Old Password',
+                                           'type': 'text',
+                                           'onfocus': "if(this.value==this.defaultValue) {"
+                                                      "this.value='';"
+                                                      "this.type='password'; }",
+                                           'onblur': "if(this.value=='') {"
+                                                     "this.value=this.defaultValue;"
+                                                     "this.type='text'; }"}),
+                                help_text="Enter your current password."
+                                )
+
+    #class Meta:
+        #model = User
+        #fields = ("username",)
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(
+                self.error_messages['password_mismatch'],
+                code='password_mismatch',
+            )
+        return password2
 
     def clean_old_password(self):
         """
@@ -271,3 +311,10 @@ class ChangePasswordForm(SetPasswordForm):
                 code='password_incorrect',
             )
         return old_password
+
+    def save(self, commit=True):
+        user = super(UpdatePasswordForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user

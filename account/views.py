@@ -5,9 +5,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_change
-from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 
-from account.forms import UserCreateForm, ChangePasswordForm, ChangeSettingsForm
+from account.forms import UserCreateForm, ChangeSettingsForm, UpdatePasswordForm
 
 
 def my_signup(request):
@@ -46,7 +45,7 @@ def my_login(request):
 
 def my_change_password(request):
     if request.method == 'POST':
-        form = ChangePasswordForm(request.POST)
+        form = UpdatePasswordForm(request.POST)
 
         if form.is_valid():
             password_change(request)
@@ -76,5 +75,5 @@ def settings(request):
 @login_required
 def change_password(request):
     return render_to_response('change_password.html',
-                              {'change_password_form': PasswordChangeForm}, # Change this back to ChangePasswordForm when we fix that
+                              {'change_password_form': UpdatePasswordForm},
                               RequestContext(request))
