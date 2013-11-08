@@ -20,8 +20,8 @@ def my_signup(request):
 
             login(request, user)
 
-            return HttpResponseRedirect('/gradebook/report-card')
-        return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/gradebook/report_card')
+        return render_to_response('signup_page.html', {'signup_form': form}, RequestContext(request))
     return Http404
 
 
@@ -33,7 +33,7 @@ def my_login(request):
         user = authenticate(username=username, password=password)
         if user is not None and user.is_active:
             login(request, user)
-            return HttpResponseRedirect('/gradebook/report-card/')
+            return HttpResponseRedirect('/gradebook/report_card/')
         else:
             return HttpResponseRedirect('/accounts/login_page/')
 
@@ -42,6 +42,10 @@ def my_login(request):
 
 def login_page(request):
     return render_to_response('login_page.html', {'login_form': LoginForm}, RequestContext(request))
+
+
+def signup_page(request):
+    return render_to_response('signup_page.html', {'signup_form': UserCreateForm}, RequestContext(request))
 
 
 def my_logout(request):
