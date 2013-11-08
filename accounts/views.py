@@ -1,9 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, Http404
-from mygrades.forms import UserCreateForm, LoginForm
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import password_change
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
+
+from accounts.forms import UserCreateForm, ChangePasswordForm, ChangeSettingsForm
 
 
 def my_signup(request):
@@ -40,14 +44,37 @@ def my_login(request):
     return Http404
 
 
+def my_change_password(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+
+        if form.is_valid():
+            password_change(request)
+            return HttpResponseRedirect('/accounts/settings/')
+        else:
+            return HttpResponseRedirect('/accounts/change_password/')
+
+    return Http404
+
+
 def login_page(request):
-    return render_to_response('login_page.html', {'login_form': LoginForm}, RequestContext(request))
+    return render_to_response('login_page.html', RequestContext(request))
 
 
 def signup_page(request):
-    return render_to_response('signup_page.html', {'signup_form': UserCreateForm}, RequestContext(request))
+    return render_to_response('signup_page.html', RequestContext(request))
 
-
+@login_required
 def my_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+@login_required
+def settings(request):
+    return render_to_response('settings.html', {'change_settings_form': ChangeSettingsForm}, RequestContext(request))
+
+@login_required
+def change_password(request):
+    return render_to_response('change_password.html',
+                              {'change_password_form': PasswordChangeForm}, # Change this back to ChangePasswordForm when we fix that
+                              RequestContext(request))

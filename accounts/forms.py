@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, get_user_model
 from django.utils.text import capfirst
+from django.contrib.auth.forms import SetPasswordForm
 
 
 class LoginForm(forms.Form):
@@ -193,6 +194,80 @@ class UserCreateForm(forms.ModelForm):
         return user
 
 
-        #attrs={'value': 'Username',
-        #       'onfocus': "if(this.value==this.defaultValue)this.value='';",
-        #       'onblur': "if(this.value=='')this.value=this.defaultValue;"}
+class ChangeSettingsForm(forms.Form):
+    error_messages = {
+        'duplicate_username': "A user with that username already exists.",
+    }
+
+    first_name = forms.CharField(widget=forms.TextInput(
+        attrs={'value': 'First Name',
+               'autocomplete': 'off',
+               'onfocus': "if(this.value==this.defaultValue)this.value='';",
+               'onblur': "if(this.value=='')this.value=this.defaultValue;"}
+    ))
+
+    last_name = forms.CharField(widget=forms.TextInput(
+        attrs={'value': 'Last Name',
+               'autocomplete': 'off',
+               'onfocus': "if(this.value==this.defaultValue)this.value='';",
+               'onblur': "if(this.value=='')this.value=this.defaultValue;"}
+    ))
+
+    username = forms.RegexField(label="Username", max_length=30,
+                                widget=forms.TextInput(
+                                    attrs={'value': 'Username',
+                                           'autocomplete': 'off',
+                                           'onfocus': "if(this.value==this.defaultValue)this.value='';",
+                                           'onblur': "if(this.value=='')this.value=this.defaultValue;"}),
+                                regex=r'^[\w.@+-]+$',
+                                help_text="Required. 30 characters or fewer. Letters, digits and @.+-_ only.",
+                                error_messages={
+                                    'invalid': "This value may contain only letters, numbers and @.+-_ characters."}
+                                )
+
+    def clean_username(self):
+        # Since User.username is unique, this check is redundant,
+        # but it sets a nicer error message than the ORM. See #13147.
+        username = self.cleaned_data["username"]
+        try:
+            User._default_manager.get(username=username)
+        except User.DoesNotExist:
+            return username
+        raise forms.ValidationError(
+            self.error_messages['duplicate_username'],
+            code='duplicate_username',
+        )
+
+
+class ChangePasswordForm(SetPasswordForm):
+    """
+    A form that lets a user change his/her password by entering
+    their old password.
+    """
+    error_messages = dict(SetPasswordForm.error_messages, **{
+        'password_incorrect': "Your old password was entered incorrectly. "
+                                "Please enter it again.",
+    })
+    old_password = forms.CharField(label="Password",
+                                widget=forms.PasswordInput(
+                                    attrs={'value': 'Password',
+                                           'type': 'text',
+                                           'onfocus': "if(this.value==this.defaultValue) {"
+                                                      "this.value='';"
+                                                      "this.type='password'; }",
+                                           'onblur': "if(this.value=='') {"
+                                                     "this.value=this.defaultValue;"
+                                                     "this.type='text'; }"}),
+                                )
+
+    def clean_old_password(self):
+        """
+        Validates that the old_password field is correct.
+        """
+        old_password = self.cleaned_data["old_password"]
+        if not self.user.check_password(old_password):
+            raise forms.ValidationError(
+                self.error_messages['password_incorrect'],
+                code='password_incorrect',
+            )
+        return old_password
