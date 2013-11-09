@@ -249,9 +249,22 @@ class UpdatePasswordForm(forms.Form):
                                 "Please enter it again.",
     }
 
+    old_password = forms.CharField(label="Old Password",
+                                   widget=forms.PasswordInput(
+                                       attrs={'value': 'Old Password',
+                                              'type': 'text',
+                                              'onfocus': "if(this.value==this.defaultValue) {"
+                                                         "this.value='';"
+                                                         "this.type='password'; }",
+                                              'onblur': "if(this.value=='') {"
+                                                        "this.value=this.defaultValue;"
+                                                        "this.type='text'; }"}),
+                                   help_text="Enter your current password."
+                                   )
+
     password1 = forms.CharField(label="Password",
                                 widget=forms.PasswordInput(
-                                    attrs={'value': 'Password',
+                                    attrs={'value': 'New Password',
                                            'type': 'text',
                                            'onfocus': "if(this.value==this.defaultValue) {"
                                                       "this.value='';"
@@ -262,7 +275,7 @@ class UpdatePasswordForm(forms.Form):
                                 )
     password2 = forms.CharField(label="Password confirmation",
                                 widget=forms.PasswordInput(
-                                    attrs={'value': 'Password Confirmation',
+                                    attrs={'value': 'New Password Confirmation',
                                            'type': 'text',
                                            'onfocus': "if(this.value==this.defaultValue) {"
                                                       "this.value='';"
@@ -271,19 +284,6 @@ class UpdatePasswordForm(forms.Form):
                                                      "this.value=this.defaultValue;"
                                                      "this.type='text'; }"}),
                                 help_text="Enter the same password as above, for verification."
-                                )
-
-    old_password = forms.CharField(label="Old Password",
-                                widget=forms.PasswordInput(
-                                    attrs={'value': 'Old Password',
-                                           'type': 'text',
-                                           'onfocus': "if(this.value==this.defaultValue) {"
-                                                      "this.value='';"
-                                                      "this.type='password'; }",
-                                           'onblur': "if(this.value=='') {"
-                                                     "this.value=this.defaultValue;"
-                                                     "this.type='text'; }"}),
-                                help_text="Enter your current password."
                                 )
 
     #class Meta:

@@ -1,0 +1,38 @@
+#settings_wrapper {
+    width: 700px;
+    margin: auto;
+    top: 50px;
+    position: relative;
+}
+
+#settings_wrapper-table {
+    border: 1px #aaaaaa solid;
+    border-radius: 5px;
+}
+
+#current-settings-div td {
+    padding: 5px;
+    font-size: 1em;
+}
+
+#current-settings-table {
+    width: 85%;
+    margin: auto;
+}
+
+#current-settings-div {
+    width: 350px;
+    height: 100%;
+
+    border-right: 1px #aaaaaa solid;
+}
+
+#change-settings-div {
+    width: 350px;
+}
+
+input[type=submit] {
+    width: 10em;
+    margin: 15px auto;
+    display: block;
+}

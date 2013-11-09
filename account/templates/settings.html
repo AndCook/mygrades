@@ -1,9 +1,53 @@
 {% extends 'base.html' %}
 
+{% block extra_head %}
+    <link rel='stylesheet' type='text/css' href='/static/css/settings_stylesheet.css' />
+    <script type='text/javascript' src='/static/javascript/settings_script.js'></script>
+{% endblock %}
+
 {% block base_content %}
 
-    {% for field in change_settings_form %}
-        {{ field }}
-    {% endfor %}
+    <div id="settings_wrapper">
+        <table id="settings_wrapper-table"><tbody>
+            <tr>
+                <td colspan="2">
+                    <h1>Account Settings</h1>
+                </td>
+            </tr>
+            <tr>
+                <td id="current-settings-div">
+                    <table id="current-settings-table"><tbody>
+                        <tr>
+                            <td>Email:</td><td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Username:</td><td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td>First Name:</td><td>{{ user.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Last Name:</td><td>{{ user.last_name }}</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+
+                <td id='change-settings-div'>
+                    <form method='post' action='/' name='change_settings_form'>{% csrf_token %}
+                        <p style="font-size: 1em; text-align: center">Enter any information you would like to change</p>
+                        {% for field in change_settings_form %}
+                            {% for error in field.errors %}
+                                <p class='error'>{{ error|escape }}</p>
+                            {% endfor %}
+                            {{ field }}
+                        {% endfor %}
+                        <div style="border-top: 1px #aaaaaa solid; width: 98%; margin: 0 auto">
+                            <input type="submit" value="Change Settings" style="margin-right: 7.5%"/>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
 
 {% endblock %}

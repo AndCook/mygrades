@@ -8,9 +8,8 @@
 {% block base_content %}
 
     <div id='login-div'>
-        <form method='post' action='/account/login/' name='login_form'>{% csrf_token %}
+        <form method='post' action='' name='login_form'>{% csrf_token %}
             <h2 class='form-title'>Login</h2>
-            <p class='validate-tips'></p>
             {% for field in login_form %}
                 {% for error in field.errors %}
                     <p class='error'>{{ error|escape }}</p>
