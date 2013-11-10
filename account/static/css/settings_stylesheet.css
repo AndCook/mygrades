@@ -30,9 +30,3 @@
 #change-settings-div {
     width: 350px;
 }
-
-input[type=submit] {
-    width: 10em;
-    margin: 15px auto;
-    display: block;
-}

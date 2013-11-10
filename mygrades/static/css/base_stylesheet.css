@@ -8,6 +8,8 @@ body {
 }
 
 p, h1 {
+    color: #222222;
+
     /*the next three lines truncate long text*/
     overflow: hidden;
     text-overflow:ellipsis;
@@ -64,21 +66,15 @@ h1 {
     color: white;
     text-decoration: none;
 
-    /*The next 5 lines make the text unselectable*/
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+    background-color: #222222;
 }
 
 .header-link:hover {
-    background-color: #333333;
     cursor: pointer;
 }
 
 #account-button:hover {
-    background-color: #333333;
+    cursor: default;
 }
 
 #main-wrapper {
@@ -96,66 +92,7 @@ h1 {
     clear: both;
 }
 
-
-
-.ui-dialog {
-    font-size: .825em;
-}
-
-.ui-dialog-titlebar {
-    display: none;
-}
-
-.form-title {
-    color: #333333;
-    font-size: 2em;
-    text-align: center;
-    margin: 5px auto;
-    display: block;
-}
-
-input {
-    width: 80%;
-    height: 2em;
-    margin: 10px auto;
-    padding: 1px 5px;
-
-    font-size: 1em;
-    line-height: 2em;
-
-    border: 1px #aaaaaa solid;
-    border-radius: 2px;
-
-    display: block;
-    color: #999999;
-}
-
-input:focus {
-    border-color: white;
-}
-
-input.text {
-	margin-bottom:12px;
-	width:95%;
-	padding: .4em;
-}
-
-fieldset {
-	padding:0;
-	border:0;
-	margin-top:25px;
-}
-
-.error {
-    width: 80%;
-    margin: 0 auto;
-    font-size: 1em;
-    line-height: 2em;
-    color: darkred;
-}
-
 #account-dropdown {
-
     background-color: #222222;
     position: absolute;
     z-index: 1000;
@@ -163,25 +100,6 @@ fieldset {
 }
 
 .dropdown-link {
-    margin: 0;
-    padding: 0 10px;
-
     line-height: 2em;
     display: block;
-
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-
-    /*The next 5 lines make the text unselectable*/
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-.dropdown-link:hover {
-    background-color: #333333;
-    cursor: pointer;
 }

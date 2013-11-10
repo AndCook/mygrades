@@ -62,16 +62,17 @@ $(function() {
 	});
 });
 
+// accounts dropdown menu
 $(function() {
-    var accBut = $('#account-button')
-    var dropdown = $('#account-dropdown')
+    var accBut = $('#account-button');
+    var dropdown = $('#account-dropdown');
     var posLeft = accBut.offset().left + accBut.width() + 20 - dropdown.width();
-    var posTop = accBut.offset().top + accBut.height();
-    dropdown.css('left', posLeft)
-    dropdown.css('top', posTop)
+    var posTop = accBut.offsetTop + accBut.height();
+    dropdown.css('left', posLeft);
+    dropdown.css('top', posTop);
 
     accBut.mouseenter(function() {
-        dropdown.css('display', 'block');
+        dropdown.slideDown(200);
     });
 
     accBut.mouseleave(function() {
@@ -80,15 +81,31 @@ $(function() {
 
     dropdown.mouseenter(function() {
         dropdown.css('display', 'block');
-    })
+    });
 
     dropdown.mouseleave(function() {
         dropdown.css('display', 'none');
     })
 });
 
-// enable tooltips everywhere
-// to use a tooltip include a title tag on inputs
 $(function() {
+    // enable tooltips everywhere
+    // to use a tooltip include a title tag on inputs
     $( document ).tooltip();
+
+    // make all submit buttons pretty
+    $('input[type=submit]').button();
+
+    // on hover over all header-link's, change the background-color to #333333 from #222222
+    var headerlinks = $('.header-link, .dropdown-link');
+    headerlinks.mouseenter(function() {
+        $(this).animate({
+            backgroundColor: '#3b3b3b'
+        }, 100);
+    });
+    headerlinks.mouseleave(function() {
+        $(this).animate({
+            backgroundColor: '#222222'
+        }, 100);
+    });
 });

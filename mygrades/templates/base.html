@@ -6,13 +6,14 @@
         <!-- jquery-ui stylesheet -->
         <link rel='stylesheet' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' />
         <!-- jquery library file -->
-        <script src='http://code.jquery.com/jquery-1.9.1.js'></script>
+        <script type='text/javascript' src='/static/javascript/jquery_1_10_2.js'></script>
         <!-- jquery-ui library file -->
-        <script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
+        <script type='text/javascript' src='/static/javascript/jquery-ui_1_10_3.js'></script>
         <!-- jquery-color library file -->
-		<!--script type='text/javascript' src='/static/javascript/jquery-color.js'></script-->
+		<script type='text/javascript' src='/static/javascript/jquery-color.js'></script>
 
         <link rel='stylesheet' type='text/css' href='/static/css/base_stylesheet.css' />
+        <link rel='stylesheet' type='text/css' href='/static/css/default_form_stylesheet.css' />
 		<script type='text/javascript' src='/static/javascript/base_script.js'></script>
 
         {% block extra_head %}{% endblock %}
@@ -58,7 +59,7 @@
                         {% if user.is_authenticated %}
                             <li>
                                 <a id='account-button' class='header-link'>
-                                    {{ user.username }}
+                                    {{ user.first_name }} {{ user.last_name }}
                                 </a>
                             </li>
                         {% else %}
@@ -79,9 +80,9 @@
         </div><!-- end header -->
 
         <div id="account-dropdown">
-            <a class='dropdown-link' href="/account/settings/">Account Settings</a>
-            <a class='dropdown-link' href="/account/change_password/">Change Password</a>
-            <a class='dropdown-link' href="/account/logout/">Logout</a>
+            <a class='header-link dropdown-link' href="/account/settings_page/">Account Settings</a>
+            <a class='header-link dropdown-link' href="/account/change_password/">Change Password</a>
+            <a class='header-link dropdown-link' href="/account/logout/">Logout</a>
         </div>
 
         <div id='login-dialog-form' title='Login'>

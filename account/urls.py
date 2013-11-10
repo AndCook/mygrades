@@ -4,11 +4,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('account.views',
-                       url(r'^login_page/$', 'login_page'),
-                       url(r'^signup_page/$', 'signup_page'),
                        url(r'^login/$', 'my_login'),
-                       url(r'^signup', 'my_signup'),
+                       url(r'^signup/$', 'my_signup'),
+                       url(r'^change_password/$', 'my_change_password'),
+                       url(r'^settings_page/$', 'settings_page'),
+                       url(r'^settings/$', 'my_settings'),
                        url(r'^logout/$', 'my_logout'),
-                       url(r'^settings/$', 'settings'),
-                       url(r'^change_password/$', 'change_password')
 )

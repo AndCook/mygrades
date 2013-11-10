@@ -7,17 +7,23 @@
 
 {% block base_content %}
 
-    <div id='signup-div'>
+    <div class="form-wrapper">
         <form method='post' action='/account/signup/' name='signup_form'>{% csrf_token %}
             <h2 class='form-title'>Sign Up</h2>
+
+            {% for error in login_form.non_field_errors %}
+                <p class='error'>{{ error|escape }}</p>
+            {% endfor %}
+
             {% for field in signup_form %}
                 {% for error in field.errors %}
                     <p class='error'>{{ error|escape }}</p>
                 {% endfor %}
                 {{ field }}
             {% endfor %}
+
             <div style="border-top: 1px #aaaaaa solid; width: 98%; margin: 0 auto">
-                <input type="submit" value="Sign Up" style="margin-right: 7.5%"/>
+                <input type="submit" value="Sign Up"/>
             </div>
         </form>
     </div>

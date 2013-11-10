@@ -1,22 +1,81 @@
+from collections import OrderedDict
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, get_user_model
 from django.utils.text import capfirst
 
 
-class LoginForm(forms.Form):
-    """
-    Base class for authenticating users. Extend this to get a form that accepts
-    username/password logins.
-    """
-    username = forms.CharField(max_length=254,
-                               widget=forms.TextInput(
-                                   attrs={'value': 'Username',
-                                          'autocomplete': 'off',
-                                          'onfocus': "if(this.value==this.defaultValue)this.value='';",
-                                          'onblur': "if(this.value=='')this.value=this.defaultValue;"}),
+# based on LoginForm in django source code
+class MyLoginForm(forms.Form):
+    error_messages = {
+        'invalid_login': "Invalid email/password combination",
+    }
+
+    email_field = forms.CharField(required=True,
+                                  widget=forms.PasswordInput( # use instead of TextInput to remove text on load
+                                      attrs={'value': 'Email',
+                                             'type': 'text',
+                                             'autocomplete': 'off',
+                                             'onfocus': "if(this.value==this.defaultValue)this.value='';",
+                                             'onblur': "if(this.value=='')this.value=this.defaultValue;"}),
+
+                                  )
+
+    password_field = forms.CharField(required=True,
+                                     widget=forms.PasswordInput(
+                                         attrs={'value': 'Password',
+                                                'type': 'text',
+                                                'onfocus': "if(this.value==this.defaultValue) {"
+                                                           "this.value='';"
+                                                           "this.type='password'; }",
+                                                'onblur': "if(this.value=='') {"
+                                                          "this.value=this.defaultValue;"
+                                                          "this.type='text'; }"})
+                                     )
+
+    def clean(self):
+        email = self.cleaned_data.get('email_field')
+        password = self.cleaned_data.get('password_field')
+
+        potential_user = authenticate(username=email, password=password)
+        if potential_user is None or not potential_user.is_active:
+            raise forms.ValidationError(
+                self.error_messages['invalid_login'],
+                code='invalid_login',
+            )
+        return self.cleaned_data
+
+
+# based on UserCreationForm in django source code
+class MyUserCreationForm(forms.Form):
+    error_messages = {
+        'duplicate_email': 'A user with that email already exists.',
+        'all_fields_required': 'All fields are required',
+        'password_mismatch': 'The two password fields didn\'t match.',
+    }
+
+    email = forms.EmailField(widget=forms.PasswordInput(
+        attrs={'value': 'Email',
+               'type': 'text',
+               'autocomplete': 'off',
+               'onfocus': "if(this.value==this.defaultValue)this.value='';",
+               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
     )
-    password = forms.CharField(label="Password", widget=forms.PasswordInput(
+    first_name = forms.CharField(widget=forms.PasswordInput(
+        attrs={'value': 'First Name',
+               'type': 'text',
+               'autocomplete': 'off',
+               'onfocus': "if(this.value==this.defaultValue)this.value='';",
+               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    )
+    last_name = forms.CharField(widget=forms.PasswordInput(
+        attrs={'value': 'Last Name',
+               'type': 'text',
+               'autocomplete': 'off',
+               'onfocus': "if(this.value==this.defaultValue)this.value='';",
+               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    )
+    password1 = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'Password',
                'type': 'text',
                'onfocus': "if(this.value==this.defaultValue) {"
@@ -26,230 +85,132 @@ class LoginForm(forms.Form):
                          "this.value=this.defaultValue;"
                          "this.type='text'; }"})
     )
+    password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'value': 'Password Confirmation',
+               'type': 'text',
+               'onfocus': "if(this.value==this.defaultValue) {"
+                          "this.value='';"
+                          "this.type='password'; }",
+               'onblur': "if(this.value=='') {"
+                         "this.value=this.defaultValue;"
+                         "this.type='text'; }"})
+    )
 
-    error_messages = {
-        'invalid_login':
-        "Please enter a correct %(username)s and password. Note that both fields may be case-sensitive.",
-        'inactive': "This account is inactive.",
-    }
-
-    def __init__(self, request=None, *args, **kwargs):
-        """
-        The 'request' parameter is set for custom auth use by subclasses.
-        The form data comes in via the standard 'data' kwarg.
-        """
-        self.request = request
-        self.user_cache = None
-        super(LoginForm, self).__init__(*args, **kwargs)
-
-        # Set the label for the "username" field.
-        UserModel = get_user_model()
-        self.username_field = UserModel._meta.get_field(UserModel.USERNAME_FIELD)
-        if self.fields['username'].label is None:
-            self.fields['username'].label = capfirst(self.username_field.verbose_name)
-
-    def clean(self):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-
-        if username and password:
-            self.user_cache = authenticate(username=username,
-                                           password=password)
-            if self.user_cache is None:
-                raise forms.ValidationError(
-                    self.error_messages['invalid_login'],
-                    code='invalid_login',
-                    params={'username': self.username_field.verbose_name},
-                )
-            else:
-                self.confirm_login_allowed(self.user_cache)
-
-        return self.cleaned_data
-
-    def confirm_login_allowed(self, user):
-        """
-        Controls whether the given User may log in. This is a policy setting,
-        independent of end-user authentication. This default behavior is to
-        allow login by active users, and reject login by inactive users.
-
-        If the given user cannot log in, this method should raise a
-        ``forms.ValidationError``.
-
-        If the given user may log in, this method should return None.
-        """
-        if not user.is_active:
-            raise forms.ValidationError(
-                self.error_messages['inactive'],
-                code='inactive',
-            )
-
-    def get_user_id(self):
-        if self.user_cache:
-            return self.user_cache.id
-        return None
-
-    def get_user(self):
-        return self.user_cache
-
-
-class UserCreateForm(forms.ModelForm):
-    """
-    A form that creates a user, with no privileges, from the given username and
-    password.
-    """
-    error_messages = {
-        'duplicate_username': "A user with that username already exists.",
-        'password_mismatch': "The two password fields didn't match.",
-    }
-
-    first_name = forms.CharField(widget=forms.TextInput(
-        attrs={'value': 'First Name',
-               'autocomplete': 'off',
-               'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"}
-    ))
-    last_name = forms.CharField(widget=forms.TextInput(
-        attrs={'value': 'Last Name',
-               'autocomplete': 'off',
-               'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"}
-    ))
-    email = forms.EmailField(widget=forms.TextInput(
-        attrs={'value': 'Email',
-               'autocomplete': 'off',
-               'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"}
-    ))
-    username = forms.RegexField(label="Username", max_length=30,
-                                widget=forms.TextInput(
-                                    attrs={'value': 'Username',
-                                           'autocomplete': 'off',
-                                           'onfocus': "if(this.value==this.defaultValue)this.value='';",
-                                           'onblur': "if(this.value=='')this.value=this.defaultValue;"}),
-                                regex=r'^[\w.@+-]+$',
-                                help_text="Required. 30 characters or fewer. Letters, digits and @.+-_ only.",
-                                error_messages={
-                                    'invalid': "This value may contain only letters, numbers and @.+-_ characters."}
-                                )
-    password1 = forms.CharField(label="Password",
-                                widget=forms.PasswordInput(
-                                    attrs={'value': 'Password',
-                                           'type': 'text',
-                                           'onfocus': "if(this.value==this.defaultValue) {"
-                                                      "this.value='';"
-                                                      "this.type='password'; }",
-                                           'onblur': "if(this.value=='') {"
-                                                     "this.value=this.defaultValue;"
-                                                     "this.type='text'; }"}),
-                                )
-    password2 = forms.CharField(label="Password confirmation",
-                                widget=forms.PasswordInput(
-                                    attrs={'value': 'Password Confirmation',
-                                           'type': 'text',
-                                           'onfocus': "if(this.value==this.defaultValue) {"
-                                                      "this.value='';"
-                                                      "this.type='password'; }",
-                                           'onblur': "if(this.value=='') {"
-                                                     "this.value=this.defaultValue;"
-                                                     "this.type='text'; }"}),
-                                help_text="Enter the same password as above, for verification."
-                                )
-
-    class Meta:
-        model = User
-        fields = ("username",)
-
-    def clean_username(self):
+    def clean_email(self):
         # Since User.username is unique, this check is redundant,
         # but it sets a nicer error message than the ORM. See #13147.
-        username = self.cleaned_data["username"]
+        email = self.cleaned_data["email"]
+        if email == '' or email == 'Email':
+            raise forms.ValidationError(
+                self.error_messages['all_fields_required'],
+                code='all_fields_required'
+            )
         try:
-            User._default_manager.get(username=username)
+            User._default_manager.get(username=email)
         except User.DoesNotExist:
-            return username
+            return email
         raise forms.ValidationError(
-            self.error_messages['duplicate_username'],
-            code='duplicate_username',
+            self.error_messages['duplicate_email'],
+            code='duplicate_email',
         )
 
-    def clean_password2(self):
+    def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
+        if password1 == '' or password2 == '':
+            raise forms.ValidationError(
+                self.error_messages['all_fields_required'],
+                code='all_fields_required'
+            )
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError(
                 self.error_messages['password_mismatch'],
                 code='password_mismatch',
             )
-        return password2
+        return password1
 
-    def save(self, commit=True):
-        user = super(UserCreateForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        user.email = self.cleaned_data["email"]
-        user.first_name = self.cleaned_data["first_name"]
-        user.last_name = self.cleaned_data["last_name"]
-        if commit:
-            user.save()
-        return user
+    def clean(self):
+        cleaned_data = super(MyUserCreationForm, self).clean()
+        first_name = cleaned_data['first_name']
+        last_name = cleaned_data['last_name']
+        if first_name == '' or first_name == 'First Name' or last_name == '' or last_name == 'Last Name':
+            raise forms.ValidationError(
+                self.error_messages['all_fields_required'],
+                code='all_fields_required'
+            )
+        return cleaned_data
 
 
-class ChangeSettingsForm(forms.Form):
+class MyChangeSettingsForm(forms.Form):
     error_messages = {
-        'duplicate_username': "A user with that username already exists.",
+        'duplicate_email': 'A user with that email already exists.',
+        'all_fields_required': 'All fields are required',
+        'password_mismatch': 'The two password fields didn\'t match.',
     }
 
-    first_name = forms.CharField(widget=forms.TextInput(
+    email = forms.EmailField(widget=forms.PasswordInput(
+        attrs={'value': 'Email',
+               'type': 'text',
+               'autocomplete': 'off',
+               'onfocus': "if(this.value==this.defaultValue)this.value='';",
+               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    )
+    first_name = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'First Name',
+               'type': 'text',
                'autocomplete': 'off',
                'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"}
-    ))
-
-    last_name = forms.CharField(widget=forms.TextInput(
+               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    )
+    last_name = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'Last Name',
+               'type': 'text',
                'autocomplete': 'off',
                'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"}
-    ))
+               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    )
 
-    username = forms.RegexField(label="Username", max_length=30,
-                                widget=forms.TextInput(
-                                    attrs={'value': 'Username',
-                                           'autocomplete': 'off',
-                                           'onfocus': "if(this.value==this.defaultValue)this.value='';",
-                                           'onblur': "if(this.value=='')this.value=this.defaultValue;"}),
-                                regex=r'^[\w.@+-]+$',
-                                help_text="Required. 30 characters or fewer. Letters, digits and @.+-_ only.",
-                                error_messages={
-                                    'invalid': "This value may contain only letters, numbers and @.+-_ characters."}
-                                )
-
-    def clean_username(self):
+    def clean_email(self):
         # Since User.username is unique, this check is redundant,
         # but it sets a nicer error message than the ORM. See #13147.
-        username = self.cleaned_data["username"]
+        email = self.cleaned_data["email"]
+        if email == '' or email == 'Email':
+            raise forms.ValidationError(
+                self.error_messages['all_fields_required'],
+                code='all_fields_required'
+            )
         try:
-            User._default_manager.get(username=username)
+            User._default_manager.get(username=email)
         except User.DoesNotExist:
-            return username
+            return email
         raise forms.ValidationError(
-            self.error_messages['duplicate_username'],
-            code='duplicate_username',
+            self.error_messages['duplicate_email'],
+            code='duplicate_email',
         )
 
+    def clean(self):
+        cleaned_data = super(MyChangeSettingsForm, self).clean()
+        first_name = cleaned_data['first_name']
+        last_name = cleaned_data['last_name']
+        if first_name == '' or first_name == 'First Name' or last_name == '' or last_name == 'Last Name':
+            raise forms.ValidationError(
+                self.error_messages['all_fields_required'],
+                code='all_fields_required'
+            )
+        return cleaned_data
 
-class UpdatePasswordForm(forms.Form):
+
+# A combination of PasswordChangeForm and SetPasswordForm in django source code
+class MyPasswordChangeForm(forms.Form):
     """
-    A form that creates a user, with no privileges, from the given username and
-    password.
+    A form that lets a user change his/her password by entering
+    their old password.
     """
     error_messages = {
+        'password_incorrect': "Your old password was entered incorrectly. Please enter it again.",
         'password_mismatch': "The two password fields didn't match.",
-        'password_incorrect': "Your old password was entered incorrectly. "
-                                "Please enter it again.",
     }
-
-    old_password = forms.CharField(label="Old Password",
+    old_password = forms.CharField(label="Old password",
                                    widget=forms.PasswordInput(
                                        attrs={'value': 'Old Password',
                                               'type': 'text',
@@ -258,63 +219,56 @@ class UpdatePasswordForm(forms.Form):
                                                          "this.type='password'; }",
                                               'onblur': "if(this.value=='') {"
                                                         "this.value=this.defaultValue;"
-                                                        "this.type='text'; }"}),
-                                   help_text="Enter your current password."
-                                   )
+                                                        "this.type='text'; }"}),)
+    new_password1 = forms.CharField(label="New password",
+                                    widget=forms.PasswordInput(
+                                        attrs={'value': 'New Password',
+                                               'type': 'text',
+                                               'onfocus': "if(this.value==this.defaultValue) {"
+                                                          "this.value='';"
+                                                          "this.type='password'; }",
+                                               'onblur': "if(this.value=='') {"
+                                                         "this.value=this.defaultValue;"
+                                                         "this.type='text'; }"}),)
+    new_password2 = forms.CharField(label="New password confirmation",
+                                    widget=forms.PasswordInput(
+                                        attrs={'value': 'New Password Confirmation',
+                                               'type': 'text',
+                                               'onfocus': "if(this.value==this.defaultValue) {"
+                                                          "this.value='';"
+                                                          "this.type='password'; }",
+                                               'onblur': "if(this.value=='') {"
+                                                         "this.value=this.defaultValue;"
+                                                         "this.type='text'; }"}),)
 
-    password1 = forms.CharField(label="Password",
-                                widget=forms.PasswordInput(
-                                    attrs={'value': 'New Password',
-                                           'type': 'text',
-                                           'onfocus': "if(this.value==this.defaultValue) {"
-                                                      "this.value='';"
-                                                      "this.type='password'; }",
-                                           'onblur': "if(this.value=='') {"
-                                                     "this.value=this.defaultValue;"
-                                                     "this.type='text'; }"}),
-                                )
-    password2 = forms.CharField(label="Password confirmation",
-                                widget=forms.PasswordInput(
-                                    attrs={'value': 'New Password Confirmation',
-                                           'type': 'text',
-                                           'onfocus': "if(this.value==this.defaultValue) {"
-                                                      "this.value='';"
-                                                      "this.type='password'; }",
-                                           'onblur': "if(this.value=='') {"
-                                                     "this.value=this.defaultValue;"
-                                                     "this.type='text'; }"}),
-                                help_text="Enter the same password as above, for verification."
-                                )
-
-    #class Meta:
-        #model = User
-        #fields = ("username",)
-
-    def clean_password2(self):
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
-                code='password_mismatch',
-            )
-        return password2
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(MyPasswordChangeForm, self).__init__(*args, **kwargs)
 
     def clean_old_password(self):
         """
         Validates that the old_password field is correct.
         """
         old_password = self.cleaned_data["old_password"]
-        if not self.user.check_password(old_password):
+        if self.user is None or not self.user.check_password(old_password):
             raise forms.ValidationError(
                 self.error_messages['password_incorrect'],
                 code='password_incorrect',
             )
         return old_password
 
-    def save(self, commit=True):
-        user = super(UpdatePasswordForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        if commit:
-            user.save()
-        return user
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError(
+                    self.error_messages['password_mismatch'],
+                    code='password_mismatch',
+                )
+        return password2
+
+MyPasswordChangeForm.base_fields = OrderedDict(
+    (k, MyPasswordChangeForm.base_fields[k])
+    for k in ['old_password', 'new_password1', 'new_password2']
+)

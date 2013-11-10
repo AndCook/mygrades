@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from account.forms import UserCreateForm, LoginForm
+from account.forms import MyUserCreationForm, MyLoginForm
 
 
 def home(request):
@@ -12,4 +12,4 @@ def about(request):
 
 
 def base_form_context_processor(request):
-    return {'login_form': LoginForm, 'signup_form': UserCreateForm}
+    return {'login_form': MyLoginForm, 'signup_form': MyUserCreationForm}
