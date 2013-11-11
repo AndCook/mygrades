@@ -1,11 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
-from django import forms
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-
+from django.forms.util import ErrorList
 from account.forms import MyLoginForm, MyUserCreationForm, MyChangeSettingsForm, MyPasswordChangeForm
 
 
@@ -32,14 +31,13 @@ def my_signup(request):
         form = MyUserCreationForm(request.POST)
 
         if form.is_valid():
-            user_info = form.cleaned_data
-            email = user_info['email']
-            password = user_info['password1']
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password1')
             user = User.objects.create_user(username=email,
                                             password=password,
                                             email=email)
-            user.first_name = user_info['first_name']
-            user.last_name = user_info['last_name']
+            user.first_name = form.cleaned_data.get('first_name')
+            user.last_name = form.cleaned_data.get('last_name')
             user.is_active = True
             user.save()
 
@@ -54,30 +52,50 @@ def my_signup(request):
 
 
 @login_required
-def my_change_password(request):
+def my_settings(request):
     if request.method == 'POST':
-        form = MyPasswordChangeForm(request.POST, {'user': request.user})
+        form = MyChangeSettingsForm(request.POST)
 
         if form.is_valid():
-            request.user.set_password(form.cleaned_data['new_password1'])
+            email = form.cleaned_data.get('email')
+            if email != 'Email' and email.strip() != '':
+                request.user.username = email.strip()
+                request.user.email = email.strip()
+            first_name = form.cleaned_data.get('first_name')
+            if first_name != 'First Name' and first_name.strip() != '':
+                request.user.first_name = first_name.strip()
+            last_name = form.cleaned_data.get('last_name')
+            if last_name != 'Last Name' and last_name.strip() != '':
+                request.user.last_name = last_name.strip()
             request.user.save()
             return HttpResponseRedirect('/account/settings/')
     else:
-        form = MyPasswordChangeForm({'user': request.user})
-    return render_to_response('change_password_page.html',
-                              {'password_change_form': form},
+        form = MyChangeSettingsForm()
+    return render_to_response('settings_page.html',
+                              {'change_settings_form': form},
                               RequestContext(request))
 
 
 @login_required
-def settings_page(request):
-    return render_to_response('settings_page.html',
-                              {'change_settings_form': MyChangeSettingsForm()},
+def my_change_password(request):
+    if request.method == 'POST':
+        form = MyPasswordChangeForm(request.POST)
+
+        if form.is_valid():
+            print('old pass: ' + form.cleaned_data.get('old_password'))
+            if not request.user.check_password(form.cleaned_data.get('old_password')):
+                errors = form.errors.setdefault('old_password', ErrorList())
+                errors.append(form.error_messages['password_incorrect'])
+            else:
+                print('new pass: ' + form.cleaned_data.get('new_password1'))
+                request.user.set_password(form.cleaned_data.get('new_password1'))
+                request.user.save()
+                return HttpResponseRedirect('/account/settings/')
+    else:
+        form = MyPasswordChangeForm()
+    return render_to_response('change_password_page.html',
+                              {'password_change_form': form},
                               RequestContext(request))
-
-
-def my_settings(request):
-    return HttpResponseRedirect('/account/settings_page/')
 
 
 def my_logout(request):

@@ -1,8 +1,7 @@
-from collections import OrderedDict
+from django.forms.util import ErrorList
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, get_user_model
-from django.utils.text import capfirst
+from django.contrib.auth import authenticate
 
 
 # based on LoginForm in django source code
@@ -34,8 +33,10 @@ class MyLoginForm(forms.Form):
                                      )
 
     def clean(self):
-        email = self.cleaned_data.get('email_field')
-        password = self.cleaned_data.get('password_field')
+        cleaned_data = super(MyLoginForm, self).clean()
+
+        email = cleaned_data.get('email_field')
+        password = cleaned_data.get('password_field')
 
         potential_user = authenticate(username=email, password=password)
         if potential_user is None or not potential_user.is_active:
@@ -43,7 +44,7 @@ class MyLoginForm(forms.Form):
                 self.error_messages['invalid_login'],
                 code='invalid_login',
             )
-        return self.cleaned_data
+        return cleaned_data
 
 
 # based on UserCreationForm in django source code
@@ -54,7 +55,7 @@ class MyUserCreationForm(forms.Form):
         'password_mismatch': 'The two password fields didn\'t match.',
     }
 
-    email = forms.EmailField(widget=forms.PasswordInput(
+    email = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'Email',
                'type': 'text',
                'autocomplete': 'off',
@@ -99,56 +100,59 @@ class MyUserCreationForm(forms.Form):
     def clean_email(self):
         # Since User.username is unique, this check is redundant,
         # but it sets a nicer error message than the ORM. See #13147.
-        email = self.cleaned_data["email"]
+        email = self.cleaned_data.get('email')
         if email == '' or email == 'Email':
             raise forms.ValidationError(
                 self.error_messages['all_fields_required'],
                 code='all_fields_required'
             )
-        try:
-            User._default_manager.get(username=email)
-        except User.DoesNotExist:
-            return email
-        raise forms.ValidationError(
-            self.error_messages['duplicate_email'],
-            code='duplicate_email',
-        )
+        if User.objects.filter(username=email).count():
+            raise forms.ValidationError(
+                self.error_messages['duplicate_email'],
+                code='duplicate_email',
+            )
+        return email
 
-    def clean_password1(self):
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 == '' or password2 == '':
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if first_name == 'First Name' or first_name == '':
             raise forms.ValidationError(
                 self.error_messages['all_fields_required'],
                 code='all_fields_required'
             )
-        if password1 and password2 and password1 != password2:
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if last_name == 'Last Name' or last_name == '':
             raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
-                code='password_mismatch',
+                self.error_messages['all_fields_required'],
+                code='all_fields_required'
             )
-        return password1
+        return last_name
 
     def clean(self):
         cleaned_data = super(MyUserCreationForm, self).clean()
-        first_name = cleaned_data['first_name']
-        last_name = cleaned_data['last_name']
-        if first_name == '' or first_name == 'First Name' or last_name == '' or last_name == 'Last Name':
+
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+
+        if password1 != password2:
             raise forms.ValidationError(
-                self.error_messages['all_fields_required'],
-                code='all_fields_required'
+                self.error_messages['password_mismatch'],
+                code='password_mismatch'
             )
+            #self.errors.setdefault('password1', ErrorList()).append(self.error_messages['password_mismatch'])
+
         return cleaned_data
 
 
 class MyChangeSettingsForm(forms.Form):
     error_messages = {
         'duplicate_email': 'A user with that email already exists.',
-        'all_fields_required': 'All fields are required',
-        'password_mismatch': 'The two password fields didn\'t match.',
     }
 
-    email = forms.EmailField(widget=forms.PasswordInput(
+    email = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'Email',
                'type': 'text',
                'autocomplete': 'off',
@@ -174,101 +178,62 @@ class MyChangeSettingsForm(forms.Form):
         # Since User.username is unique, this check is redundant,
         # but it sets a nicer error message than the ORM. See #13147.
         email = self.cleaned_data["email"]
-        if email == '' or email == 'Email':
+        if User.objects.filter(username=email).count():
             raise forms.ValidationError(
-                self.error_messages['all_fields_required'],
-                code='all_fields_required'
+                self.error_messages['duplicate_email'],
+                code='duplicate_email',
             )
-        try:
-            User._default_manager.get(username=email)
-        except User.DoesNotExist:
-            return email
-        raise forms.ValidationError(
-            self.error_messages['duplicate_email'],
-            code='duplicate_email',
-        )
-
-    def clean(self):
-        cleaned_data = super(MyChangeSettingsForm, self).clean()
-        first_name = cleaned_data['first_name']
-        last_name = cleaned_data['last_name']
-        if first_name == '' or first_name == 'First Name' or last_name == '' or last_name == 'Last Name':
-            raise forms.ValidationError(
-                self.error_messages['all_fields_required'],
-                code='all_fields_required'
-            )
-        return cleaned_data
+        return email
 
 
 # A combination of PasswordChangeForm and SetPasswordForm in django source code
 class MyPasswordChangeForm(forms.Form):
-    """
-    A form that lets a user change his/her password by entering
-    their old password.
-    """
     error_messages = {
-        'password_incorrect': "Your old password was entered incorrectly. Please enter it again.",
-        'password_mismatch': "The two password fields didn't match.",
+        'password_incorrect': 'Old password was incorrect.',
+        'password_mismatch': 'The two password fields didn\'t match.',
     }
-    old_password = forms.CharField(label="Old password",
-                                   widget=forms.PasswordInput(
-                                       attrs={'value': 'Old Password',
-                                              'type': 'text',
-                                              'onfocus': "if(this.value==this.defaultValue) {"
-                                                         "this.value='';"
-                                                         "this.type='password'; }",
-                                              'onblur': "if(this.value=='') {"
-                                                        "this.value=this.defaultValue;"
-                                                        "this.type='text'; }"}),)
-    new_password1 = forms.CharField(label="New password",
-                                    widget=forms.PasswordInput(
-                                        attrs={'value': 'New Password',
-                                               'type': 'text',
-                                               'onfocus': "if(this.value==this.defaultValue) {"
-                                                          "this.value='';"
-                                                          "this.type='password'; }",
-                                               'onblur': "if(this.value=='') {"
-                                                         "this.value=this.defaultValue;"
-                                                         "this.type='text'; }"}),)
-    new_password2 = forms.CharField(label="New password confirmation",
-                                    widget=forms.PasswordInput(
-                                        attrs={'value': 'New Password Confirmation',
-                                               'type': 'text',
-                                               'onfocus': "if(this.value==this.defaultValue) {"
-                                                          "this.value='';"
-                                                          "this.type='password'; }",
-                                               'onblur': "if(this.value=='') {"
-                                                         "this.value=this.defaultValue;"
-                                                         "this.type='text'; }"}),)
+    old_password = forms.CharField(widget=forms.PasswordInput(
+        attrs={'value': 'Old Password',
+               'type': 'text',
+               'onfocus': "if(this.value==this.defaultValue) {"
+                          "this.value='';"
+                          "this.type='password'; }",
+               'onblur': "if(this.value=='') {"
+                         "this.value=this.defaultValue;"
+                         "this.type='text'; }"})
+    )
+    new_password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'value': 'New Password',
+               'type': 'text',
+               'onfocus': "if(this.value==this.defaultValue) {"
+                          "this.value='';"
+                          "this.type='password'; }",
+               'onblur': "if(this.value=='') {"
+                         "this.value=this.defaultValue;"
+                         "this.type='text'; }"})
+    )
+    new_password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'value': 'New Password Confirmation',
+               'type': 'text',
+               'onfocus': "if(this.value==this.defaultValue) {"
+                          "this.value='';"
+                          "this.type='password'; }",
+               'onblur': "if(this.value=='') {"
+                         "this.value=this.defaultValue;"
+                         "this.type='text'; }"})
+    )
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super(MyPasswordChangeForm, self).__init__(*args, **kwargs)
+    def clean(self):
+        cleaned_data = super(MyPasswordChangeForm, self).clean()
 
-    def clean_old_password(self):
-        """
-        Validates that the old_password field is correct.
-        """
-        old_password = self.cleaned_data["old_password"]
-        if self.user is None or not self.user.check_password(old_password):
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+
+        if password1 != password2:
             raise forms.ValidationError(
-                self.error_messages['password_incorrect'],
-                code='password_incorrect',
+                self.error_messages['password_mismatch'],
+                code='password_mismatch'
             )
-        return old_password
+            #self.errors.setdefault('password1', ErrorList()).append(self.error_messages['password_mismatch'])
 
-    def clean_new_password2(self):
-        password1 = self.cleaned_data.get('new_password1')
-        password2 = self.cleaned_data.get('new_password2')
-        if password1 and password2:
-            if password1 != password2:
-                raise forms.ValidationError(
-                    self.error_messages['password_mismatch'],
-                    code='password_mismatch',
-                )
-        return password2
-
-MyPasswordChangeForm.base_fields = OrderedDict(
-    (k, MyPasswordChangeForm.base_fields[k])
-    for k in ['old_password', 'new_password1', 'new_password2']
-)
+        return cleaned_data

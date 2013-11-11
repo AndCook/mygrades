@@ -11,7 +11,7 @@
         <table id="settings_wrapper-table"><tbody>
             <tr>
                 <td colspan="2">
-                    <h1>Account Settings</h1>
+                    <h1 style="text-align: center">Account Settings</h1>
                 </td>
             </tr>
             <tr>
@@ -29,9 +29,9 @@
                     </tbody></table>
                 </td>
 
-                <td class='form-wrapper'>
-                    <form method='post' action='/' name='change_settings_form'>{% csrf_token %}
-                        <p style="font-size: 1em; text-align: center">Enter any information you would like to change</p>
+                <td id='change-settings-div'>
+                    <form method='post' action='/account/settings/' name='change_settings_form'>{% csrf_token %}
+                        <p style="font-size: 1em; text-align: center">Enter <b>only</b> information you would like to change</p>
                         {{ change_settings_form.non_field_errors }}
                         {% for field in change_settings_form %}
                             {% for error in field.errors %}
