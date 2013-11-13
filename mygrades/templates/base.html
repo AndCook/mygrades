@@ -35,7 +35,7 @@
                                 About
                             </a>
                         </li>
-                        {% if user.is_authenticated %}
+                        {% if user.is_active %}
                             <li>
                                 <a href='/gradebook/overview/' class='header-link'>
                                     Overview
@@ -57,6 +57,13 @@
                 <div id='right-header'>
                     <ul>
                         {% if user.is_authenticated %}
+                            {% if not user.is_active %}
+                                <li>
+                                <a href='/account/settings/' class='header-link'>
+                                    Validate Account
+                                </a>
+                            </li>
+                            {% endif %}
                             <li>
                                 <a id='account-button' class='header-link'>
                                     {{ user.first_name }} {{ user.last_name }}
@@ -88,7 +95,7 @@
         <div id='login-dialog-form' title='Login'>
             <form method='post' action='/account/login/' name='login_form'>{% csrf_token %}
                 <h2 class='form-title'>Login</h2>
-                <p class='validate-tips'></p>
+
                 {% for field in login_form %}
                     {{ field }}
                 {% endfor %}
@@ -98,7 +105,6 @@
         <div id='signup-dialog-form' title='Sign up'>
             <form method='post' action='/account/signup/' name='signup_form'>{% csrf_token %}
                 <h2 class='form-title'>Sign Up</h2>
-                <p class='validate-tips'></p>
                 {% for field in signup_form %}
                     {{ field }}
                 {% endfor %}

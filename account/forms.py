@@ -1,4 +1,3 @@
-from django.forms.util import ErrorList
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -11,7 +10,7 @@ class MyLoginForm(forms.Form):
     }
 
     email_field = forms.CharField(required=True,
-                                  widget=forms.PasswordInput( # use instead of TextInput to remove text on load
+                                  widget=forms.PasswordInput(  # use instead of TextInput to remove text on load
                                       attrs={'value': 'Email',
                                              'type': 'text',
                                              'autocomplete': 'off',
@@ -39,7 +38,7 @@ class MyLoginForm(forms.Form):
         password = cleaned_data.get('password_field')
 
         potential_user = authenticate(username=email, password=password)
-        if potential_user is None or not potential_user.is_active:
+        if potential_user is None:
             raise forms.ValidationError(
                 self.error_messages['invalid_login'],
                 code='invalid_login',
@@ -131,47 +130,44 @@ class MyUserCreationForm(forms.Form):
             )
         return last_name
 
-    def clean(self):
-        cleaned_data = super(MyUserCreationForm, self).clean()
-
-        password1 = cleaned_data.get('password1')
-        password2 = cleaned_data.get('password2')
-
-        if password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
-                code='password_mismatch'
-            )
-            #self.errors.setdefault('password1', ErrorList()).append(self.error_messages['password_mismatch'])
-
-        return cleaned_data
-
 
 class MyChangeSettingsForm(forms.Form):
     error_messages = {
         'duplicate_email': 'A user with that email already exists.',
+        'incorrect_validation': 'Incorrect validation code',
     }
 
-    email = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'Email',
-               'type': 'text',
-               'autocomplete': 'off',
-               'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    validation_code = forms.CharField(required=False,
+                                      widget=forms.PasswordInput(
+                                          attrs={'value': 'Validation Code',
+                                                 'type': 'text',
+                                                 'autocomplete': 'off',
+                                                 'onfocus': "if(this.value==this.defaultValue)this.value='';",
+                                                 'onblur': "if(this.value=='')this.value=this.defaultValue;"})
     )
-    first_name = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'First Name',
-               'type': 'text',
-               'autocomplete': 'off',
-               'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    email = forms.CharField(required=False,
+                            widget=forms.PasswordInput(
+                                attrs={'value': 'Email',
+                                       'type': 'text',
+                                       'autocomplete': 'off',
+                                       'onfocus': "if(this.value==this.defaultValue)this.value='';",
+                                       'onblur': "if(this.value=='')this.value=this.defaultValue;"})
     )
-    last_name = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'Last Name',
-               'type': 'text',
-               'autocomplete': 'off',
-               'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    first_name = forms.CharField(required=False,
+                                 widget=forms.PasswordInput(
+                                     attrs={'value': 'First Name',
+                                            'type': 'text',
+                                            'autocomplete': 'off',
+                                            'onfocus': "if(this.value==this.defaultValue)this.value='';",
+                                            'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    )
+    last_name = forms.CharField(required=False,
+                                widget=forms.PasswordInput(
+                                    attrs={'value': 'Last Name',
+                                           'type': 'text',
+                                           'autocomplete': 'off',
+                                           'onfocus': "if(this.value==this.defaultValue)this.value='';",
+                                           'onblur': "if(this.value=='')this.value=this.defaultValue;"})
     )
 
     def clean_email(self):
@@ -222,18 +218,3 @@ class MyPasswordChangeForm(forms.Form):
                          "this.value=this.defaultValue;"
                          "this.type='text'; }"})
     )
-
-    def clean(self):
-        cleaned_data = super(MyPasswordChangeForm, self).clean()
-
-        password1 = cleaned_data.get('password1')
-        password2 = cleaned_data.get('password2')
-
-        if password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
-                code='password_mismatch'
-            )
-            #self.errors.setdefault('password1', ErrorList()).append(self.error_messages['password_mismatch'])
-
-        return cleaned_data

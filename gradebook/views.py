@@ -1,18 +1,28 @@
 from django.shortcuts import render_to_response
 from gradebook.models import Semester, Course, Category, Assignment
 from django.template import RequestContext
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
 @login_required
 def overview(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/account/settings/')
+
     return render_to_response('overview.html', RequestContext(request))
 
 @login_required
 def semester_detail(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/account/settings/')
+
     return render_to_response('semester_detail.html', RequestContext(request))
 
 @login_required
 def course_detail(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/account/settings/')
+
     semesters = Semester.objects.all()
     selected_semester = None
     if len(semesters) > 0:

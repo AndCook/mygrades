@@ -1,13 +1,14 @@
-#settings_wrapper {
-    width: 700px;
+#validation_wrapper {
     margin: auto;
-    top: 50px;
+    top: 25px;
     position: relative;
 }
 
-#settings_wrapper-table {
-    border: 1px #aaaaaa solid;
-    border-radius: 5px;
+#settings_wrapper {
+    width: 700px;
+    top: 50px;
+    margin: auto;
+    position: relative;
 }
 
 #current-settings-div td {

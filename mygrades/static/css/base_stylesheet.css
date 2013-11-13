@@ -12,7 +12,7 @@ p, h1 {
 
     /*the next three lines truncate long text*/
     overflow: hidden;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 

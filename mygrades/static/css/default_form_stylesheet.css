@@ -16,7 +16,6 @@
 .form-wrapper {
     width: 350px;
     margin: auto;
-    top: 50px;
 
     border: 1px #aaaaaa solid;
     border-radius: 5px;
@@ -65,9 +64,17 @@ fieldset {
 
 .error {
     width: 80%;
-    margin: 0 auto;
+    margin: 10px auto;
     text-align: center;
     font-size: 1em;
     line-height: 2em;
     color: darkred;
+}
+
+.form-wrapper p {
+    width: 90%;
+    margin: 10px auto;
+    overflow: visible;
+    white-space: normal;
+    font-size: 1em;
 }
