@@ -1,13 +1,7 @@
-#validation_wrapper {
-    margin: auto;
-    top: 25px;
-    position: relative;
-}
-
 #settings_wrapper {
     width: 700px;
     top: 50px;
-    margin: auto;
+    margin: 0 auto 50px;
     position: relative;
 }
 

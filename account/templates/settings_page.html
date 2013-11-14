@@ -2,39 +2,10 @@
 
 {% block extra_head %}
     <link rel='stylesheet' type='text/css' href='/static/css/settings_stylesheet.css' />
-    <script type='text/javascript' src='/static/javascript/settings_script.js'></script>
+    <!--script type='text/javascript' src='/static/javascript/settings_script.js'></script-->
 {% endblock %}
 
 {% block base_content %}
-
-    {% if not user.is_active %}
-        <div class='form-wrapper' id='validation_wrapper'>
-            <form method='post' action='/account/settings/' name='validate_email_form'>{% csrf_token %}
-                <h2 class='form-title'>Email Validation</h2>
-                <p>
-                    Your account is not active yet. In the box below,
-                    plese enter the validation code you recieved in an email.
-                </p>
-
-                {% for error in change_settings_form.validation_code.errors %}
-                    <p class='error'>{{ error|escape }}</p>
-                {% endfor %}
-
-                {{ change_settings_form.validation_code }}
-
-                <p>
-                    To resend the email, first make sure your email is
-                    correct below in the Account Settings section.
-                    A new email will be sent when you click Change Settings.
-                </p>
-
-                <div style="border-top: 1px #aaaaaa solid; width: 98%; margin: 0 auto">
-                    <input type="submit" value="Validate Account"/>
-                </div>
-            </form>
-        </div>
-
-    {% endif %}
 
     <div class='form-wrapper' id="settings_wrapper">
         <table><tbody>
@@ -43,6 +14,19 @@
                     <h2  class='form-title'>Account Settings</h2>
                 </td>
             </tr>
+            {% if not user.is_active %}
+                <tr>
+                    <td colspan="2">
+                        <p style="text-align: center; color: darkred">
+                            Your account is locked until your email is verified.
+                            To vertify your email, click the link that we sent you via email.
+                            It may take a couple minutes to arrive.
+                            To resend this email, first make sure your email address below
+                            is correct, and then click Change Settings.
+                        </p>
+                    </td>
+                </tr>
+            {% endif %}
             <tr>
                 <td id="current-settings-div">
                     <table id="current-settings-table"><tbody>

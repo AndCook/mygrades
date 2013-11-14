@@ -134,17 +134,8 @@ class MyUserCreationForm(forms.Form):
 class MyChangeSettingsForm(forms.Form):
     error_messages = {
         'duplicate_email': 'A user with that email already exists.',
-        'incorrect_validation': 'Incorrect validation code',
     }
 
-    validation_code = forms.CharField(required=False,
-                                      widget=forms.PasswordInput(
-                                          attrs={'value': 'Validation Code',
-                                                 'type': 'text',
-                                                 'autocomplete': 'off',
-                                                 'onfocus': "if(this.value==this.defaultValue)this.value='';",
-                                                 'onblur': "if(this.value=='')this.value=this.defaultValue;"})
-    )
     email = forms.CharField(required=False,
                             widget=forms.PasswordInput(
                                 attrs={'value': 'Email',
@@ -198,6 +189,57 @@ class MyPasswordChangeForm(forms.Form):
                          "this.value=this.defaultValue;"
                          "this.type='text'; }"})
     )
+    new_password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'value': 'New Password',
+               'type': 'text',
+               'onfocus': "if(this.value==this.defaultValue) {"
+                          "this.value='';"
+                          "this.type='password'; }",
+               'onblur': "if(this.value=='') {"
+                         "this.value=this.defaultValue;"
+                         "this.type='text'; }"})
+    )
+    new_password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'value': 'New Password Confirmation',
+               'type': 'text',
+               'onfocus': "if(this.value==this.defaultValue) {"
+                          "this.value='';"
+                          "this.type='password'; }",
+               'onblur': "if(this.value=='') {"
+                         "this.value=this.defaultValue;"
+                         "this.type='text'; }"})
+    )
+
+
+class MyPasswordResetFormEmail(forms.Form):
+    error_messages = {
+        'invalid_email': 'That email is not linked with any account.',
+    }
+    email = forms.CharField(required=False,
+                            widget=forms.PasswordInput(
+                                attrs={'value': 'Email',
+                                       'type': 'text',
+                                       'autocomplete': 'off',
+                                       'onfocus': "if(this.value==this.defaultValue)this.value='';",
+                                       'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+    )
+
+    def clean_email(self):
+        # Since User.username is unique, this check is redundant,
+        # but it sets a nicer error message than the ORM. See #13147.
+        email = self.cleaned_data["email"]
+        if User.objects.filter(username=email).count() == 0:
+            raise forms.ValidationError(
+                self.error_messages['invalid_email'],
+                code='invalid_email',
+            )
+        return email
+
+
+class MyPasswordResetFormPasswords(forms.Form):
+    error_messages = {
+        'password_mismatch': 'The two password fields didn\'t match.',
+    }
     new_password1 = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'New Password',
                'type': 'text',

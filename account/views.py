@@ -6,7 +6,8 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.forms.util import ErrorList
 from django.core.mail import EmailMessage
-from account.forms import MyLoginForm, MyUserCreationForm, MyChangeSettingsForm, MyPasswordChangeForm
+from account.forms import MyLoginForm, MyUserCreationForm,\
+    MyChangeSettingsForm, MyPasswordChangeForm, MyPasswordResetFormEmail, MyPasswordResetFormPasswords
 from mygrades.settings import EMAIL_HOST_USER
 from random import choice
 from string import ascii_letters, digits
@@ -48,34 +49,20 @@ def my_signup(request):
                 user.first_name = form.cleaned_data.get('first_name')
                 user.last_name = form.cleaned_data.get('last_name')
                 user.is_active = False  # user is inactive until email is validated
+                user.save()
                 prof = UserProfile(user=user)
                 prof.save()
-                user.save()
 
                 send_validation_email(user)
 
                 login(request, authenticate(username=email, password=password1))
 
-                return HttpResponseRedirect('/gradebook/overview/')
+                return HttpResponseRedirect('/account/settings/')
     else:
         form = MyUserCreationForm()
     return render_to_response('signup_page.html',
                               {'signup_form': form},
                               RequestContext(request))
-
-
-def send_validation_email(user):
-    validation_code = ''.join(choice(ascii_letters + digits) for x in range(20))
-    prof = UserProfile.objects.get(user=user)
-    prof.validation_code = validation_code
-    prof.save()
-
-    subject = 'mygrades Validation Email'
-    message = 'Thank you for registering with mygrades.\nTo get started, validate your' \
-              'email by clicking the link below and entering the following code:\n' \
-              '\nhttp://127.0.0.1:7654/account/settings/\n' + validation_code
-    message = EmailMessage(subject, message, EMAIL_HOST_USER, [user.email])
-    message.send()
 
 
 @login_required
@@ -84,15 +71,6 @@ def my_settings(request):
         form = MyChangeSettingsForm(request.POST)
 
         if form.is_valid():
-            validation_code = form.cleaned_data.get('validation_code')
-            profile = UserProfile.objects.get(user=request.user)
-            print(profile.validation_code)
-            if validation_code != 'Validation Code' and validation_code.strip() != '' \
-                and validation_code == profile.validation_code:
-                    request.user.is_active = True
-            else:
-                form.errors.setdefault('validation_code', ErrorList()).append(form.error_messages['incorrect_validation'])
-
             email = form.cleaned_data.get('email')
             if email != 'Email' and email.strip() != '':
                 request.user.username = email.strip()
@@ -119,12 +97,23 @@ def my_settings(request):
 
 
 @login_required
+def my_validate_email(request, code):
+    validation_code = code
+    profile = UserProfile.objects.get(user=request.user)
+    if validation_code != profile.validation_code:
+        return HttpResponseRedirect('/')  #error page
+    request.user.is_active = True
+    request.user.save()
+
+    return HttpResponseRedirect('/gradebook/overview/')
+
+
+@login_required
 def my_change_password(request):
     if request.method == 'POST':
         form = MyPasswordChangeForm(request.POST)
 
         if form.is_valid():
-            print('old pass: ' + form.cleaned_data.get('old_password'))
             if not request.user.check_password(form.cleaned_data.get('old_password')):
                 errors = form.errors.setdefault('old_password', ErrorList())
                 errors.append(form.error_messages['password_incorrect'])
@@ -134,7 +123,6 @@ def my_change_password(request):
                 if password1 != password2:
                     form.errors.setdefault('new_password1', ErrorList()).append(form.error_messages['password_mismatch'])
                 else:
-                    print('new pass: ' + password1)
                     request.user.set_password(password1)
                     request.user.save()
                     return HttpResponseRedirect('/account/settings/')
@@ -145,6 +133,80 @@ def my_change_password(request):
                               RequestContext(request))
 
 
+def my_forgot_password_email(request):
+    if request.method == 'POST':
+        form = MyPasswordResetFormEmail(request.POST)
+
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            send_forgotten_password_email(email)
+            return HttpResponseRedirect('/')
+    else:
+        form = MyPasswordResetFormEmail()
+    return render_to_response('reset_password_page_email.html',
+                              {'password_reset_form_email': form},
+                              RequestContext(request))
+
+
+def my_forgot_password_passwords(request, code):
+    prof = UserProfile.objects.get(validation_code=code)
+    if prof is None:
+        return HttpResponseRedirect('/')
+
+    if request.method == 'POST':
+        form = MyPasswordResetFormPasswords(request.POST)
+
+        if form.is_valid():
+            password1 = form.cleaned_data.get('new_password1')
+            password2 = form.cleaned_data.get('new_password2')
+            if password1 != password2:
+                form.errors.setdefault('new_password1', ErrorList()).append(form.error_messages['password_mismatch'])
+            else:
+                print('new pass: ' + password1)
+                prof.user.set_password(password1)
+                prof.user.save()
+                login(request, authenticate(username=prof.user.email, password=password1))
+                return HttpResponseRedirect('/account/settings/')
+    else:
+        form = MyPasswordResetFormPasswords()
+    return render_to_response('reset_password_page_passwords.html',
+                              {'password_reset_form_passwords': form,
+                               'validation_code': code,
+                               'user_email': prof.user.email},
+                              RequestContext(request))
+
+
 def my_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+
+def send_validation_email(user):
+    validation_code = ''.join(choice(ascii_letters + digits) for x in range(20))
+    prof = UserProfile.objects.get(user=user)
+    prof.validation_code = validation_code
+    prof.save()
+
+    subject = 'mygrades Validation Email'
+    message = 'Hello ' + user.first_name + ' ' + user.last_name + ',\n\n'\
+              'Thank you for registering with mygrades.\n' \
+              'To get started, validate your email by clicking the following link.\n\n' \
+              'http://127.0.0.1:7654/account/validate_email/' + validation_code + '/\n'
+    message = EmailMessage(subject, message, EMAIL_HOST_USER, [user.email])
+    message.send()
+
+
+def send_forgotten_password_email(email):
+    validation_code = ''.join(choice(ascii_letters + digits) for x in range(20))
+    user = User.objects.get(username=email)
+    prof = UserProfile.objects.get(user=user)
+    prof.validation_code = validation_code
+    prof.save()
+
+    subject = 'mygrades Forgot Password'
+    message = 'Hello ' + user.first_name + ' ' + user.last_name + ',\n\n'\
+              'You are receiving this email because you claimed to have forgotten your password on mygrades.\n' \
+              'If this is a mistake, ignore this email. Else, follow the link below to reset your password.\n\n' \
+              'http://127.0.0.1:7654/account/forgot_password/' + validation_code + '/\n'
+    message = EmailMessage(subject, message, EMAIL_HOST_USER, [user.email])
+    message.send()
