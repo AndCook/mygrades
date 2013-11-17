@@ -54,13 +54,25 @@
                         {% endif %}
                     </ul>
                 </div>
+
                 <div id='right-header'>
                     <ul>
                         {% if user.is_authenticated %}
-                            <li>
+                            <li id='account-button-dropdown'>
                                 <a id='account-button' class='header-link'>
                                     {{ user.first_name }} {{ user.last_name }}
                                 </a>
+                                <div id="account-dropdown">
+                                    <a class='header-link dropdown-link' href="/account/settings/">
+                                        Account Settings
+                                    </a>
+                                    <a class='header-link dropdown-link' href="/account/change_password/">
+                                        Change Password
+                                    </a>
+                                    <a class='header-link dropdown-link' href="/account/logout/">
+                                        Logout
+                                    </a>
+                                </div>
                             </li>
                         {% else %}
                             <li>
@@ -79,12 +91,6 @@
             </div>
         </div><!-- end header -->
 
-        <div id="account-dropdown">
-            <a class='header-link dropdown-link' href="/account/settings/">Account Settings</a>
-            <a class='header-link dropdown-link' href="/account/change_password/">Change Password</a>
-            <a class='header-link dropdown-link' href="/account/logout/">Logout</a>
-        </div>
-
         <div id='login-dialog-form' title='Login'>
             <form method='post' action='/account/login/' name='login_form'>{% csrf_token %}
                 <h2 class='form-title'>Login</h2>
@@ -93,7 +99,7 @@
                     {{ field }}
                 {% endfor %}
 
-                <a href="/account/forgot_password/">Forget your password?</a>
+                <a href="/account/forgot_password/" style="margin-left: 10%;color: #333333;">Forget your password?</a>
             </form>
         </div><!-- end login-dialog-form div -->
 

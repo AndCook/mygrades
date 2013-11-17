@@ -9,27 +9,22 @@ class MyLoginForm(forms.Form):
         'invalid_login': "Invalid email/password combination",
     }
 
-    email_field = forms.CharField(required=True,
-                                  widget=forms.PasswordInput(  # use instead of TextInput to remove text on load
-                                      attrs={'value': 'Email',
-                                             'type': 'text',
-                                             'autocomplete': 'off',
-                                             'onfocus': "if(this.value==this.defaultValue)this.value='';",
-                                             'onblur': "if(this.value=='')this.value=this.defaultValue;"}),
+    email = forms.CharField(required=True,
+                            widget=forms.PasswordInput(  # use instead of TextInput to remove text on load
+                                attrs={'value': 'Email',
+                                       'type': 'text',
+                                       'autocomplete': 'off'})
+                            )
 
-                                  )
-
-    password_field = forms.CharField(required=True,
-                                     widget=forms.PasswordInput(
-                                         attrs={'value': 'Password',
-                                                'type': 'text',
-                                                'onfocus': "if(this.value==this.defaultValue) {"
-                                                           "this.value='';"
-                                                           "this.type='password'; }",
-                                                'onblur': "if(this.value=='') {"
-                                                          "this.value=this.defaultValue;"
-                                                          "this.type='text'; }"})
-                                     )
+    password = forms.CharField(required=True,
+                               widget=forms.PasswordInput(
+                                   attrs={'value': 'Password',
+                                          'type': 'text',
+                                          'onfocus': "if(this.value==this.defaultValue)"
+                                                     "this.type='password';",
+                                          'onblur': "if(this.value=='')"
+                                                    "this.type='text';"})
+                               )
 
     def clean(self):
         cleaned_data = super(MyLoginForm, self).clean()
@@ -57,43 +52,33 @@ class MyUserCreationForm(forms.Form):
     email = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'Email',
                'type': 'text',
-               'autocomplete': 'off',
-               'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+               'autocomplete': 'off'})
     )
     first_name = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'First Name',
                'type': 'text',
-               'autocomplete': 'off',
-               'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+               'autocomplete': 'off'})
     )
     last_name = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'Last Name',
                'type': 'text',
-               'autocomplete': 'off',
-               'onfocus': "if(this.value==this.defaultValue)this.value='';",
-               'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+               'autocomplete': 'off'})
     )
     password1 = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'Password',
                'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue) {"
-                          "this.value='';"
-                          "this.type='password'; }",
-               'onblur': "if(this.value=='') {"
-                         "this.value=this.defaultValue;"
-                         "this.type='text'; }"})
+               'onfocus': "if(this.value==this.defaultValue)"
+                          "this.type='password';",
+               'onblur': "if(this.value=='')"
+                         "this.type='text';"})
     )
     password2 = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'Password Confirmation',
                'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue) {"
-                          "this.value='';"
-                          "this.type='password'; }",
-               'onblur': "if(this.value=='') {"
-                         "this.value=this.defaultValue;"
-                         "this.type='text'; }"})
+               'onfocus': "if(this.value==this.defaultValue)"
+                          "this.type='password';",
+               'onblur': "if(this.value=='')"
+                         "this.type='text';"})
     )
 
     def clean_email(self):
@@ -140,25 +125,19 @@ class MyChangeSettingsForm(forms.Form):
                             widget=forms.PasswordInput(
                                 attrs={'value': 'Email',
                                        'type': 'text',
-                                       'autocomplete': 'off',
-                                       'onfocus': "if(this.value==this.defaultValue)this.value='';",
-                                       'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+                                       'autocomplete': 'off'})
     )
     first_name = forms.CharField(required=False,
                                  widget=forms.PasswordInput(
                                      attrs={'value': 'First Name',
                                             'type': 'text',
-                                            'autocomplete': 'off',
-                                            'onfocus': "if(this.value==this.defaultValue)this.value='';",
-                                            'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+                                            'autocomplete': 'off'})
     )
     last_name = forms.CharField(required=False,
                                 widget=forms.PasswordInput(
                                     attrs={'value': 'Last Name',
                                            'type': 'text',
-                                           'autocomplete': 'off',
-                                           'onfocus': "if(this.value==this.defaultValue)this.value='';",
-                                           'onblur': "if(this.value=='')this.value=this.defaultValue;"})
+                                           'autocomplete': 'off'})
     )
 
     def clean_email(self):
@@ -182,32 +161,26 @@ class MyPasswordChangeForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'Old Password',
                'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue) {"
-                          "this.value='';"
-                          "this.type='password'; }",
-               'onblur': "if(this.value=='') {"
-                         "this.value=this.defaultValue;"
-                         "this.type='text'; }"})
+               'onfocus': "if(this.value==this.defaultValue)"
+                          "this.type='password';",
+               'onblur': "if(this.value=='')"
+                         "this.type='text';"})
     )
     new_password1 = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'New Password',
                'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue) {"
-                          "this.value='';"
-                          "this.type='password'; }",
-               'onblur': "if(this.value=='') {"
-                         "this.value=this.defaultValue;"
-                         "this.type='text'; }"})
+               'onfocus': "if(this.value==this.defaultValue)"
+                          "this.type='password';",
+               'onblur': "if(this.value=='')"
+                         "this.type='text';"})
     )
     new_password2 = forms.CharField(widget=forms.PasswordInput(
         attrs={'value': 'New Password Confirmation',
                'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue) {"
-                          "this.value='';"
-                          "this.type='password'; }",
-               'onblur': "if(this.value=='') {"
-                         "this.value=this.defaultValue;"
-                         "this.type='text'; }"})
+               'onfocus': "if(this.value==this.defaultValue)"
+                          "this.type='password';",
+               'onblur': "if(this.value=='')"
+                         "this.type='text';"})
     )
 
 

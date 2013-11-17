@@ -1,3 +1,49 @@
+$(document).ready(function() {
+    // fix width of account button to be the same as the dropdown
+    var accBut = $('#account-button');
+    if (accBut)
+        accBut.css('width', $('#account-dropdown').width() - 20);
+
+
+    // on page load, save default values of all text inputs
+    var allTextInputs = $('input[type=text]');
+    var defaultValues = {};
+    for (var i = 0; i < allTextInputs.size(); i++) {
+        var input = allTextInputs.eq(i);
+        defaultValues[input.attr('name')] = input.attr('value');
+    }
+
+    // the focus and blur event listeners on all text inputs change text color appropriately
+    // if text is the original value "First Name", then it is gray, else it is black
+    allTextInputs.focus(function() {
+        var name = $(this).attr('name');
+        if (name in defaultValues) {
+            var value = $(this).val();
+            var defaultValue = defaultValues[name];
+            if (value === defaultValue)
+                $(this).val('');
+            $(this).css('color', '#222222');
+        }
+    });
+
+    allTextInputs.blur(function() {
+        var name = $(this).attr('name');
+        if (name in defaultValues) {
+            var value = $(this).val();
+            var defaultValue = defaultValues[name];
+            if (value === '') {
+                $(this).val(defaultValue);
+                $(this).css('color', '#999999');
+            } else if (value === defaultValue) {
+                $(this).css('color', '#999999');
+            } else {
+                $(this).css('color', '#222222');
+            }
+        }
+    });
+});
+
+
 // login dialog box
 $(function() {
 	var tips = $( ".validate-tips" );
@@ -64,28 +110,18 @@ $(function() {
 
 // accounts dropdown menu
 $(function() {
-    var accBut = $('#account-button');
-    var dropdown = $('#account-dropdown');
-    var posLeft = accBut.offset().left + accBut.width() + 20 - dropdown.width();
-    var posTop = accBut.offsetTop + accBut.height();
-    dropdown.css('left', posLeft);
-    dropdown.css('top', posTop);
+    var acc = $('#account-button-dropdown');
+    if (acc) {
+        var dropdown = $('#account-dropdown');
 
-    accBut.mouseenter(function() {
-        dropdown.slideDown(200);
-    });
+        acc.mouseenter(function() {
+            dropdown.slideDown(200);
+        });
 
-    accBut.mouseleave(function() {
-        dropdown.css('display', 'none');
-    });
-
-    dropdown.mouseenter(function() {
-        dropdown.css('display', 'block');
-    });
-
-    dropdown.mouseleave(function() {
-        dropdown.css('display', 'none');
-    })
+        acc.mouseleave(function() {
+            dropdown.css('display', 'none');
+        });
+    }
 });
 
 $(function() {

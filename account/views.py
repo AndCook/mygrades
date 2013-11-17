@@ -19,8 +19,8 @@ def my_login(request):
         form = MyLoginForm(request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data.get('email_field')
-            password = form.cleaned_data.get('password_field')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
 
             user = authenticate(username=email, password=password)
             login(request, user)
@@ -101,7 +101,7 @@ def my_validate_email(request, code):
     validation_code = code
     profile = UserProfile.objects.get(user=request.user)
     if validation_code != profile.validation_code:
-        return HttpResponseRedirect('/')  #error page
+        return HttpResponseRedirect('/')  # error page
     request.user.is_active = True
     request.user.save()
 
@@ -121,7 +121,8 @@ def my_change_password(request):
                 password1 = form.cleaned_data.get('new_password1')
                 password2 = form.cleaned_data.get('new_password2')
                 if password1 != password2:
-                    form.errors.setdefault('new_password1', ErrorList()).append(form.error_messages['password_mismatch'])
+                    form.errors.setdefault('new_password1',
+                                           ErrorList()).append(form.error_messages['password_mismatch'])
                 else:
                     request.user.set_password(password1)
                     request.user.save()

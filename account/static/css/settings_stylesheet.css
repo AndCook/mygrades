@@ -1,7 +1,6 @@
 #settings_wrapper {
     width: 700px;
-    top: 50px;
-    margin: 0 auto 50px;
+    margin: auto;
     position: relative;
 }
 
