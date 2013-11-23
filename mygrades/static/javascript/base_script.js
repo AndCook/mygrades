@@ -1,9 +1,13 @@
 $(document).ready(function() {
     // fix width of account button to be the same as the dropdown
     var accBut = $('#account-button');
-    if (accBut)
-        accBut.css('width', $('#account-dropdown').width() - 20);
-
+    var dropdown = $('#account-dropdown');
+    if (accBut && dropdown) {
+        if (accBut.width() + 20 > dropdown.width())
+            dropdown.css('width', accBut.width() + 20);
+        else
+            accBut.css('width', dropdown.width() - 20);
+    }
 
     // on page load, save default values of all text inputs
     var allTextInputs = $('input[type=text]');

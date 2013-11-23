@@ -15,6 +15,10 @@ from account.models import UserProfile
 
 
 def my_login(request):
+    # if the user is already logged in, send them to the overview page
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/gradebook/overview/')
+
     if request.method == 'POST':
         form = MyLoginForm(request.POST)
 
@@ -33,6 +37,10 @@ def my_login(request):
 
 
 def my_signup(request):
+    # if the user is already logged in, send them to the overview page
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/gradebook/overview/')
+
     if request.method == 'POST':
         form = MyUserCreationForm(request.POST)
 
@@ -71,13 +79,6 @@ def my_settings(request):
         form = MyChangeSettingsForm(request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data.get('email')
-            if email != 'Email' and email.strip() != '':
-                request.user.username = email.strip()
-                request.user.email = email.strip()
-                request.user.is_active = False
-                send_validation_email(request.user)
-
             first_name = form.cleaned_data.get('first_name')
             if first_name != 'First Name' and first_name.strip() != '':
                 request.user.first_name = first_name.strip()
@@ -85,6 +86,13 @@ def my_settings(request):
             last_name = form.cleaned_data.get('last_name')
             if last_name != 'Last Name' and last_name.strip() != '':
                 request.user.last_name = last_name.strip()
+
+            email = form.cleaned_data.get('email')
+            if email != 'Email' and email.strip() != '':
+                request.user.username = email.strip()
+                request.user.email = email.strip()
+                request.user.is_active = False
+                send_validation_email(request.user)
 
             request.user.save()
 
@@ -194,7 +202,7 @@ def send_validation_email(user):
               'To get started, validate your email by clicking the following link.\n\n' \
               'http://127.0.0.1:7654/account/validate_email/' + validation_code + '/\n'
     message = EmailMessage(subject, message, EMAIL_HOST_USER, [user.email])
-    message.send()
+    message.send(fail_silently=True)
 
 
 def send_forgotten_password_email(email):

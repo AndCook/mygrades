@@ -3,7 +3,6 @@
     margin: auto;
     position: relative;
 }
-
 #current-settings-div td {
     padding: 5px;
     font-size: 1em;
@@ -11,7 +10,15 @@
 
 #current-settings-table {
     width: 85%;
-    margin: auto;
+}
+
+#current-settings-table p {
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #current-settings-div {

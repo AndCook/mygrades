@@ -12,4 +12,9 @@ def about(request):
 
 
 def base_form_context_processor(request):
-    return {'login_form': MyLoginForm, 'signup_form': MyUserCreationForm}
+    last_name_initial = ''
+    if request.user.is_authenticated() and len(request.user.last_name) > 0:
+        last_name_initial = str(request.user.last_name[0])
+    return {'login_form': MyLoginForm,
+            'signup_form': MyUserCreationForm,
+            'last_name_initial': last_name_initial}

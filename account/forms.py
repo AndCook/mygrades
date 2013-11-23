@@ -29,8 +29,8 @@ class MyLoginForm(forms.Form):
     def clean(self):
         cleaned_data = super(MyLoginForm, self).clean()
 
-        email = cleaned_data.get('email_field')
-        password = cleaned_data.get('password_field')
+        email = cleaned_data.get('email')
+        password = cleaned_data.get('password')
 
         potential_user = authenticate(username=email, password=password)
         if potential_user is None:
@@ -49,37 +49,42 @@ class MyUserCreationForm(forms.Form):
         'password_mismatch': 'The two password fields didn\'t match.',
     }
 
-    email = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'Email',
-               'type': 'text',
-               'autocomplete': 'off'})
-    )
-    first_name = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'First Name',
-               'type': 'text',
-               'autocomplete': 'off'})
-    )
-    last_name = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'Last Name',
-               'type': 'text',
-               'autocomplete': 'off'})
-    )
-    password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'Password',
-               'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue)"
-                          "this.type='password';",
-               'onblur': "if(this.value=='')"
-                         "this.type='text';"})
-    )
-    password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'Password Confirmation',
-               'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue)"
-                          "this.type='password';",
-               'onblur': "if(this.value=='')"
-                         "this.type='text';"})
-    )
+    email = forms.CharField(max_length=254,
+                            widget=forms.PasswordInput(
+                                attrs={'value': 'Email',
+                                       'type': 'text',
+                                       'autocomplete': 'off'})
+                            )
+    first_name = forms.CharField(max_length=35,
+                                 widget=forms.PasswordInput(
+                                     attrs={'value': 'First Name',
+                                            'type': 'text',
+                                            'autocomplete': 'off'})
+                                 )
+    last_name = forms.CharField(max_length=35,
+                                widget=forms.PasswordInput(
+                                    attrs={'value': 'Last Name',
+                                           'type': 'text',
+                                           'autocomplete': 'off'})
+                                )
+    password1 = forms.CharField(max_length=30,
+                                widget=forms.PasswordInput(
+                                    attrs={'value': 'Password (max length 30)',
+                                           'type': 'text',
+                                           'onfocus': "if(this.value==this.defaultValue)"
+                                                      "this.type='password';",
+                                           'onblur': "if(this.value=='')"
+                                                     "this.type='text';"})
+                                )
+    password2 = forms.CharField(max_length=30,
+                                widget=forms.PasswordInput(
+                                    attrs={'value': 'Password Confirmation',
+                                           'type': 'text',
+                                           'onfocus': "if(this.value==this.defaultValue)"
+                                                      "this.type='password';",
+                                           'onblur': "if(this.value=='')"
+                                                     "this.type='text';"})
+                                )
 
     def clean_email(self):
         # Since User.username is unique, this check is redundant,
@@ -122,27 +127,28 @@ class MyChangeSettingsForm(forms.Form):
     }
 
     email = forms.CharField(required=False,
+                            max_length=254,
                             widget=forms.PasswordInput(
                                 attrs={'value': 'Email',
                                        'type': 'text',
                                        'autocomplete': 'off'})
-    )
+                            )
     first_name = forms.CharField(required=False,
+                                 max_length=35,
                                  widget=forms.PasswordInput(
                                      attrs={'value': 'First Name',
                                             'type': 'text',
                                             'autocomplete': 'off'})
-    )
+                                 )
     last_name = forms.CharField(required=False,
+                                max_length=35,
                                 widget=forms.PasswordInput(
                                     attrs={'value': 'Last Name',
                                            'type': 'text',
                                            'autocomplete': 'off'})
-    )
+                                )
 
     def clean_email(self):
-        # Since User.username is unique, this check is redundant,
-        # but it sets a nicer error message than the ORM. See #13147.
         email = self.cleaned_data["email"]
         if User.objects.filter(username=email).count():
             raise forms.ValidationError(
@@ -158,30 +164,33 @@ class MyPasswordChangeForm(forms.Form):
         'password_incorrect': 'Old password was incorrect.',
         'password_mismatch': 'The two password fields didn\'t match.',
     }
-    old_password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'Old Password',
-               'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue)"
-                          "this.type='password';",
-               'onblur': "if(this.value=='')"
-                         "this.type='text';"})
-    )
-    new_password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'New Password',
-               'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue)"
-                          "this.type='password';",
-               'onblur': "if(this.value=='')"
-                         "this.type='text';"})
-    )
-    new_password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'New Password Confirmation',
-               'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue)"
-                          "this.type='password';",
-               'onblur': "if(this.value=='')"
-                         "this.type='text';"})
-    )
+    old_password = forms.CharField(max_length=30,
+                                   widget=forms.PasswordInput(
+                                   attrs={'value': 'Old Password',
+                                          'type': 'text',
+                                          'onfocus': "if(this.value==this.defaultValue)"
+                                                     "this.type='password';",
+                                          'onblur': "if(this.value=='')"
+                                                    "this.type='text';"})
+                                   )
+    new_password1 = forms.CharField(max_length=30,
+                                    widget=forms.PasswordInput(
+                                        attrs={'value': 'New Password (max length 30)',
+                                               'type': 'text',
+                                               'onfocus': "if(this.value==this.defaultValue)"
+                                                          "this.type='password';",
+                                               'onblur': "if(this.value=='')"
+                                                         "this.type='text';"})
+                                    )
+    new_password2 = forms.CharField(max_length=30,
+                                    widget=forms.PasswordInput(
+                                        attrs={'value': 'New Password Confirmation',
+                                               'type': 'text',
+                                               'onfocus': "if(this.value==this.defaultValue)"
+                                                          "this.type='password';",
+                                               'onblur': "if(this.value=='')"
+                                                         "this.type='text';"})
+                                    )
 
 
 class MyPasswordResetFormEmail(forms.Form):
@@ -189,13 +198,14 @@ class MyPasswordResetFormEmail(forms.Form):
         'invalid_email': 'That email is not linked with any account.',
     }
     email = forms.CharField(required=False,
+                            max_length=254,
                             widget=forms.PasswordInput(
                                 attrs={'value': 'Email',
                                        'type': 'text',
                                        'autocomplete': 'off',
                                        'onfocus': "if(this.value==this.defaultValue)this.value='';",
                                        'onblur': "if(this.value=='')this.value=this.defaultValue;"})
-    )
+                            )
 
     def clean_email(self):
         # Since User.username is unique, this check is redundant,
@@ -213,23 +223,25 @@ class MyPasswordResetFormPasswords(forms.Form):
     error_messages = {
         'password_mismatch': 'The two password fields didn\'t match.',
     }
-    new_password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'New Password',
-               'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue) {"
-                          "this.value='';"
-                          "this.type='password'; }",
-               'onblur': "if(this.value=='') {"
-                         "this.value=this.defaultValue;"
-                         "this.type='text'; }"})
-    )
-    new_password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'value': 'New Password Confirmation',
-               'type': 'text',
-               'onfocus': "if(this.value==this.defaultValue) {"
-                          "this.value='';"
-                          "this.type='password'; }",
-               'onblur': "if(this.value=='') {"
-                         "this.value=this.defaultValue;"
-                         "this.type='text'; }"})
-    )
+    new_password1 = forms.CharField(max_length=30,
+                                    widget=forms.PasswordInput(
+                                        attrs={'value': 'New Password (max length 30)',
+                                               'type': 'text',
+                                               'onfocus': "if(this.value==this.defaultValue) {"
+                                                          "this.value='';"
+                                                          "this.type='password'; }",
+                                               'onblur': "if(this.value=='') {"
+                                                         "this.value=this.defaultValue;"
+                                                         "this.type='text'; }"})
+                                    )
+    new_password2 = forms.CharField(max_length=30,
+                                    widget=forms.PasswordInput(
+                                        attrs={'value': 'New Password Confirmation',
+                                               'type': 'text',
+                                               'onfocus': "if(this.value==this.defaultValue) {"
+                                                          "this.value='';"
+                                                          "this.type='password'; }",
+                                               'onblur': "if(this.value=='') {"
+                                                         "this.value=this.defaultValue;"
+                                                         "this.type='text'; }"})
+                                    )

@@ -60,7 +60,8 @@
                         {% if user.is_authenticated %}
                             <li id='account-button-dropdown'>
                                 <a id='account-button' class='header-link'>
-                                    {{ user.first_name }} {{ user.last_name }}
+                                        {{ user.first_name }}
+                                        {{ last_name_initial }}
                                 </a>
                                 <div id="account-dropdown">
                                     <a class='header-link dropdown-link' href="/account/settings/">

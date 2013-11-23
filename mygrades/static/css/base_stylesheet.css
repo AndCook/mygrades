@@ -79,6 +79,10 @@ h1 {
     cursor: pointer;
 }
 
+#account-button {
+    height: 45px;
+}
+
 #account-button:hover {
     cursor: default;
 }
