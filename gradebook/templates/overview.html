@@ -1,12 +1,186 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block extra_head %}
-    <link rel="stylesheet" type="text/css" href="/static/css/overview_stylesheet.css" />
-    <script src="/static/javascript/overview_script.js"></script>
+    <link rel='stylesheet' type='text/css' href='/static/css/overview_stylesheet.css' />
+    <script src='/static/javascript/overview_script.js'></script>
 {% endblock %}
 
 {% block base_content %}
 
     <h1>Overview</h1>
+
+    {% for semester in semesters %}
+        <div class='semester_square'>
+            <h3 class='semester_square_name'>{{ semester.name }}</h3>
+        </div>
+
+    {% endfor %}
+
+    <div class='semester_square'>
+        <p class='semester_square_name'>Fall 2013 - Current</p>
+
+        <table class='semester_square_course_table'><tbody>
+            <tr>
+                <td class='s_s_table_data course_number'>CS 439H</td>
+                <td class='s_s_table_data course_name'>Operating Systems: Honors</td>
+                <td class='s_s_table_data course_grade'>96.3%</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>M 341</td>
+                <td class='s_s_table_data course_name'>Linear Algebra</td>
+                <td class='s_s_table_data course_grade'>92.6%</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>ARH 301</td>
+                <td class='s_s_table_data course_name'>Introduction to Art History</td>
+                <td class='s_s_table_data course_grade'>78.1%</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>SPN 601D</td>
+                <td class='s_s_table_data course_name'>Introductory Spanish</td>
+                <td class='s_s_table_data course_grade'>54.6%</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>PED 103L</td>
+                <td class='s_s_table_data course_name'>Beggining Social Dance</td>
+                <td class='s_s_table_data course_grade'>100.0%</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>ENS 107L</td>
+                <td class='s_s_table_data course_name'>Longhorn Band</td>
+                <td class='s_s_table_data course_grade'>96.3%</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>M 362K</td>
+                <td class='s_s_table_data course_name'>Probability 1</td>
+                <td class='s_s_table_data course_grade'>54.6%</td>
+            </tr>
+        </tbody></table>
+
+        <table class="current_semester_table"><tbody>
+            <tr>
+                <td colspan="3" class="s_s_table_data" style="text-align: center">
+                    Prospective Semester GPA
+                </td>
+            </tr>
+            <tr>
+                <td class="s_s_table_data gpa_data_number">2.60</td>
+                <td class="s_s_table_data gpa_data_number">3.84</td>
+                <td class="s_s_table_data gpa_data_number">3.92</td>
+            </tr>
+            <tr>
+                <td class="s_s_table_data gpa_data_name">minimum</td>
+                <td class="s_s_table_data gpa_data_name">current</td>
+                <td class="s_s_table_data gpa_data_name">maximum</td>
+            </tr>
+        </tbody></table>
+    </div>
+
+    <div class='semester_square'>
+        <p class='semester_square_name'>Fall 2013 - Finished</p>
+
+        <table class='semester_square_course_table'><tbody>
+            <tr>
+                <td class='s_s_table_data course_number'>CS 439H</td>
+                <td class='s_s_table_data course_name'>Operating Systems: Honors</td>
+                <td class='s_s_table_data course_grade'>A</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>M 341</td>
+                <td class='s_s_table_data course_name'>Linear Algebra</td>
+                <td class='s_s_table_data course_grade'>A-</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>ARH 301</td>
+                <td class='s_s_table_data course_name'>Introduction to Art History</td>
+                <td class='s_s_table_data course_grade'>C+</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>SPN 601D</td>
+                <td class='s_s_table_data course_name'>Introductory Spanish</td>
+                <td class='s_s_table_data course_grade'>F</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>PED 103L</td>
+                <td class='s_s_table_data course_name'>Beggining Social Dance</td>
+                <td class='s_s_table_data course_grade'>A</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>ENS 107L</td>
+                <td class='s_s_table_data course_name'>Longhorn Band</td>
+                <td class='s_s_table_data course_grade'>Pass</td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>M 362K</td>
+                <td class='s_s_table_data course_name'>Probability 1</td>
+                <td class='s_s_table_data course_grade'>Credit</td>
+            </tr>
+        </tbody></table>
+
+        <table class="finished_semester_table"><tbody>
+            <tr>
+                <td class="s_s_table_data" style="width: 85%">Total Hours Passed</td>
+                <td class="s_s_table_data">15</td>
+            </tr>
+            <tr>
+                <td class="s_s_table_data">GPA Hours</td>
+                <td class="s_s_table_data">11</td>
+            </tr>
+            <tr>
+                <td class="s_s_table_data">Semester GPA</td>
+                <td class="s_s_table_data" style="font-size: 1.2em">3.45</td>
+            </tr>
+        </tbody></table>
+    </div>
+
+    <div class='semester_square'>
+        <p class='semester_square_name'>Fall 2013 - Future</p>
+
+        <table class='semester_square_course_table'><tbody>
+            <tr>
+                <td class='s_s_table_data course_number'>CS 439H</td>
+                <td class='s_s_table_data course_name'>Operating Systems: Honors</td>
+                <td class='s_s_table_data course_grade'></td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>M 341</td>
+                <td class='s_s_table_data course_name'>Linear Algebra</td>
+                <td class='s_s_table_data course_grade'></td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>ARH 301</td>
+                <td class='s_s_table_data course_name'>Introduction to Art History</td>
+                <td class='s_s_table_data course_grade'></td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>SPN 601D</td>
+                <td class='s_s_table_data course_name'>Introductory Spanish</td>
+                <td class='s_s_table_data course_grade'></td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>PED 103L</td>
+                <td class='s_s_table_data course_name'>Beggining Social Dance</td>
+                <td class='s_s_table_data course_grade'></td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>ENS 107L</td>
+                <td class='s_s_table_data course_name'>Longhorn Band</td>
+                <td class='s_s_table_data course_grade'></td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data course_number'>M 362K</td>
+                <td class='s_s_table_data course_name'>Probability 1</td>
+                <td class='s_s_table_data course_grade'></td>
+            </tr>
+        </tbody></table>
+    </div>
+
+    <div class='semester_square'>
+        <p class='semester_square_name'>Fall 2012</p>
+    </div>
+
+    <div id='add_semester_button'>
+        <p class='semester_square_name' style='color: #3b3b3b'>Add a Semester</p>
+    </div>
 
 {%  endblock %}

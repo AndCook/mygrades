@@ -1,9 +1,11 @@
 from django.db import models
 from decimal import Decimal
+from django.contrib.auth.models import User
 
 
 class Semester(models.Model):
     name = models.CharField(max_length=200)
+    user = models.ForeignKey(User, default=None)
 
     def __unicode__(self):
         return self.name

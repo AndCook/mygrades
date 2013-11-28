@@ -1,0 +1,99 @@
+.semester_square {
+    width: 31%;
+    min-height: 300px;
+    margin: 10px 1%;
+    border-radius: 5px;
+
+    background-color: #222222;
+
+    display: inline-block;
+}
+
+.semester_square:hover {
+    cursor: pointer;
+}
+
+.semester_square_name {
+    margin: 1em 0;
+    color: white;
+    font-size: 1em;
+    text-align: center;
+}
+
+#add_semester_button {
+    width: calc(31% - 10px);
+    height: 290px;
+    margin: 10px 1%;
+    top: 5px;
+    position: relative;
+
+    display: inline-block;
+
+    border: 5px dashed #3b3b3b;
+    border-radius: 5px;
+
+    background: url(/static/images/plus_sign_light.png) no-repeat center center;
+}
+
+#add_semester_button:hover {
+    cursor: pointer;
+}
+
+#add_semester_button > img {
+    vertical-align: middle;
+}
+
+.semester_square_course_table {
+    width: 95%;
+    margin: 0 auto .5em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid white;
+    table-layout: fixed;
+}
+
+.s_s_table_data { /*semester_square_table_data*/
+    padding: .2em 0;
+    font-size: .8em;
+
+    color: white;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.course_number {
+    width: 20%;
+}
+
+.course_name {
+    width: 65%;
+}
+
+.course_grade {
+    width: 15%;
+}
+
+.current_semester_table {
+    width: 95%;
+    margin: auto;
+    table-layout: fixed;
+}
+
+.gpa_data_number {
+    width: 33%;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.gpa_data_name {
+    width: 33%;
+    text-align: center;
+    font-size: .7em;
+}
+
+.finished_semester_table {
+    width: 95%;
+    margin: auto;
+    table-layout: fixed;
+}

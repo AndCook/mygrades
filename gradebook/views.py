@@ -9,7 +9,9 @@ def overview(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/account/settings/')
 
-    return render_to_response('overview.html', RequestContext(request))
+    semesters = Semester.objects.filter(user=request.user)
+
+    return render_to_response('overview.html', {'semesters': semesters}, RequestContext(request))
 
 @login_required
 def semester_detail(request):
