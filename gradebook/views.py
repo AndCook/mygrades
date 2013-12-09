@@ -1,17 +1,33 @@
 from django.shortcuts import render_to_response
 from gradebook.models import Semester, Course, Category, Assignment
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+import json
 
+
+@csrf_protect
 @login_required
 def overview(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/account/settings/')
 
-    semesters = Semester.objects.filter(user=request.user)
+    if request.method == 'GET':
+        semesters = Semester.objects.filter(user=request.user)
+        return render_to_response('overview.html',
+                                  {'semesters': semesters},
+                                  RequestContext(request))
 
-    return render_to_response('overview.html', {'semesters': semesters}, RequestContext(request))
+    if request.is_ajax():
+        name = request.POST['new_semester_name']
+        semester = Semester(name=name, user=request.user)
+        semester.save()
+
+        #result = json.dumps({'messagesent': request.POST['tosend'] + "This is how we do it"})
+        #return HttpResponse(result, mimetype='application/javascript')
+        return HttpResponse(mimetype='application/javascript')
+
 
 @login_required
 def semester_detail(request):
@@ -19,6 +35,7 @@ def semester_detail(request):
         return HttpResponseRedirect('/account/settings/')
 
     return render_to_response('semester_detail.html', RequestContext(request))
+
 
 @login_required
 def course_detail(request):

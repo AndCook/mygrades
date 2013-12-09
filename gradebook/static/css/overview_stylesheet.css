@@ -20,6 +20,15 @@
     text-align: center;
 }
 
+.large_semester_square {
+    border-radius: 5px;
+    background-color: #606;
+}
+
+.large_semester_square:hover {
+    cursor: pointer;
+}
+
 #add_semester_button {
     width: calc(31% - 10px);
     height: 290px;

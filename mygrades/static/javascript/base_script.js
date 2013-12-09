@@ -50,8 +50,6 @@ $(document).ready(function() {
 
 // login dialog box
 $(function() {
-	var tips = $( ".validate-tips" );
-
 	$( "#login-dialog-form" ).dialog({
 		autoOpen: false,
 		width: 350,
@@ -82,8 +80,6 @@ $(function() {
 
 // signup dialog box
 $(function() {
-	var tips = $( ".validate-tips" );
-
 	$( "#signup-dialog-form" ).dialog({
 		autoOpen: false,
 		width: 350,
@@ -148,4 +144,18 @@ $(function() {
             backgroundColor: '#222222'
         }, 100);
     });
+});
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    crossDomain: false, // obviates need for sameOrigin test
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type)) {
+            var csrftoken = $.cookie('csrftoken');
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
 });

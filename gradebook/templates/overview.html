@@ -9,14 +9,21 @@
 
     <h1>Overview</h1>
 
-    {% for semester in semesters %}
-        <div class='semester_square'>
-            <h3 class='semester_square_name'>{{ semester.name }}</h3>
+    <div id='semester_squares_wrapper'>
+
+        {% for semester in semesters %}
+            <div class='semester_square'>
+                <p class='semester_square_name'>{{ semester.name }}</p>
+            </div>
+        {% endfor %}
+
+        <div id='add_semester_button'>
+            <p class='semester_square_name' style='color: #3b3b3b'>Add a Semester</p>
         </div>
 
-    {% endfor %}
+    </div>
 
-    <div class='semester_square'>
+    <!--div class='semester_square'>
         <p class='semester_square_name'>Fall 2013 - Current</p>
 
         <table class='semester_square_course_table'><tbody>
@@ -173,14 +180,6 @@
                 <td class='s_s_table_data course_grade'></td>
             </tr>
         </tbody></table>
-    </div>
-
-    <div class='semester_square'>
-        <p class='semester_square_name'>Fall 2012</p>
-    </div>
-
-    <div id='add_semester_button'>
-        <p class='semester_square_name' style='color: #3b3b3b'>Add a Semester</p>
-    </div>
+    </div-->
 
 {%  endblock %}
