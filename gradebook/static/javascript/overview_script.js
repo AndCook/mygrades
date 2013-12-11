@@ -1,56 +1,81 @@
 $(function() {
     // on hover over all semester-square's, change the background-color to #3b3b3b from #222222
-    var semester_squares = $('.semester_square');
     var semwrap = $('#semester_squares_wrapper');
-    semester_squares.mouseenter(function() {
+    semwrap.on('mouseenter', '.semester_square', function() {
         $(this).animate({
             backgroundColor: '#3b3b3b'
         }, 100);
     });
-    semester_squares.mouseleave(function() {
+    semwrap.on('mouseleave', '.semester_square', function() {
         $(this).animate({
             backgroundColor: '#222222'
         }, 100);
     });
-    var large_semester_squares = $('.large_semester_square');
     semwrap.on('mouseenter', '.large_semester_square', function() {
         $(this).animate({
-            backgroundColor: '#306'
+            backgroundColor: '#3b3b3b'
         }, 100);
     });
     semwrap.on('mouseleave', '.large_semester_square', function() {
         $(this).animate({
-            backgroundColor: '#606'
+            backgroundColor: '#222222'
         }, 100);
     });
 
+    var locked = false;
+
     semwrap.on('click', '.semester_square', function() {
+        if (locked)
+            return;
+        locked = true;
         var big_square = $(this).clone();
 
-        big_square.css('position', 'absolute');
-        big_square.css('top', $(this).offset().top);
-        big_square.css('left', $(this).offset().left);
+        big_square.css('position', 'fixed');
+        big_square.css('top', $(this).position().top - window.scrollY + 10); // 10 is for margin
+        big_square.css('left', $(this).position().left - window.scrollX + 10);
         big_square.css('width', $(this).width());
         big_square.css('height', $(this).height());
         big_square.css('margin', '0');
-        big_square.css('backgroundColor', '#606');
+        big_square.css('backgroundColor', '#3b3b3b');
         big_square.css('z-index', '10');
         big_square.addClass('large_semester_square');
         big_square.removeClass('semester_square');
 
         $(this).after(big_square);
 
-        var leftpos = semester_squares.first().offset().left;
-
         big_square.animate({
-            'width': '71.54%', // 78% width of main wrapper * 98%;
-            'left': leftpos
+            width: '65%',
+            height: '65%',
+            left: '17.5%',
+            top: '17.5%'
+        }, 200, function() {
+            locked = false;
+        });
+        var over = $('#overlay');
+        over.css('height', $('#middle-section').height());
+        over.css('display', 'block');
+        over.animate({
+            opacity: '0.3'
         }, 200);
+
     });
     semwrap.on('click', '.large_semester_square', function() {
+        if (locked)
+            return;
+        locked = true;
         $(this).animate({
             opacity: '0'
-        }, 200, function() {$(this).remove();});
+        }, 200, function() {
+            $(this).remove();
+            locked = false;
+        });
+        var over = $('#overlay');
+        over.animate({
+            opacity: '0'
+        }, 200, function() {
+            over.css('display', 'none');
+        });
+
     });
 
     var add_semester_button = $('#add_semester_button');
@@ -72,28 +97,6 @@ $(function() {
             color: '#3b3b3b'
         }, 100);
         $(this).css('background', 'url(/static/images/plus_sign_light.png) no-repeat center center');
-    });
-
-    $('#add_semester_dialog_form').dialog({
-		autoOpen: false,
-		width: 350,
-        resizable: false,
-		modal: true,
-		buttons: {
-			"Add Semester": {
-                text: 'Add Semester',
-                click: function() {
-                    document.forms['add_semester_form'].submit();
-                }
-	      	},
-		  	Cancel: function() {
-	  			$( this ).dialog( "close" );
-		  	}
-        },
-        close: function() {
-            // do special stuff when closing window
-            // such as prep for next time window is opened
-        }
     });
 
     add_semester_button.click(function() {

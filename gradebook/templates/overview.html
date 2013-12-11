@@ -9,6 +9,8 @@
 
     <h1>Overview</h1>
 
+    <div id="overlay"></div>
+
     <div id='semester_squares_wrapper'>
 
         {% for semester in semesters %}
@@ -21,9 +23,9 @@
             <p class='semester_square_name' style='color: #3b3b3b'>Add a Semester</p>
         </div>
 
-    </div>
+    <!--/div--><!-- end semester_squares_wrapper -->
 
-    <!--div class='semester_square'>
+    <div class='semester_square'>
         <p class='semester_square_name'>Fall 2013 - Current</p>
 
         <table class='semester_square_course_table'><tbody>
@@ -180,6 +182,8 @@
                 <td class='s_s_table_data course_grade'></td>
             </tr>
         </tbody></table>
-    </div-->
+    </div>
+
+    </div>
 
 {%  endblock %}
