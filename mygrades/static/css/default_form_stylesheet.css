@@ -1,80 +1,59 @@
 .ui-dialog {
-    font-size: .825em;
-}
+  font-size: .825em; }
 
 .ui-dialog-titlebar {
-    display: none;
-}
+  display: none; }
 
 .form-title {
-    font-size: 2em;
-    text-align: center;
-    margin: 5px auto;
-    display: block;
-}
+  font-size: 2em;
+  text-align: center;
+  margin: 5px auto;
+  display: block; }
 
 .form-wrapper {
-    width: 350px;
-    margin: auto;
-
-    border: 1px #aaaaaa solid;
-    border-radius: 5px;
-
-    position: relative;
-}
-
-input {
-    width: 80%;
-    height: 2em;
-    margin: 10px auto;
-    padding: 1px 5px;
-
-    font-size: 1em;
-    line-height: 2em;
-
-    border: 1px #aaaaaa solid;
-    border-radius: 2px;
-
-    display: block;
-    color: #999999;
-}
-
-input[type=submit] {
-    width: 10em;
-    margin: 15px 7.5% 15px auto;
-    display: block;
-}
-
-input:focus {
-    border-color: white;
-    /*color: #222222;*/
-}
-
-input.text {
-	margin-bottom:12px;
-	width:95%;
-	padding: .4em;
-}
-
-fieldset {
-	padding:0;
-	border:0;
-	margin-top:25px;
-}
-
-.error {
-    width: 80%;
-    margin: 10px auto;
-    text-align: center;
-    font-size: 1em;
-    line-height: 2em;
-    color: darkred;
-}
-
-.form-wrapper p {
+  width: 350px;
+  margin: auto;
+  border: 1px #aaaaaa solid;
+  border-radius: 5px;
+  position: relative; }
+  .form-wrapper p {
     width: 80%;
     margin: 10px auto;
     overflow: visible;
     white-space: normal;
-    font-size: 1em;
-}
+    font-size: 1em; }
+
+input {
+  width: 80%;
+  height: 2em;
+  margin: 10px auto;
+  padding: 1px 5px;
+  font-size: 1em;
+  line-height: 2em;
+  border: 1px #aaaaaa solid;
+  border-radius: 2px;
+  display: block;
+  color: #999999; }
+  input:focus {
+    border-color: white; }
+  input[type=submit] {
+    width: 10em;
+    margin: 15px 7.5% 15px auto;
+    display: block; }
+  input.text {
+    margin-bottom: 12px;
+    width: 95%;
+    padding: .4em; }
+
+fieldset {
+  padding: 0;
+  border: 0;
+  margin-top: 25px; }
+
+.error {
+  width: 80%;
+  margin: 10px auto;
+  text-align: center;
+  font-size: 1em;
+  line-height: 2em;
+  color: darkred; }

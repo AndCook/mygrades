@@ -1,33 +1,24 @@
 #settings_wrapper {
-    width: 700px;
-    margin: auto;
-    position: relative;
-}
-#current-settings-div td {
-    padding: 5px;
-    font-size: 1em;
-}
-
-#current-settings-table {
-    width: 85%;
-}
-
-#current-settings-table p {
-    width: 100%;
-    max-width: 250px;
-    margin: 0 auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+  width: 700px;
+  margin: auto;
+  position: relative; }
 
 #current-settings-div {
-    width: 350px;
-    height: 100%;
-
-    border-right: 1px #aaaaaa solid;
-}
+  width: 350px;
+  height: 100%;
+  border-right: 1px #aaaaaa solid; }
+  #current-settings-div table {
+    width: 85%; }
+    #current-settings-div table td {
+      padding: 5px;
+      font-size: 1em; }
+    #current-settings-div table p {
+      width: 100%;
+      max-width: 250px;
+      margin: 0 auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap; }
 
 #change-settings-div {
-    width: 350px;
-}
+  width: 350px; }

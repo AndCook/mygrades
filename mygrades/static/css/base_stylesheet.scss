@@ -1,0 +1,116 @@
+$dark_gray: #222222;
+
+body {
+    /* margin and padding at zero is the key to making width: 100% work*/
+    margin: 0;
+    padding: 0;
+
+    background-color: #eeeeee;
+    font-family: sans-serif;
+}
+
+p, h1 {
+    margin: 0;
+
+    color: $dark_gray;
+
+    /*the next three lines truncate long text*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+p {
+    font-size: .75em;
+}
+
+h1 {
+    margin-left: 30px;
+    margin-bottom: 1em;
+    font-size: 2em;
+}
+
+#header {
+    height: 45px;
+    background-color: $dark_gray;
+    display: block;
+}
+
+#header-wrapper {
+    width: 75%;
+    margin: 0 auto;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+
+        li {
+            display: inline-block;
+        }
+    }
+}
+
+#left-header {
+    float: left;
+}
+
+#right-header {
+    float: right;
+}
+
+.header-link {
+    margin: 0;
+    padding: 0 10px;
+
+    line-height: 45px;
+    display: inline-block;
+
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+
+    background-color: $dark_gray;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#account-button {
+    height: 45px;
+
+    &:hover {
+        cursor: default;
+    }
+}
+
+#account-dropdown {
+    background-color: $dark_gray;
+    position: absolute;
+    z-index: 1000;
+    display: none;
+}
+
+.dropdown-link {
+    line-height: 2em;
+    display: block;
+    text-align: left;
+}
+
+#main-wrapper {
+    width: 73%; /* width + padding must be 75% */
+    min-height: 1000px;
+    margin: 0 auto;
+    padding: 50px 1%;
+    background-color: white;
+}
+
+#footer {
+    height: 45px;
+    background-color: $dark_gray;
+    display: block;
+    clear: both;
+}
+

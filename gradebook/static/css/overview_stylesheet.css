@@ -1,140 +1,115 @@
 #overlay {
-    background-color: #aaaaaa;
-    opacity: 0;
-    position: absolute;
-    top: 45px;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    margin: auto;
-    display: none;
-    z-index: 9;
-}
+  background-color: #aaaaaa;
+  opacity: 0;
+  position: absolute;
+  top: 45px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  display: none;
+  z-index: 9; }
 
 .semester_square {
-    width: 31%;
-    min-height: 300px;
-    margin: 10px 1%;
-    border-radius: 5px;
-
-    background-color: #222222;
-
-    display: inline-block;
-}
-
-.semester_square:hover {
-    cursor: pointer;
-}
+  width: 31%;
+  min-height: 300px;
+  margin: 10px 1%;
+  border-radius: 5px;
+  background-color: #222222;
+  display: inline-block; }
+  .semester_square:hover {
+    cursor: pointer; }
 
 .s_s_name_div {
-    margin: 1em auto;
-    display: block;
-    text-align: center;
-}
+  margin: 1em auto;
+  display: block;
+  text-align: center; }
 
 .s_s_name {
-    margin: 0 5px;
-    color: white;
-    font-size: 1em;
-    /*text-align: center;*/
-    display: inline-block;
-}
+  margin: 0 5px;
+  color: white;
+  font-size: 1em;
+  /*text-align: center;*/
+  display: inline-block; }
 
 .hidden_in_s_s {
-    display: none;
-}
+  display: none; }
 
-.mini_link  {
-    margin: 0;
-    color: dodgerblue;
-    font-size: .6em;
-    text-align: center;
-}
-
-.mini_link:hover {
+.mini_link {
+  margin: 0;
+  color: dodgerblue;
+  font-size: .6em;
+  text-align: center; }
+  .mini_link:hover {
     text-decoration: underline;
-    cursor: pointer;
-}
+    cursor: pointer; }
 
 .large_semester_square {
-    border-radius: 5px;
-    background-color: #3b3b3b;
-}
+  border-radius: 5px;
+  background-color: #3b3b3b; }
 
 #add_semester_button {
-    width: calc(31% - 10px);
-    height: 290px;
-    margin: 10px 1%;
-    top: 5px;
-    position: relative;
-
-    display: inline-block;
-
-    border: 5px dashed #3b3b3b;
-    border-radius: 5px;
-
-    background: url(/static/images/plus_sign_light.png) no-repeat center center;
-}
-
-#add_semester_button:hover {
-    cursor: pointer;
-}
-
-#add_semester_button > img {
-    vertical-align: middle;
-}
+  width: calc(31% - 10px);
+  height: 290px;
+  margin: 10px 1%;
+  top: 5px;
+  position: relative;
+  display: inline-block;
+  border: 5px dashed #3b3b3b;
+  border-radius: 5px;
+  background: url(/static/images/plus_sign_light.png) no-repeat center center; }
+  #add_semester_button:hover {
+    cursor: pointer; }
+  #add_semester_button > img {
+    vertical-align: middle; }
 
 .semester_square_course_table {
-    width: 95%;
-    margin: 0 auto .5em;
-    padding-bottom: 0.5em;
-    border-bottom: 1px solid white;
-    table-layout: fixed;
-}
+  width: 95%;
+  margin: 0 auto .5em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid white;
+  table-layout: fixed; }
 
-.s_s_table_data { /*semester_square_table_data*/
-    padding: .2em 0;
-    font-size: .8em;
-
-    color: white;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+.s_s_table_data {
+  /*semester_square_table_data*/
+  padding: .2em 0;
+  font-size: .8em;
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
 
 .course_number {
-    width: 20%;
-}
+  width: 20%; }
+
+.course_link {
+  color: white;
+  text-decoration: none; }
+  .course_link:hover {
+    text-decoration: underline; }
 
 .course_name {
-    width: 65%;
-}
+  width: 65%; }
 
 .course_grade {
-    width: 15%;
-}
+  width: 15%; }
 
 .current_semester_table {
-    width: 95%;
-    margin: auto;
-    table-layout: fixed;
-}
+  width: 95%;
+  margin: auto;
+  table-layout: fixed; }
 
 .gpa_data_number {
-    width: 33%;
-    text-align: center;
-    font-size: 1.2em;
-}
+  width: 33%;
+  text-align: center;
+  font-size: 1.2em; }
 
 .gpa_data_name {
-    width: 33%;
-    text-align: center;
-    font-size: .7em;
-}
+  width: 33%;
+  text-align: center;
+  font-size: .7em; }
 
 .finished_semester_table {
-    width: 95%;
-    margin: auto;
-    table-layout: fixed;
-}
+  width: 95%;
+  margin: auto;
+  table-layout: fixed; }

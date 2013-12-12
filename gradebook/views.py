@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response
 from gradebook.models import Semester, Course, Category, Assignment
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 import json
@@ -66,27 +66,20 @@ def semester_detail(request):
 
 
 @login_required
-def course_detail(request):
+def course_detail(request, course_id):
     if not request.user.is_active:
         return HttpResponseRedirect('/account/settings/')
 
-    semesters = Semester.objects.all()
-    selected_semester = None
-    if len(semesters) > 0:
-        selected_semester = semesters[0]
-    courses = Course.objects.all()
-    selected_course = None
-    if len(courses) > 0:
-        selected_course = courses[0]
-    categories = Category.objects.filter(course=selected_course)
-    for cat in categories:
-        cat.assignments = Assignment.objects.filter(category=cat)
-        cat.has_assignments = (len(cat.assignments) > 0)
+    courses = Course.objects.filter(id=course_id)
+    # make sure course_id is valid
+    if courses.__len__() != 1:
+        return Http404()
+    course = courses[0]
+    semester = course.semester
+    # make sure current user has access to requested course
+    if request.user != semester.user:
+        return Http404
 
     return render_to_response('course_detail.html',
-                              {'user': request.user,
-                               'selected_semester': selected_semester,
-                               'semesters': semesters,
-                               'selected_course': selected_course,
-                               'courses': courses,
-                               'categories': categories})
+                              {'course': course},
+                              RequestContext(request))

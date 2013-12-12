@@ -28,13 +28,19 @@
                     {% for course in semester.courses %}
                         <tr>
                             <td class='s_s_table_data course_number'>{{ course.number }}</td>
-                            <td class='s_s_table_data course_name'>{{ course.name }}</td>
+                            <td class='s_s_table_data course_name'>
+                                <a href='/gradebook/course_detail/{{ course.id }}/' class='course_link'>
+                                    {{ course.name }}
+                                </a>
+                            </td>
                             <td class='s_s_table_data course_grade'>100.0%</td>
                         </tr>
                     {% endfor %}
                     {% endif %}
                     <tr class='hidden_in_s_s add_course_tr'>
-                        <td colspan='3'><p class='mini_link add_course'>add course</p></td>
+                        <td colspan='3'>
+                            <p class='mini_link add_course'>+ add course</p>
+                        </td>
                     </tr>
                 </tbody></table>
             </div>

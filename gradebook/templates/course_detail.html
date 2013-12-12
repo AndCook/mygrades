@@ -9,6 +9,9 @@
 
 {% block base_content %}
 
+    <h1>{{ course.name }}</h1>
+
+    {% comment %}
     <div id="add-assignment-dialog-form" title="Add new assignment">
 		<p class="validate-tips">All form fields are required.</p>
 
@@ -104,5 +107,6 @@
             <p style="display: inline-block">Add assignment for this course</p>
         </div>
     {% endif %}
+    {% endcomment %}
 
 {% endblock %}

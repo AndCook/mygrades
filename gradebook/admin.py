@@ -7,7 +7,7 @@ class SemesterAdmin(admin.ModelAdmin):
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['number', 'name', 'instructor', 'semester']
+    list_display = ['id', 'number', 'name', 'instructor', 'semester']
 
 
 class CategoryAdmin(admin.ModelAdmin):
