@@ -40,31 +40,20 @@
     display: inline-block;
 }
 
-.s_s_name_rename_delete {
+.hidden_in_s_s {
     display: none;
+}
+
+.mini_link  {
+    margin: 0;
+    color: dodgerblue;
+    font-size: .6em;
+    text-align: center;
+}
+
+.mini_link:hover {
+    text-decoration: underline;
     cursor: pointer;
-}
-
-.s_s_rename {
-    margin: 0;
-    color: dodgerblue;
-    font-size: .6em;
-    text-align: center;
-}
-
-.s_s_delete {
-    margin: 0;
-    color: dodgerblue;
-    font-size: .6em;
-    text-align: center;
-}
-
-.s_s_rename:hover {
-    text-decoration: underline;
-}
-
-.s_s_delete:hover {
-    text-decoration: underline;
 }
 
 .large_semester_square {

@@ -15,6 +15,9 @@ def overview(request):
 
     if request.method == 'GET':
         semesters = Semester.objects.filter(user=request.user)
+        for semester in semesters:
+            courses = Course.objects.filter(semester=semester)
+            semester.courses = courses
         return render_to_response('overview.html',
                                   {'semesters': semesters},
                                   RequestContext(request))
@@ -22,27 +25,36 @@ def overview(request):
     if request.is_ajax():
         post_action = request.POST['post_action']
         if post_action == 'create_semester':
-            name = request.POST['new_semester_name']
-            semester = Semester(name=name, user=request.user)
+            new_semester_name = request.POST['new_semester_name']
+            semester = Semester(name=new_semester_name, user=request.user)
             semester.save()
             return_dict = {'id': semester.id}
             js = json.dumps(return_dict)
             return HttpResponse(js, mimetype='application/json')
         elif post_action == 'delete_semester':
             # id is of form "semester_23" and we need just number
-            delete_semester_id = (request.POST['delete_semester_id'])
+            delete_semester_id = request.POST['delete_semester_id']
             semesters = Semester.objects.filter(id=delete_semester_id)
             if semesters.__len__() == 1:
                 semesters[0].delete()
             return HttpResponse(json.dumps({}), mimetype='application/json')
         elif post_action == 'rename_semester':
-            rename_semester_id = (request.POST['rename_semester_id'])
-            new_name = request.POST['new_semester_name']
+            rename_semester_id = request.POST['rename_semester_id']
+            new_semester_name = request.POST['new_semester_name']
             semesters = Semester.objects.filter(id=rename_semester_id)
             if semesters.__len__() == 1:
-                semesters[0].name = new_name
+                semesters[0].name = new_semester_name
                 semesters[0].save()
             return HttpResponse(json.dumps({}), mimetype='application/json')
+        elif post_action == 'add_course':
+            new_course_name = request.POST['new_course_name']
+            semester_id = request.POST['semester_id']
+            semester = Semester.objects.filter(id=semester_id)
+            if semester.__len__() == 1:
+                course = Course(name=new_course_name, number='XXXXX',
+                                instructor='Dr. X', semester=semester[0])
+                course.save()
+                return HttpResponse(json.dumps({}), mimetype='application/json')
 
 
 @login_required

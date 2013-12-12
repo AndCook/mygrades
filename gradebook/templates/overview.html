@@ -17,11 +17,26 @@
             <div class='semester_square' id='semester_{{ semester.id }}'>
                 <div class='s_s_name_div'>
                     <p class='s_s_name'>{{ semester.name }}</p>
-                    <div class='s_s_name_rename_delete'>
-                        <p class='s_s_rename'>rename</p>
-                        <p class='s_s_delete'>delete</p>
+                    <div class='hidden_in_s_s'>
+                        <p class='mini_link s_s_rename'>rename</p>
+                        <p class='mini_link s_s_delete'>delete</p>
                     </div>
                 </div>
+
+                <table class='semester_square_course_table'><tbody>
+                    {% if semester.courses %}
+                    {% for course in semester.courses %}
+                        <tr>
+                            <td class='s_s_table_data course_number'>{{ course.number }}</td>
+                            <td class='s_s_table_data course_name'>{{ course.name }}</td>
+                            <td class='s_s_table_data course_grade'>100.0%</td>
+                        </tr>
+                    {% endfor %}
+                    {% endif %}
+                    <tr class='hidden_in_s_s add_course_tr'>
+                        <td colspan='3'><p class='mini_link add_course'>add course</p></td>
+                    </tr>
+                </tbody></table>
             </div>
         {% endfor %}
 
@@ -31,14 +46,14 @@
             </div>
         </div>
 
-    <!--/div--><!-- end semester_squares_wrapper -->
+    </div><!-- end semester_squares_wrapper -->
 
-    <div class='semester_square'>
+    <!--div class='semester_square'>
         <div class='s_s_name_div'>
             <p class='s_s_name'>Fall 2013 - Current</p>
-            <div class='s_s_name_rename_delete'>
-                <p class='s_s_rename'>rename</p>
-                <p class='s_s_delete'>delete</p>
+            <div class='hidden_in_s_s'>
+                <p class='mini_link s_s_rename'>rename</p>
+                <p class='mini_link s_s_delete'>delete</p>
             </div>
         </div>
 
@@ -102,9 +117,9 @@
     <div class='semester_square'>
         <div class='s_s_name_div'>
             <p class='s_s_name'>Fall 2013 - Finished</p>
-            <div class='s_s_name_rename_delete'>
-                <p class='s_s_rename'>rename</p>
-                <p class='s_s_delete'>delete</p>
+            <div class='hidden_in_s_s'>
+                <p class='mini_link s_s_rename'>rename</p>
+                <p class='mini_link s_s_delete'>delete</p>
             </div>
         </div>
 
@@ -165,9 +180,9 @@
     <div class='semester_square'>
         <div class='s_s_name_div'>
             <p class='s_s_name'>Fall 2013 - Future</p>
-            <div class='s_s_name_rename_delete'>
-                <p class='s_s_rename'>rename</p>
-                <p class='s_s_delete'>delete</p>
+            <div class='hidden_in_s_s'>
+                <p class='mini_link s_s_rename'>rename</p>
+                <p class='mini_link s_s_delete'>delete</p>
             </div>
         </div>
 
@@ -210,6 +225,6 @@
         </tbody></table>
     </div>
 
-    </div>
+    </div-->
 
 {%  endblock %}

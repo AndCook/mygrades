@@ -1,5 +1,5 @@
 $(function() {
-    // on hover over all semester-square's, change the background-color to #3b3b3b from #222222
+    ////////////////////// semester squares color animation //////////////////////
     var semwrap = $('#semester_squares_wrapper');
     semwrap.on('mouseenter', '.semester_square', function() {
         $(this).animate({
@@ -23,8 +23,9 @@ $(function() {
     });*/
 
     var locked = false;
-    // expanding a square
+    ////////////////////// expanding a square //////////////////////
     semwrap.on('click', '.semester_square', function() {
+        //console.log('expand');
         if (locked)
             return;
         locked = true;
@@ -59,17 +60,17 @@ $(function() {
         }, 200);
 
         big_square.css('font-size', '1.3em');
-        big_square.find('.s_s_name_rename_delete').css('display', 'inline-block');
+        big_square.find('.hidden_in_s_s').css('display', 'inline-block');
 
     });
-    // deleting semesters
+    ////////////////////// deleting semesters //////////////////////
     semwrap.on('click', '.s_s_delete', function() {
-        console.log('delete');
+        //console.log('delete');
         var s_s_name_div = $(this).closest('.s_s_name_div');
         var semester_name = s_s_name_div.find('.s_s_name').text();
 
         var semester_square = s_s_name_div.parent();
-        var id = semester_square.attr('id');
+        var semester_id = semester_square.attr('id');
 
         if (confirm("Are you sure you want to delete semester \"" + semester_name + "\"?\n" +
         "All data relating to the semester, including classes " +
@@ -81,16 +82,17 @@ $(function() {
                 contentType: "application/x-www-form-urlencoded",
                 data: {
                     'post_action': 'delete_semester',
-                    'delete_semester_id': id.split("_").pop()
+                    'delete_semester_id': semester_id.split("_").pop()
                 },
                 success: function(data) {
-                    $('#' + id).remove();
+                    $('#' + semester_id).remove();
                 }
             });
         }
     });
+    ////////////////////// renaming semesters //////////////////////
     semwrap.on('click', '.s_s_rename', function() {
-        console.log('rename');
+        //console.log('rename');
         var s_s_name_div = $(this).closest('.s_s_name_div');
         var semester_name = s_s_name_div.find('.s_s_name').text();
 
@@ -103,7 +105,7 @@ $(function() {
         }
 
         var semester_square = s_s_name_div.parent();
-        var id = semester_square.attr('id');
+        var semester_id = semester_square.attr('id');
 
         $.ajax({
             type:"POST",
@@ -111,17 +113,17 @@ $(function() {
             contentType: "application/x-www-form-urlencoded",
             data: {
                 'post_action': 'rename_semester',
-                'rename_semester_id': id.split("_").pop(),
+                'rename_semester_id': semester_id.split("_").pop(),
                 'new_semester_name': new_name
             },
             success: function(data) {
-                $('#' + id).find('.s_s_name').text(new_name);
+                $('#' + semester_id).find('.s_s_name').text(new_name);
             }
         });
     });
-    // shrinking large square
+    ////////////////////// shrinking large square //////////////////////
     semwrap.on('click', '.large_semester_square', function() {
-        console.log('shrink');
+        //console.log('shrink');
         if (locked)
             return;
         locked = true;
@@ -138,7 +140,7 @@ $(function() {
             over.css('display', 'none');
         });
     });
-
+    ////////////////////// add semesters button color animation //////////////////////
     var add_semester_button = $('#add_semester_button');
     var par = add_semester_button.find('p');
     add_semester_button.mouseenter(function() {
@@ -159,10 +161,12 @@ $(function() {
         }, 100);
         $(this).css('background', 'url(/static/images/plus_sign_light.png) no-repeat center center');
     });
+    ////////////////////// creating semesters //////////////////////
     add_semester_button.click(function() {
-        var name = prompt('Enter Semester Name (ex. "Fall 2014")');
+        //console.log('create semester');
+        var new_semester_name = prompt('Enter Semester Name (ex. "Fall 2014")');
 
-        if (name === null || name === '') {
+        if (new_semester_name === null || new_semester_name === '') {
             alert('Invalid Semester Name');
             return;
         }
@@ -173,19 +177,59 @@ $(function() {
             contentType: "application/x-www-form-urlencoded",
             data: {
                 'post_action': 'create_semester',
-                'new_semester_name': name
+                'new_semester_name': new_semester_name
             },
             success: function(data) {
                 $('#add_semester_button').before(
                     "<div class='semester_square' id='semester_" + data.id + "'>" +
                     "    <div class='s_s_name_div'>" +
-                    "       <p class='s_s_name'>" + name + "</p>" +
-                    "       <div class='s_s_name_rename_delete'>" +
-                    "           <p class='s_s_rename'>rename</p>" +
-                    "           <p class='s_s_delete'>delete</p>" +
+                    "       <p class='s_s_name'>" + new_semester_name + "</p>" +
+                    "       <div class='hidden_in_s_s'>" +
+                    "           <p class='mini_link s_s_rename'>rename</p>" +
+                    "           <p class='mini_link s_s_delete'>delete</p>" +
                     "       </div>" +
                     "    </div>" +
+                    "    <table class='semester_square_course_table'><tbody>" +
+                    "        <tr class='hidden_in_s_s add_course_tr'>" +
+                    "            <td colspan='3'><p class='mini_link add_course'>add course</p></td>" +
+                    "        </tr>" +
+                    "    </tbody></table>" +
                     "</div>"
+                );
+            }
+        });
+    });
+    ////////////////////// adding courses //////////////////////
+    semwrap.on('click', '.add_course', function() {
+        //console.log('add course');
+
+        var new_course_name = prompt('Enter Class Name (ex. "Intro to Psychology")');
+
+        if (new_course_name === null || new_course_name === '') {
+            alert('Invalid Course Name');
+            return;
+        }
+
+        var s_s_name_div = $(this).closest('.semester_square_course_table');
+        var semester_square = s_s_name_div.parent();
+        var semester_id = semester_square.attr('id');
+
+        $.ajax({
+            type:"POST",
+            url: "/gradebook/overview/",
+            contentType: "application/x-www-form-urlencoded",
+            data: {
+                'post_action': 'add_course',
+                'new_course_name': new_course_name,
+                'semester_id': semester_id.split("_").pop()
+            },
+            success: function(data) {
+                $('#' + semester_id).find('.add_course_tr').before(
+                    "<tr>" +
+                    "    <td class='s_s_table_data course_number'>XXXXX</td>" +
+                    "    <td class='s_s_table_data course_name'>" + new_course_name + "</td>" +
+                    "    <td class='s_s_table_data course_grade'>100.0%</td>" +
+                    "</tr>"
                 );
             }
         });
