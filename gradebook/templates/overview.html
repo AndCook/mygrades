@@ -14,19 +14,33 @@
     <div id='semester_squares_wrapper'>
 
         {% for semester in semesters %}
-            <div class='semester_square'>
-                <p class='semester_square_name'>{{ semester.name }}</p>
+            <div class='semester_square' id='semester_{{ semester.id }}'>
+                <div class='s_s_name_div'>
+                    <p class='s_s_name'>{{ semester.name }}</p>
+                    <div class='s_s_name_rename_delete'>
+                        <p class='s_s_rename'>rename</p>
+                        <p class='s_s_delete'>delete</p>
+                    </div>
+                </div>
             </div>
         {% endfor %}
 
         <div id='add_semester_button'>
-            <p class='semester_square_name' style='color: #3b3b3b'>Add a Semester</p>
+            <div class='s_s_name_div'>
+                <p class='s_s_name' style='color: #3b3b3b'>Add a Semester</p>
+            </div>
         </div>
 
     <!--/div--><!-- end semester_squares_wrapper -->
 
     <div class='semester_square'>
-        <p class='semester_square_name'>Fall 2013 - Current</p>
+        <div class='s_s_name_div'>
+            <p class='s_s_name'>Fall 2013 - Current</p>
+            <div class='s_s_name_rename_delete'>
+                <p class='s_s_rename'>rename</p>
+                <p class='s_s_delete'>delete</p>
+            </div>
+        </div>
 
         <table class='semester_square_course_table'><tbody>
             <tr>
@@ -86,7 +100,13 @@
     </div>
 
     <div class='semester_square'>
-        <p class='semester_square_name'>Fall 2013 - Finished</p>
+        <div class='s_s_name_div'>
+            <p class='s_s_name'>Fall 2013 - Finished</p>
+            <div class='s_s_name_rename_delete'>
+                <p class='s_s_rename'>rename</p>
+                <p class='s_s_delete'>delete</p>
+            </div>
+        </div>
 
         <table class='semester_square_course_table'><tbody>
             <tr>
@@ -143,7 +163,13 @@
     </div>
 
     <div class='semester_square'>
-        <p class='semester_square_name'>Fall 2013 - Future</p>
+        <div class='s_s_name_div'>
+            <p class='s_s_name'>Fall 2013 - Future</p>
+            <div class='s_s_name_rename_delete'>
+                <p class='s_s_rename'>rename</p>
+                <p class='s_s_delete'>delete</p>
+            </div>
+        </div>
 
         <table class='semester_square_course_table'><tbody>
             <tr>

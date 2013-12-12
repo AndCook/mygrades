@@ -11,7 +11,7 @@ $(function() {
             backgroundColor: '#222222'
         }, 100);
     });
-    semwrap.on('mouseenter', '.large_semester_square', function() {
+    /*semwrap.on('mouseenter', '.large_semester_square', function() {
         $(this).animate({
             backgroundColor: '#3b3b3b'
         }, 100);
@@ -20,10 +20,10 @@ $(function() {
         $(this).animate({
             backgroundColor: '#222222'
         }, 100);
-    });
+    });*/
 
     var locked = false;
-
+    // expanding a square
     semwrap.on('click', '.semester_square', function() {
         if (locked)
             return;
@@ -36,7 +36,7 @@ $(function() {
         big_square.css('width', $(this).width());
         big_square.css('height', $(this).height());
         big_square.css('margin', '0');
-        big_square.css('backgroundColor', '#3b3b3b');
+        big_square.css('backgroundColor', '#222222');
         big_square.css('z-index', '10');
         big_square.addClass('large_semester_square');
         big_square.removeClass('semester_square');
@@ -58,8 +58,70 @@ $(function() {
             opacity: '0.3'
         }, 200);
 
+        big_square.css('font-size', '1.3em');
+        big_square.find('.s_s_name_rename_delete').css('display', 'inline-block');
+
     });
+    // deleting semesters
+    semwrap.on('click', '.s_s_delete', function() {
+        console.log('delete');
+        var s_s_name_div = $(this).closest('.s_s_name_div');
+        var semester_name = s_s_name_div.find('.s_s_name').text();
+
+        var semester_square = s_s_name_div.parent();
+        var id = semester_square.attr('id');
+
+        if (confirm("Are you sure you want to delete semester \"" + semester_name + "\"?\n" +
+        "All data relating to the semester, including classes " +
+        "and assignments, will be deleted."))
+        {
+            $.ajax({
+                type:"POST",
+                url: "/gradebook/overview/",
+                contentType: "application/x-www-form-urlencoded",
+                data: {
+                    'post_action': 'delete_semester',
+                    'delete_semester_id': id.split("_").pop()
+                },
+                success: function(data) {
+                    $('#' + id).remove();
+                }
+            });
+        }
+    });
+    semwrap.on('click', '.s_s_rename', function() {
+        console.log('rename');
+        var s_s_name_div = $(this).closest('.s_s_name_div');
+        var semester_name = s_s_name_div.find('.s_s_name').text();
+
+        var new_name = prompt('Enter new Semester Name to replace "' +
+            semester_name + '" (ex. "Fall 2014")');
+
+        if (new_name === null || new_name === '') {
+            alert('Invalid Semester Name');
+            return;
+        }
+
+        var semester_square = s_s_name_div.parent();
+        var id = semester_square.attr('id');
+
+        $.ajax({
+            type:"POST",
+            url: "/gradebook/overview/",
+            contentType: "application/x-www-form-urlencoded",
+            data: {
+                'post_action': 'rename_semester',
+                'rename_semester_id': id.split("_").pop(),
+                'new_semester_name': new_name
+            },
+            success: function(data) {
+                $('#' + id).find('.s_s_name').text(new_name);
+            }
+        });
+    });
+    // shrinking large square
     semwrap.on('click', '.large_semester_square', function() {
+        console.log('shrink');
         if (locked)
             return;
         locked = true;
@@ -75,7 +137,6 @@ $(function() {
         }, 200, function() {
             over.css('display', 'none');
         });
-
     });
 
     var add_semester_button = $('#add_semester_button');
@@ -98,7 +159,6 @@ $(function() {
         }, 100);
         $(this).css('background', 'url(/static/images/plus_sign_light.png) no-repeat center center');
     });
-
     add_semester_button.click(function() {
         var name = prompt('Enter Semester Name (ex. "Fall 2014")');
 
@@ -112,15 +172,23 @@ $(function() {
             url: "/gradebook/overview/",
             contentType: "application/x-www-form-urlencoded",
             data: {
-                   'new_semester_name': name
+                'post_action': 'create_semester',
+                'new_semester_name': name
+            },
+            success: function(data) {
+                $('#add_semester_button').before(
+                    "<div class='semester_square' id='semester_" + data.id + "'>" +
+                    "    <div class='s_s_name_div'>" +
+                    "       <p class='s_s_name'>" + name + "</p>" +
+                    "       <div class='s_s_name_rename_delete'>" +
+                    "           <p class='s_s_rename'>rename</p>" +
+                    "           <p class='s_s_delete'>delete</p>" +
+                    "       </div>" +
+                    "    </div>" +
+                    "</div>"
+                );
             }
         });
-
-        $('#add_semester_button').before(
-            "<div class='semester_square'>" +
-            "    <p class='semester_square_name'>" + name + "</p>" +
-            "</div>"
-        );
     });
-});
 
+});

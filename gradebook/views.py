@@ -20,13 +20,29 @@ def overview(request):
                                   RequestContext(request))
 
     if request.is_ajax():
-        name = request.POST['new_semester_name']
-        semester = Semester(name=name, user=request.user)
-        semester.save()
-
-        #result = json.dumps({'messagesent': request.POST['tosend'] + "This is how we do it"})
-        #return HttpResponse(result, mimetype='application/javascript')
-        return HttpResponse(mimetype='application/javascript')
+        post_action = request.POST['post_action']
+        if post_action == 'create_semester':
+            name = request.POST['new_semester_name']
+            semester = Semester(name=name, user=request.user)
+            semester.save()
+            return_dict = {'id': semester.id}
+            js = json.dumps(return_dict)
+            return HttpResponse(js, mimetype='application/json')
+        elif post_action == 'delete_semester':
+            # id is of form "semester_23" and we need just number
+            delete_semester_id = (request.POST['delete_semester_id'])
+            semesters = Semester.objects.filter(id=delete_semester_id)
+            if semesters.__len__() == 1:
+                semesters[0].delete()
+            return HttpResponse(json.dumps({}), mimetype='application/json')
+        elif post_action == 'rename_semester':
+            rename_semester_id = (request.POST['rename_semester_id'])
+            new_name = request.POST['new_semester_name']
+            semesters = Semester.objects.filter(id=rename_semester_id)
+            if semesters.__len__() == 1:
+                semesters[0].name = new_name
+                semesters[0].save()
+            return HttpResponse(json.dumps({}), mimetype='application/json')
 
 
 @login_required

@@ -3,7 +3,7 @@ from django.contrib import admin
 
 
 class SemesterAdmin(admin.ModelAdmin):
-    list_display = ['name', 'user']
+    list_display = ['id', 'user', 'name']
 
 
 class CourseAdmin(admin.ModelAdmin):

@@ -26,20 +26,50 @@
     cursor: pointer;
 }
 
-.semester_square_name {
-    margin: 1em 0;
+.s_s_name_div {
+    margin: 1em auto;
+    display: block;
+    text-align: center;
+}
+
+.s_s_name {
+    margin: 0 5px;
     color: white;
     font-size: 1em;
+    /*text-align: center;*/
+    display: inline-block;
+}
+
+.s_s_name_rename_delete {
+    display: none;
+    cursor: pointer;
+}
+
+.s_s_rename {
+    margin: 0;
+    color: dodgerblue;
+    font-size: .6em;
     text-align: center;
+}
+
+.s_s_delete {
+    margin: 0;
+    color: dodgerblue;
+    font-size: .6em;
+    text-align: center;
+}
+
+.s_s_rename:hover {
+    text-decoration: underline;
+}
+
+.s_s_delete:hover {
+    text-decoration: underline;
 }
 
 .large_semester_square {
     border-radius: 5px;
     background-color: #3b3b3b;
-}
-
-.large_semester_square:hover {
-    cursor: pointer;
 }
 
 #add_semester_button {
