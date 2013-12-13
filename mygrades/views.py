@@ -11,6 +11,14 @@ def about(request):
     return render_to_response('about.html', RequestContext(request))
 
 
+def methodology(request):
+    return render_to_response('methodology.html', RequestContext(request))
+
+
+def contact_us(request):
+    return render_to_response('contact_us.html', RequestContext(request))
+
+
 def base_form_context_processor(request):
     last_name_initial = ''
     if request.user.is_authenticated() and len(request.user.last_name) > 0:

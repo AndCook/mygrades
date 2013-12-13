@@ -1,29 +1,29 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block extra_head %}
-    <link rel="stylesheet" type="text/css" href="/static/css/semester_detail_stylesheet.css" />
-    <script src="/static/javascript/semester_detail_script.js"></script>
+    <link rel='stylesheet' type='text/css' href='/static/css/semester_detail_stylesheet.css' />
+    <script src='/static/javascript/semester_detail_script.js'></script>
 {% endblock %}
 
 {% block base_content %}
 
-    <div id="add-course-dialog-form" title="Add new course">
-		<p class="validate-tips">All form fields are required.</p>
+    <div id='add-course-dialog-form' title='Add new course'>
+		<p class='validate-tips'>All form fields are required.</p>
 
 		<form>
 			<fieldset>
-				<label for="number">
+				<label for='number'>
 					Course Number (ex. "PSY 301" or "M 408L")
 				</label>
-				<input type="text" name="number" id="number" class="text" />
-				<label for="name">
+				<input type='text' name='number' id='number' class='text' />
+				<label for='name'>
 					Course Name (ex. "Intro to Psych" or "Integral Calculus")
 				</label>
-				<input type="text" name="name" id="name" class="text" />
-				<label for="instructor">
+				<input type='text' name='name' id='name' class='text' />
+				<label for='instructor'>
 					Course Instructor (ex. "John Smith" or "Dr. Lin")
 				</label>
-				<input type="text" name="instructor" id="instructor" class="text" />
+				<input type='text' name='instructor' id='instructor' class='text' />
 			</fieldset>
 		</form>
 	</div><!-- end add-course-dialog-form div -->
@@ -33,27 +33,27 @@
     <h1>{{ selected_semester }}</h1>
 
     {% if courses %}
-        <ul id="sortable-courselist">
+        <ul id='sortable-courselist'>
             {% for course in courses %}
-                <li class="course">
+                <li class='course'>
                     <p>{{ course.number }}: {{ course.name }}</p>
-                    <p style="display: inline-block">{{ course.instructor }}</p>
-                    <div class="delete-edit-buttons">
-                        <img class="edit-button" src="/static/images/edit.png"/>
-                        <img class="delete-button" src="/static/images/delete.png"/>
+                    <p style='display: inline-block'>{{ course.instructor }}</p>
+                    <div class='delete-edit-buttons'>
+                        <img class='edit-button' src='/static/images/edit.png'/>
+                        <img class='delete-button' src='/static/images/delete.png'/>
                     </div>
                 </li>
             {% endfor %}
         </ul>
     {% else %}
-        <div class="course">
+        <div class='course'>
             <p>No classes added for this semester</p>
         </div>
     {% endif %}
 
-    <div class="add-course-div">
-        <img class="add-course-button" src="/static/images/add.png"/>
-        <p style="display: inline-block">Add course for this semseter</p>
+    <div class='add-course-div'>
+        <img class='add-course-button' src='/static/images/add.png'/>
+        <p style='display: inline-block'>Add course for this semseter</p>
     </div>
 
 {% endblock %}

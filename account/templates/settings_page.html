@@ -7,17 +7,17 @@
 
 {% block base_content %}
 
-    <div class='form-wrapper' id="settings_wrapper">
+    <div class='form_wrapper' id='settings_wrapper'>
         <table><tbody>
             <tr>
-                <td colspan="2">
-                    <h2  class='form-title'>Account Settings</h2>
+                <td colspan='2'>
+                    <h2  class='form_title'>Account Settings</h2>
                 </td>
             </tr>
             {% if not user.is_active %}
                 <tr>
-                    <td colspan="2">
-                        <p style="text-align: center; color: darkred">
+                    <td colspan='2'>
+                        <p style='text-align: center; color: darkred'>
                             Your account is locked until your email is verified.
                             To vertify your email, click the link that we sent you via email.
                             It may take a couple minutes to arrive.
@@ -28,7 +28,7 @@
                 </tr>
             {% endif %}
             <tr>
-                <td id="current-settings-div">
+                <td id='current_settings_div'>
                     <table><tbody>
                         <tr>
                             <td><p>Email:</p></td>
@@ -45,9 +45,9 @@
                     </tbody></table>
                 </td>
 
-                <td id='change-settings-div'>
+                <td id='change_settings_div'>
                     <form method='post' action='/account/settings/' name='change_settings_form'>{% csrf_token %}
-                        <p style="text-align: center">Enter <b>only</b> information you would like to change</p>
+                        <p style='text-align: center'>Enter <b>only</b> information you would like to change</p>
                         {{ change_settings_form.non_field_errors }}
 
                         {% for error in change_settings_form.email.errors %}
@@ -66,7 +66,7 @@
                         {{ change_settings_form.last_name }}
 
                         <div class='horizontal_line'>
-                            <input type="submit" value="Change Settings"/>
+                            <input type='submit' value='Change Settings'/>
                         </div>
                     </form>
                 </td>

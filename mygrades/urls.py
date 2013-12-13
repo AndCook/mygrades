@@ -5,6 +5,8 @@ admin.autodiscover()
 urlpatterns = patterns('mygrades.views',
                        url(r'^$', 'home'),
                        url(r'^about/$', 'about'),
+                       url(r'^methodology/$', 'methodology'),
+                       url(r'^contact_us/$', 'contact_us'),
 
                        url(r'^account/', include('account.urls')),
 

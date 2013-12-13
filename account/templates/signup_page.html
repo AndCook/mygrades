@@ -7,9 +7,9 @@
 
 {% block base_content %}
 
-    <div class="form-wrapper">
+    <div class='form_wrapper'>
         <form method='post' action='/account/signup/' name='signup_form'>{% csrf_token %}
-            <h2 class='form-title'>Sign Up</h2>
+            <h2 class='form_title'>Sign Up</h2>
 
             {% for error in login_form.non_field_errors %}
                 <p class='error'>{{ error|escape }}</p>
@@ -23,7 +23,7 @@
             {% endfor %}
 
             <div class='horizontal_line'>
-                <input type="submit" value="Sign Up" style="width: 6.5em"/>
+                <input type='submit' value='Sign Up' style='width: 6.5em'/>
             </div>
         </form>
     </div>

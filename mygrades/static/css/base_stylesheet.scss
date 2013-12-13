@@ -36,7 +36,7 @@ h1 {
     display: block;
 }
 
-#header-wrapper {
+.header_footer_wrapper {
     width: 75%;
     margin: 0 auto;
 
@@ -51,15 +51,15 @@ h1 {
     }
 }
 
-#left-header {
+.header_footer_left {
     float: left;
 }
 
-#right-header {
+.header_footer_right {
     float: right;
 }
 
-.header-link {
+.header_footer_link {
     margin: 0;
     padding: 0 10px;
 
@@ -67,7 +67,7 @@ h1 {
     display: inline-block;
 
     font-weight: bold;
-    color: white;
+    color: $white_text;
     text-decoration: none;
     text-align: center;
 
@@ -80,7 +80,7 @@ h1 {
     }
 }
 
-#account-button {
+#account_button {
     height: 45px;
 
     &:hover {
@@ -88,25 +88,25 @@ h1 {
     }
 }
 
-#account-dropdown {
+#account_dropdown {
     background-color: $dark_shade;
     position: absolute;
     z-index: 1000;
     display: none;
 }
 
-.dropdown-link {
+.dropdown_link {
     line-height: 2em;
     display: block;
     text-align: left;
 }
 
-#main-wrapper {
+#main_wrapper {
     width: 73%; /* width + padding must be 75% */
     min-height: 1000px;
     margin: 0 auto;
     padding: 50px 1%;
-    background-color: white;
+    background-color: $white_text;
 }
 
 #footer {

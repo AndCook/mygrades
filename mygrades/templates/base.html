@@ -12,7 +12,7 @@
         <!-- jquery-color library file -->
 		<script type='text/javascript' src='/static/javascript/jquery-color.js'></script>
         <!-- jquery cookie library file -->
-        <script type='text/javascript'  src="/static/javascript/jquery.cookie.js"></script>
+        <script type='text/javascript'  src='/static/javascript/jquery.cookie.js'></script>
 
         <link rel='stylesheet' type='text/css' href='/static/css/base_stylesheet.css' />
         <link rel='stylesheet' type='text/css' href='/static/css/default_form_stylesheet.css' />
@@ -24,32 +24,32 @@
 	<body>
 
         <div id='header'>
-            <div id='header-wrapper'>
-                <div id='left-header'>
+            <div class='header_footer_wrapper'>
+                <div class='header_footer_left'>
                     <ul>
                         <li>
-                            <a href='/' class='header-link'>
+                            <a href='/' class='header_footer_link'>
                                 Home
                             </a>
                         </li>
                         <li>
-                            <a href='/about/' class='header-link'>
+                            <a href='/about/' class='header_footer_link'>
                                 About
                             </a>
                         </li>
                         {% if user.is_active %}
                             <li>
-                                <a href='/gradebook/overview/' class='header-link'>
+                                <a href='/gradebook/overview/' class='header_footer_link'>
                                     Overview
                                 </a>
                             </li>
                             <!--li>
-                                <a href='/gradebook/semester_detail/' class='header-link'>
+                                <a href='/gradebook/semester_detail/' class='header_footer_link'>
                                     Semester Detail
                                 </a>
                             </li>
                             <li>
-                                <a href='/gradebook/course_detail/' class='header-link'>
+                                <a href='/gradebook/course_detail/' class='header_footer_link'>
                                     Course Detail
                                 </a>
                             </li-->
@@ -57,34 +57,34 @@
                     </ul>
                 </div>
 
-                <div id='right-header'>
+                <div class='header_footer_right'>
                     <ul>
                         {% if user.is_authenticated %}
-                            <li id='account-button-dropdown'>
-                                <a id='account-button' class='header-link'>
+                            <li id='account_button_dropdown'>
+                                <a id='account_button' class='header_footer_link'>
                                         {{ user.first_name }}
                                         {{ last_name_initial }}
                                 </a>
-                                <div id="account-dropdown">
-                                    <a class='header-link dropdown-link' href="/account/settings/">
+                                <div id='account_dropdown'>
+                                    <a class='header_footer_link dropdown_link' href='/account/settings/'>
                                         Account Settings
                                     </a>
-                                    <a class='header-link dropdown-link' href="/account/change_password/">
+                                    <a class='header_footer_link dropdown_link' href='/account/change_password/'>
                                         Change Password
                                     </a>
-                                    <a class='header-link dropdown-link' href="/account/logout/">
+                                    <a class='header_footer_link dropdown_link' href='/account/logout/'>
                                         Logout
                                     </a>
                                 </div>
                             </li>
                         {% else %}
                             <li>
-                                <a id='login-button' class='header-link'>
+                                <a id='login_button' class='header_footer_link'>
                                     Login
                                 </a>
                             </li>
                             <li>
-                                <a id='signup-button' class='header-link'>
+                                <a id='signup_button' class='header_footer_link'>
                                     Sign Up
                                 </a>
                             </li>
@@ -94,35 +94,55 @@
             </div>
         </div><!-- end header -->
 
-        <div id='login-dialog-form' title='Login'>
+        <div id='login_dialog_box' title='Login'>
             <form method='post' action='/account/login/' name='login_form'>{% csrf_token %}
-                <h2 class='form-title'>Login</h2>
+                <h2 class='form_title'>Login</h2>
 
                 {% for field in login_form %}
                     {{ field }}
                 {% endfor %}
 
-                <a href="/account/forgot_password/" style="margin-left: 10%;color: #333333;">Forget your password?</a>
+                <a href='/account/forgot_password/' style='margin-left: 10%;color: #333333;'>Forget your password?</a>
             </form>
-        </div><!-- end login-dialog-form div -->
+        </div><!-- end login_dialog_box div -->
 
-        <div id='signup-dialog-form' title='Sign up'>
+        <div id='signup_dialog_box' title='Sign up'>
             <form method='post' action='/account/signup/' name='signup_form'>{% csrf_token %}
-                <h2 class='form-title'>Sign Up</h2>
+                <h2 class='form_title'>Sign Up</h2>
                 {% for field in signup_form %}
                     {{ field }}
                 {% endfor %}
             </form>
-        </div><!-- end signup-dialog-form div -->
+        </div><!-- end signup_dialog_box div -->
 
-        <div id='middle-section'>
-            <div id='main-wrapper'>
+        <div id='middle_section'>
+            <div id='main_wrapper'>
                 {% block base_content %}{% endblock %}
             </div>
         </div>
 
         <div id='footer'>
+            <div class='header_footer_wrapper'>
+                <div class='header_footer_left'>
+                    <ul>
+                        <li>
+                            <a href='/methodology/' class='header_footer_link'>
+                                Methodology
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
+                <div class='header_footer_right'>
+                    <ul>
+                        <li>
+                            <a href='/contact_us/' class='header_footer_link'>
+                                Contact Us
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
     </body>

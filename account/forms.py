@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate
 # based on LoginForm in django source code
 class MyLoginForm(forms.Form):
     error_messages = {
-        'invalid_login': "Invalid email/password combination",
+        'invalid_login': 'Invalid email/password combination',
     }
 
     email = forms.CharField(required=True,
@@ -149,7 +149,7 @@ class MyChangeSettingsForm(forms.Form):
                                 )
 
     def clean_email(self):
-        email = self.cleaned_data["email"]
+        email = self.cleaned_data['email']
         if User.objects.filter(username=email).count():
             raise forms.ValidationError(
                 self.error_messages['duplicate_email'],
@@ -210,7 +210,7 @@ class MyPasswordResetFormEmail(forms.Form):
     def clean_email(self):
         # Since User.username is unique, this check is redundant,
         # but it sets a nicer error message than the ORM. See #13147.
-        email = self.cleaned_data["email"]
+        email = self.cleaned_data['email']
         if User.objects.filter(username=email).count() == 0:
             raise forms.ValidationError(
                 self.error_messages['invalid_email'],

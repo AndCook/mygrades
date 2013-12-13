@@ -27,7 +27,7 @@ $(function() {
             locked = false;
         });
         var over = $('#overlay');
-        over.css('height', $('#middle-section').height());
+        over.css('height', $('#middle_section').height());
         over.css('display', 'block');
         over.animate({
             opacity: '0.3'

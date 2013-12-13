@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // fix width of account button to be the same as the dropdown
-    var accBut = $('#account-button');
-    var dropdown = $('#account-dropdown');
+    var accBut = $('#account_button');
+    var dropdown = $('#account_dropdown');
     if (accBut && dropdown) {
         if (accBut.width() + 20 > dropdown.width())
             dropdown.css('width', accBut.width() + 20);
@@ -50,7 +50,7 @@ $(document).ready(function() {
 
 // login dialog box
 $(function() {
-	$( "#login-dialog-form" ).dialog({
+	$( "#login_dialog_box" ).dialog({
 		autoOpen: false,
 		width: 350,
         resizable: false,
@@ -72,15 +72,15 @@ $(function() {
         }
 	});
 
-	$( "#login-button" ).click(function() {
-		$( "#login-dialog-form" ).dialog( "open" );
+	$( "#login_button" ).click(function() {
+		$( "#login_dialog_box" ).dialog( "open" );
         $('input').blur();
 	});
 });
 
 // signup dialog box
 $(function() {
-	$( "#signup-dialog-form" ).dialog({
+	$( "#signup_dialog_box" ).dialog({
 		autoOpen: false,
 		width: 350,
         resizable: false,
@@ -102,17 +102,17 @@ $(function() {
         }
     });
 
-	$( "#signup-button" ).click(function() {
-		$( "#signup-dialog-form" ).dialog( "open" );
+	$( "#signup_button" ).click(function() {
+		$( "#signup_dialog_box" ).dialog( "open" );
         $('input').blur();
 	});
 });
 
 // accounts dropdown menu
 $(function() {
-    var acc = $('#account-button-dropdown');
+    var acc = $('#account_button_dropdown');
     if (acc) {
-        var dropdown = $('#account-dropdown');
+        var dropdown = $('#account_dropdown');
 
         acc.mouseenter(function() {
             dropdown.slideDown(200);

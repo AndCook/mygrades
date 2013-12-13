@@ -1,14 +1,14 @@
 @import 'global_variables.scss';
 
-.ui-dialog {
+.ui-dialog { // needs to be dashes
     font-size: .825em;
 }
 
-.ui-dialog-titlebar {
+.ui-dialog-titlebar { // needs to be dashes
     display: none;
 }
 
-.form-title {
+.form_title {
     font-size: 2em;
     text-align: center;
     margin: 5px auto;
@@ -16,7 +16,7 @@
     color: $black_text;
 }
 
-.form-wrapper {
+.form_wrapper {
     width: 350px;
     margin: auto;
 
@@ -58,7 +58,7 @@ input {
     color: #999999;
 
     &:focus {
-        border-color: white;
+        border-color: $white_text;
     }
 
     &[type=submit] {
