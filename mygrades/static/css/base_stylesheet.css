@@ -2,7 +2,7 @@ body {
   /* margin and padding at zero is the key to making width: 100% work*/
   margin: 0;
   padding: 0;
-  background-color: #eeeeee;
+  background-color: #e1aaff;
   font-family: sans-serif; }
 
 p, h1 {
@@ -23,7 +23,7 @@ h1 {
 
 #header {
   height: 45px;
-  background-color: #222222;
+  background-color: #560583;
   display: block; }
 
 #header-wrapper {
@@ -51,10 +51,10 @@ h1 {
   color: white;
   text-decoration: none;
   text-align: center;
-  background-color: #222222;
+  background-color: #560583;
   transition: background-color 0.1s linear; }
   .header-link:hover {
-    background-color: #3b3b3b;
+    background-color: #7109aa;
     cursor: pointer; }
 
 #account-button {
@@ -63,7 +63,7 @@ h1 {
     cursor: default; }
 
 #account-dropdown {
-  background-color: #222222;
+  background-color: #560583;
   position: absolute;
   z-index: 1000;
   display: none; }
@@ -83,6 +83,6 @@ h1 {
 
 #footer {
   height: 45px;
-  background-color: #222222;
+  background-color: #560583;
   display: block;
   clear: both; }

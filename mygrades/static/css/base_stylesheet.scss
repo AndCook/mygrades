@@ -5,14 +5,14 @@ body {
     margin: 0;
     padding: 0;
 
-    background-color: #eeeeee;
+    background-color: $page_background_color;
     font-family: sans-serif;
 }
 
 p, h1 {
     margin: 0;
 
-    color: $dark_gray;
+    color: $black_text;
 
     /*the next three lines truncate long text*/
     overflow: hidden;
@@ -32,7 +32,7 @@ h1 {
 
 #header {
     height: 45px;
-    background-color: $dark_gray;
+    background-color: $dark_shade;
     display: block;
 }
 
@@ -71,11 +71,11 @@ h1 {
     text-decoration: none;
     text-align: center;
 
-    background-color: $dark_gray;
+    background-color: $dark_shade;
     transition: background-color 0.1s linear;
 
     &:hover {
-        background-color: $medium_gray;
+        background-color: $medium_shade;
         cursor: pointer;
     }
 }
@@ -89,7 +89,7 @@ h1 {
 }
 
 #account-dropdown {
-    background-color: $dark_gray;
+    background-color: $dark_shade;
     position: absolute;
     z-index: 1000;
     display: none;
@@ -111,7 +111,7 @@ h1 {
 
 #footer {
     height: 45px;
-    background-color: $dark_gray;
+    background-color: $dark_shade;
     display: block;
     clear: both;
 }

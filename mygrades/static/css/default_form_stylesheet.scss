@@ -1,3 +1,5 @@
+@import 'global_variables.scss';
+
 .ui-dialog {
     font-size: .825em;
 }
@@ -11,13 +13,14 @@
     text-align: center;
     margin: 5px auto;
     display: block;
+    color: $black_text;
 }
 
 .form-wrapper {
     width: 350px;
     margin: auto;
 
-    border: 1px #aaaaaa solid;
+    border: 1px $border_gray solid;
     border-radius: 5px;
 
     position: relative;
@@ -48,7 +51,7 @@ input {
     font-size: 1em;
     line-height: 2em;
 
-    border: 1px #aaaaaa solid;
+    border: 1px $border_gray solid;
     border-radius: 2px;
 
     display: block;
@@ -62,6 +65,7 @@ input {
         width: 10em;
         margin: 15px 7.5% 15px auto;
         display: block;
+        color: $black_text;
     }
 
     &.text {
@@ -84,4 +88,10 @@ fieldset {
     font-size: 1em;
     line-height: 2em;
     color: darkred;
+}
+
+.horizontal_line {
+    border-top: 1px $border_gray solid;
+    width: 98%;
+    margin: 0 auto;
 }

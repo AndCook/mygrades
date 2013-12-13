@@ -1,3 +1,5 @@
+@import '../../../mygrades/static/css/global_variables.scss';
+
 #settings_wrapper {
     width: 700px;
     margin: auto;
@@ -8,7 +10,7 @@
     width: 350px;
     height: 100%;
 
-    border-right: 1px #aaaaaa solid;
+    border-right: 1px $border_gray solid;
 
     table {
         width: 85%;

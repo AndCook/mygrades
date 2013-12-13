@@ -7,7 +7,7 @@
 
 {% block base_content %}
 
-    <div class="form-wrapper">
+    <div class='form-wrapper'>
         <form method='post' action='/account/login/' name='login_form'>{% csrf_token %}
             <h2 class='form-title'>Login</h2>
 
@@ -22,10 +22,10 @@
                 {{ field }}
             {% endfor %}
 
-            <a href="/account/forgot_password/" style="margin-left: 10%;color: #333333;">Forget your password?</a>
+            <a href=''/account/forgot_password/' style="margin-left: 10%;color: #333333;">Forget your password?</a>
 
-            <div style="border-top: 1px #aaaaaa solid; width: 98%; margin: 7px auto 0 auto">
-                <input type="submit" value="Login" style="width: 6.5em"/>
+            <div class='horizontal_line' style='margin-top: 7px'>
+                <input type='submit' value='Login' style='width: 6.5em'/>
             </div>
         </form>
     </div>

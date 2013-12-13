@@ -128,7 +128,7 @@ $(function() {
         }
 	});
     ////////////////////// shrinking large square //////////////////////
-    $('#overlay').click( function() {
+    $('#overlay, #header, #footer').click( function() {
         if (locked)
             return;
         locked = true;
