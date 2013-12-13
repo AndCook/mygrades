@@ -131,19 +131,6 @@ $(function() {
 
     // make all submit buttons pretty
     $('input[type=submit]').button();
-
-    // on hover over all header-link's, change the background-color to #333333 from #222222
-    var headerlinks = $('.header-link, .dropdown-link');
-    headerlinks.mouseenter(function() {
-        $(this).animate({
-            backgroundColor: '#3b3b3b'
-        }, 100);
-    });
-    headerlinks.mouseleave(function() {
-        $(this).animate({
-            backgroundColor: '#222222'
-        }, 100);
-    });
 });
 
 function csrfSafeMethod(method) {

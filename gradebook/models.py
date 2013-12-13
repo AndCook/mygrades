@@ -1,7 +1,7 @@
 from django.db import models
 from decimal import Decimal
 from django.contrib.auth.models import User
-from django import forms
+from django.forms import ModelForm
 
 
 class Semester(models.Model):
@@ -12,6 +12,12 @@ class Semester(models.Model):
         return self.name
 
 
+class SemesterForm(ModelForm):
+    class Meta:
+        model = Semester
+        fields = ['name']
+
+
 class Course(models.Model):
     name = models.CharField(max_length=200)
     number = models.CharField(max_length=200)
@@ -20,6 +26,12 @@ class Course(models.Model):
 
     def __unicode__(self):
         return self.number + " - " + self.name
+
+
+class CourseForm(ModelForm):
+    class Meta:
+        model = Course
+        fields = ['name', 'number', 'instructor']
 
 
 class Category(models.Model):

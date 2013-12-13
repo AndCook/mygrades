@@ -51,8 +51,10 @@ h1 {
   color: white;
   text-decoration: none;
   text-align: center;
-  background-color: #222222; }
+  background-color: #222222;
+  transition: background-color 0.1s linear; }
   .header-link:hover {
+    background-color: #3b3b3b;
     cursor: pointer; }
 
 #account-button {

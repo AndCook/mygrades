@@ -1,4 +1,4 @@
-$dark_gray: #222222;
+@import 'global_variables.scss';
 
 body {
     /* margin and padding at zero is the key to making width: 100% work*/
@@ -72,8 +72,10 @@ h1 {
     text-align: center;
 
     background-color: $dark_gray;
+    transition: background-color 0.1s linear;
 
     &:hover {
+        background-color: $medium_gray;
         cursor: pointer;
     }
 }

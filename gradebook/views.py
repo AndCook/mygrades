@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response
-from gradebook.models import Semester, Course, Category, Assignment
+from gradebook.models import Semester, SemesterForm, Course, CourseForm, Category, Assignment
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
@@ -19,14 +19,16 @@ def overview(request):
             courses = Course.objects.filter(semester=semester)
             semester.courses = courses
         return render_to_response('overview.html',
-                                  {'semesters': semesters},
+                                  {'semesters': semesters,
+                                   'semester_form': SemesterForm(),
+                                   'course_form': CourseForm()},
                                   RequestContext(request))
 
     if request.is_ajax():
         post_action = request.POST['post_action']
-        if post_action == 'create_semester':
-            new_semester_name = request.POST['new_semester_name']
-            semester = Semester(name=new_semester_name, user=request.user)
+        if post_action == 'add_semester':
+            semester_name = request.POST['semester_name']
+            semester = Semester(name=semester_name, user=request.user)
             semester.save()
             return_dict = {'id': semester.id}
             js = json.dumps(return_dict)
@@ -47,12 +49,14 @@ def overview(request):
                 semesters[0].save()
             return HttpResponse(json.dumps({}), mimetype='application/json')
         elif post_action == 'add_course':
-            new_course_name = request.POST['new_course_name']
+            course_name = request.POST['course_name']
+            course_number = request.POST['course_number']
+            course_instructor = request.POST['course_instructor']
             semester_id = request.POST['semester_id']
             semester = Semester.objects.filter(id=semester_id)
             if semester.__len__() == 1:
-                course = Course(name=new_course_name, number='XXXXX',
-                                instructor='Dr. X', semester=semester[0])
+                course = Course(name=course_name, number=course_number,
+                                instructor=course_instructor, semester=semester[0])
                 course.save()
                 return HttpResponse(json.dumps({}), mimetype='application/json')
 

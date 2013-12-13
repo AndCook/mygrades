@@ -48,11 +48,59 @@
 
         <div id='add_semester_button'>
             <div class='s_s_name_div'>
-                <p class='s_s_name' style='color: #3b3b3b'>Add a Semester</p>
+                <p class='s_s_name'>Add a Semester</p>
             </div>
         </div>
 
     </div><!-- end semester_squares_wrapper -->
+
+    <div id='add_semester_dialog_box' title='Add Semester'>
+        <form id='add_semester_form'>
+            <h2 class='form-title'>Add Semester</h2>
+
+            <p>Semester Name (ex. "Fall 2014") (required)</p>
+            <p class='validation_tips' style='display: none; color: darkred'></p>
+            {{ semester_form.name }}
+
+        </form>
+    </div>
+
+    <div id='rename_semester_dialog_box' title='Rename Semester'>
+        <form id='rename_semester_form'>
+            <h2 class='form-title'>Rename Semester</h2>
+
+            <p>Enter a new name for this semester (ex. "Fall 2014") (required)</p>
+            <p class='validation_tips' style='display: none; color: darkred'></p>
+            {{ semester_form.name }}
+
+        </form>
+    </div>
+
+    <div id='delete_semester_dialog_box' title='Delete Semester'>
+        <form id='delete_semester_form'>
+            <h2 class='form-title'>Delete Semester</h2>
+            <p>
+                Are you sure you want to delete semester?
+                All data relating to the semester, including courses
+                and assignments, will be deleted.
+            </p>
+        </form>
+    </div>
+
+    <div id='add_course_dialog_box' title='Add Course'>
+        <form id='add_course_form'>
+            <h2 class='form-title'>Add Course</h2>
+
+            <p>Course Name (ex. "Intro to Psychology") (required)</p>
+            <p class='validation_tips' style='display: none; color: darkred'></p>
+            {{ course_form.name }}
+            <p>Course Number (ex. "PSY 301") (optional)</p>
+            {{ course_form.number }}
+            <p>Course Instructor (optional)</p>
+            {{ course_form.instructor }}
+
+        </form>
+    </div>
 
     <!--div class='semester_square'>
         <div class='s_s_name_div'>

@@ -1,5 +1,7 @@
+@import '../../../mygrades/static/css/global_variables.scss';
+
 #overlay {
-    background-color: #aaaaaa;
+    background-color: #777777;
     opacity: 0;
     position: absolute;
     top: 45px;
@@ -17,11 +19,13 @@
     margin: 10px 1%;
     border-radius: 5px;
 
-    background-color: #222222;
+    background-color: $dark_gray;
+    transition: background-color 0.1s linear;
 
     display: inline-block;
 
     &:hover {
+        background-color: $medium_gray;
         cursor: pointer;
     }
 }
@@ -57,8 +61,11 @@
 }
 
 .large_semester_square {
+    margin: 0;
     border-radius: 5px;
-    background-color: #3b3b3b;
+    background-color: $dark_gray;
+    z-index: 10;
+    position: fixed;
 }
 
 #add_semester_button {
@@ -70,17 +77,25 @@
 
     display: inline-block;
 
-    border: 5px dashed #3b3b3b;
+    border: 5px dashed $medium_gray;
     border-radius: 5px;
 
     background: url(/static/images/plus_sign_light.png) no-repeat center center;
+    transition: border-color 0.1s linear;
 
     &:hover {
         cursor: pointer;
+        border-color: $dark_gray;
+
+        background-image: url(/static/images/plus_sign_dark.png);
+
+        div p {
+            color: $dark_gray;
+        }
     }
 
-    > img {
-        vertical-align: middle;
+    div p {
+        color: $medium_gray;
     }
 }
 
