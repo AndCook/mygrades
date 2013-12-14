@@ -1,21 +1,30 @@
 from django.db import models
 from decimal import Decimal
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django import forms
+import datetime
 
 
 class Semester(models.Model):
     name = models.CharField(max_length=32)
     user = models.ForeignKey(User, default=None)
+    start_date = models.DateField(default=datetime.date.today)
+    end_date = models.DateField(default=datetime.date.today)
 
     def __unicode__(self):
         return self.name
 
 
-class SemesterForm(ModelForm):
+class SemesterForm(forms.ModelForm):
     class Meta:
         model = Semester
-        fields = ['name']
+        fields = ['name', 'start_date', 'end_date']
+        widgets = {'name': forms.TextInput(attrs={'autocomplete': 'off'}),
+                   'start_date': forms.DateInput(format='%d %b, %Y',
+                                                 attrs={'class': 'start_date_input'}),
+                   'end_date': forms.DateInput(format='%d %b, %Y',
+                                               attrs={'class': 'end_date_input'})
+                   }
 
 
 class Course(models.Model):
@@ -28,7 +37,7 @@ class Course(models.Model):
         return self.number + " - " + self.name
 
 
-class CourseForm(ModelForm):
+class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ['name', 'number', 'instructor']

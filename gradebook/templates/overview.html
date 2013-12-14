@@ -17,10 +17,17 @@
             <div class='semester_square' id='semester_{{ semester.id }}'>
                 <div class='s_s_name_div'>
                     <p class='s_s_name'>{{ semester.name }}</p>
-                    <div class='hidden_in_s_s'>
+                    <div class='hidden_in_s_s_inline'>
                         <p class='mini_link s_s_rename'>rename</p>
                         <p class='mini_link s_s_delete'>delete</p>
                     </div>
+                </div>
+
+                <div style='text-align: center'>
+                    <p class='hidden_in_s_s_inline s_s_dates' style='margin-right: 5px;'>
+                        {{ semester.start_date }} to {{ semester.end_date }}
+                    </p>
+                    <p class='hidden_in_s_s_inline mini_link s_s_change_dates'>edit</p>
                 </div>
 
                 <table class='semester_square_course_table'><tbody>
@@ -37,7 +44,7 @@
                         </tr>
                     {% endfor %}
                     {% endif %}
-                    <tr class='hidden_in_s_s add_course_tr'>
+                    <tr class='hidden_in_s_s_block add_course_tr'>
                         <td colspan='3'>
                             <p class='mini_link add_course'>+ add course</p>
                         </td>
@@ -55,13 +62,16 @@
     <!--/div--><!-- end semester_squares_wrapper -->
 
     <div id='add_semester_dialog_box' title='Add Semester'>
-        <form id='add_semester_form'>
+        <form id='add_semester_form' style='text-align: center'>
             <h2 class='form_title'>Add Semester</h2>
 
             <p>Semester Name (ex. "Fall 2014") (required)</p>
             <p class='validation_tips' style='display: none; color: darkred'></p>
             {{ semester_form.name }}
-
+            <p>Start Date (required but estimating is okay)</p>
+            <label><input id='add_semester_start_date' style='display: none'/></label>
+            <p>End Date (required but estimating is okay)</p>
+            <label><input id='add_semester_end_date' style='display: none'/></label>
         </form>
     </div>
 
@@ -80,10 +90,21 @@
         <form id='delete_semester_form'>
             <h2 class='form_title'>Delete Semester</h2>
             <p>
-                Are you sure you want to delete semester?
-                All data relating to the semester, including courses
+                Are you sure you want to delete this semester?
+                All data relating to this semester, including courses
                 and assignments, will be deleted.
             </p>
+        </form>
+    </div>
+
+    <div id='change_dates_dialog_box' title='Change Dates'>
+        <form id='change_dates_form' style='text-align: center'>
+            <h2 class='form_title'>Change Semester Dates</h2>
+            <p>Change the dates for the start and end of the selected semester.</p>
+            <p>Start Date (required but estimating is okay)</p>
+            <label><input id='change_dates_start_date' style='display: none'/></label>
+            <p>End Date (required but estimating is okay)</p>
+            <label><input id='change_dates_end_date' style='display: none'/></label>
         </form>
     </div>
 
@@ -104,11 +125,18 @@
 
     <div class='semester_square'>
         <div class='s_s_name_div'>
-            <p class='s_s_name'>Fall 2013 - Current</p>
-            <div class='hidden_in_s_s'>
-                <p class='mini_link s_s_rename'>rename</p>
-                <p class='mini_link s_s_delete'>delete</p>
+            <p class='s_s_name'>Fall 2013 - Sample Current</p>
+            <div class='hidden_in_s_s_inline'>
+                <p class='mini_link'>rename</p>
+                <p class='mini_link'>delete</p>
             </div>
+        </div>
+
+        <div style='text-align: center'>
+            <p class='hidden_in_s_s_inline s_s_dates' style='margin-right: 5px;'>
+                Aug. 28, 2013 to Dec. 14, 2013
+            </p>
+            <p class='hidden_in_s_s_inline mini_link'>edit</p>
         </div>
 
         <table class='semester_square_course_table'><tbody>
@@ -147,6 +175,11 @@
                 <td class='s_s_table_data course_name'>Probability 1</td>
                 <td class='s_s_table_data course_grade'>54.6%</td>
             </tr>
+            <tr class='hidden_in_s_s_block add_course_tr'>
+                <td colspan='3'>
+                    <p class='mini_link'>+ add course</p>
+                </td>
+            </tr>
         </tbody></table>
 
         <table class='current_semester_table'><tbody>
@@ -170,11 +203,18 @@
 
     <div class='semester_square'>
         <div class='s_s_name_div'>
-            <p class='s_s_name'>Fall 2013 - Finished</p>
-            <div class='hidden_in_s_s'>
-                <p class='mini_link s_s_rename'>rename</p>
-                <p class='mini_link s_s_delete'>delete</p>
+            <p class='s_s_name'>Fall 2013 - Sample Finished</p>
+            <div class='hidden_in_s_s_inline'>
+                <p class='mini_link'>rename</p>
+                <p class='mini_link'>delete</p>
             </div>
+        </div>
+
+        <div style='text-align: center'>
+            <p class='hidden_in_s_s_inline s_s_dates' style='margin-right: 5px;'>
+                Aug. 28, 2013 to Dec. 14, 2013
+            </p>
+            <p class='hidden_in_s_s_inline mini_link'>edit</p>
         </div>
 
         <table class='semester_square_course_table'><tbody>
@@ -213,6 +253,11 @@
                 <td class='s_s_table_data course_name'>Probability 1</td>
                 <td class='s_s_table_data course_grade'>Credit</td>
             </tr>
+            <tr class='hidden_in_s_s_block add_course_tr'>
+                <td colspan='3'>
+                    <p class='mini_link'>+ add course</p>
+                </td>
+            </tr>
         </tbody></table>
 
         <table class='finished_semester_table'><tbody>
@@ -233,11 +278,18 @@
 
     <div class='semester_square'>
         <div class='s_s_name_div'>
-            <p class='s_s_name'>Fall 2013 - Future</p>
-            <div class='hidden_in_s_s'>
-                <p class='mini_link s_s_rename'>rename</p>
-                <p class='mini_link s_s_delete'>delete</p>
+            <p class='s_s_name'>Fall 2013 - Sample Future</p>
+            <div class='hidden_in_s_s_inline'>
+                <p class='mini_link'>rename</p>
+                <p class='mini_link'>delete</p>
             </div>
+        </div>
+
+        <div style='text-align: center'>
+            <p class='hidden_in_s_s_inline s_s_dates' style='margin-right: 5px;'>
+                Aug. 28, 2013 to Dec. 14, 2013
+            </p>
+            <p class='hidden_in_s_s_inline mini_link'>edit</p>
         </div>
 
         <table class='semester_square_course_table'><tbody>
@@ -275,6 +327,11 @@
                 <td class='s_s_table_data course_number'>M 362K</td>
                 <td class='s_s_table_data course_name'>Probability 1</td>
                 <td class='s_s_table_data course_grade'></td>
+            </tr>
+            <tr class='hidden_in_s_s_block add_course_tr'>
+                <td colspan='3'>
+                    <p class='mini_link'>+ add course</p>
+                </td>
             </tr>
         </tbody></table>
     </div>

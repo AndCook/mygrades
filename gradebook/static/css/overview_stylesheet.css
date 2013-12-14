@@ -21,9 +21,12 @@
   .semester_square:hover {
     background-color: #576d7f;
     cursor: pointer; }
+  .semester_square p:not(.mini_link) {
+    text-align: center;
+    color: #f9fcef; }
 
 .s_s_name_div {
-  margin: 1em auto;
+  margin: .75em auto .25em;
   display: block;
   text-align: center; }
 
@@ -34,24 +37,28 @@
   /*text-align: center;*/
   display: inline-block; }
 
-.hidden_in_s_s {
-  display: none; }
-
-.mini_link {
-  margin: 0;
-  color: darkturquoise;
-  font-size: .6em;
-  text-align: center; }
-  .mini_link:hover {
-    text-decoration: underline;
-    cursor: pointer; }
-
 .large_semester_square {
   margin: 0;
   border-radius: 5px;
   background-color: #2b405c;
   z-index: 10;
   position: fixed; }
+  .large_semester_square .course_link:hover {
+    text-decoration: underline; }
+  .large_semester_square p:not(.mini_link) {
+    text-align: center;
+    color: #f9fcef; }
+
+.hidden_in_s_s_inline, .hidden_in_s_s_block {
+  display: none; }
+
+.mini_link {
+  margin: 0;
+  color: darkturquoise;
+  font-size: .6em; }
+  .mini_link:hover {
+    text-decoration: underline;
+    cursor: pointer; }
 
 #add_semester_button {
   width: calc(31% - 10px);
@@ -73,7 +80,7 @@
 
 .semester_square_course_table {
   width: 95%;
-  margin: 0 auto .5em;
+  margin: .5em auto;
   padding-bottom: 0.5em;
   border-bottom: 1px solid #f9fcef;
   table-layout: fixed; }
@@ -93,8 +100,6 @@
 .course_link {
   color: #f9fcef;
   text-decoration: none; }
-  .course_link:hover {
-    text-decoration: underline; }
 
 .course_name {
   width: 65%; }

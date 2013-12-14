@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 import json
+from datetime import datetime
 
 
 @csrf_protect
@@ -28,24 +29,40 @@ def overview(request):
         post_action = request.POST['post_action']
         if post_action == 'add_semester':
             semester_name = request.POST['semester_name']
-            semester = Semester(name=semester_name, user=request.user)
+            start_date_string = request.POST['start_date']
+            start_date = datetime.strptime(start_date_string, '%b. %d, %Y')
+            end_date_string = request.POST['end_date']
+            end_date = datetime.strptime(end_date_string, '%b. %d, %Y')
+            semester = Semester(name=semester_name, user=request.user,
+                                start_date=start_date, end_date=end_date)
             semester.save()
             return_dict = {'id': semester.id}
             js = json.dumps(return_dict)
             return HttpResponse(js, mimetype='application/json')
+        elif post_action == 'rename_semester':
+            semester_id = request.POST['semester_id']
+            new_semester_name = request.POST['new_semester_name']
+            semesters = Semester.objects.filter(id=semester_id)
+            if semesters.__len__() == 1:
+                semesters[0].name = new_semester_name
+                semesters[0].save()
+            return HttpResponse(json.dumps({}), mimetype='application/json')
         elif post_action == 'delete_semester':
-            # id is of form "semester_23" and we need just number
-            delete_semester_id = request.POST['delete_semester_id']
-            semesters = Semester.objects.filter(id=delete_semester_id)
+            semester_id = request.POST['semester_id']
+            semesters = Semester.objects.filter(id=semester_id)
             if semesters.__len__() == 1:
                 semesters[0].delete()
             return HttpResponse(json.dumps({}), mimetype='application/json')
-        elif post_action == 'rename_semester':
-            rename_semester_id = request.POST['rename_semester_id']
-            new_semester_name = request.POST['new_semester_name']
-            semesters = Semester.objects.filter(id=rename_semester_id)
+        elif post_action == 'change_dates':
+            new_start_date_string = request.POST['new_start_date']
+            new_start_date = datetime.strptime(new_start_date_string, '%b. %d, %Y')
+            new_end_date_string = request.POST['new_end_date']
+            new_end_date = datetime.strptime(new_end_date_string, '%b. %d, %Y')
+            semester_id = request.POST['semester_id']
+            semesters = Semester.objects.filter(id=semester_id)
             if semesters.__len__() == 1:
-                semesters[0].name = new_semester_name
+                semesters[0].start_date = new_start_date
+                semesters[0].end_date = new_end_date
                 semesters[0].save()
             return HttpResponse(json.dumps({}), mimetype='application/json')
         elif post_action == 'add_course':
