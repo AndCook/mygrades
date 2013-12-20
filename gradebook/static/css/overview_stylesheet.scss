@@ -13,11 +13,17 @@
     z-index: 9;
 }
 
+#semester_squares_wrapper {
+    text-align: center;
+}
+
 .semester_square {
+    min-width: $semester_square_width;
     width: 31%;
     min-height: 300px;
     margin: 10px 1%;
     border-radius: 5px;
+    text-align: left;
 
     background-color: $dark_shade;
     transition: background-color 0.1s linear;
@@ -55,6 +61,7 @@
     background-color: $dark_shade;
     z-index: 10;
     position: fixed;
+    text-align: left;
 
     .course_link:hover {
         text-decoration: underline;
@@ -82,6 +89,7 @@
 }
 
 #add_semester_button {
+    min-width: $semester_square_width - 10px;
     width: calc(31% - 10px);
     height: 290px;
     margin: 10px 1%;

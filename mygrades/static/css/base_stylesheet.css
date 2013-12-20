@@ -1,4 +1,5 @@
 body {
+  min-width: 370px;
   /* margin and padding at zero is the key to making width: 100% work*/
   margin: 0;
   padding: 0;
@@ -27,6 +28,7 @@ h1 {
   display: block; }
 
 .header_footer_wrapper {
+  min-width: 350px;
   width: 75%;
   margin: 0 auto; }
   .header_footer_wrapper ul {
@@ -74,6 +76,7 @@ h1 {
   text-align: left; }
 
 #main_wrapper {
+  min-width: 350px;
   width: 73%;
   /* width + padding must be 75% */
   min-height: 1000px;

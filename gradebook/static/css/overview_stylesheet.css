@@ -10,11 +10,16 @@
   display: none;
   z-index: 9; }
 
+#semester_squares_wrapper {
+  text-align: center; }
+
 .semester_square {
+  min-width: 340px;
   width: 31%;
   min-height: 300px;
   margin: 10px 1%;
   border-radius: 5px;
+  text-align: left;
   background-color: #2b405c;
   transition: background-color 0.1s linear;
   display: inline-block; }
@@ -42,7 +47,8 @@
   border-radius: 5px;
   background-color: #2b405c;
   z-index: 10;
-  position: fixed; }
+  position: fixed;
+  text-align: left; }
   .large_semester_square .course_link:hover {
     text-decoration: underline; }
   .large_semester_square p:not(.mini_link) {
@@ -61,6 +67,7 @@
     cursor: pointer; }
 
 #add_semester_button {
+  min-width: 330px;
   width: calc(31% - 10px);
   height: 290px;
   margin: 10px 1%;

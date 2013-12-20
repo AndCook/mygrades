@@ -50,6 +50,44 @@
                         </td>
                     </tr>
                 </tbody></table>
+                {% if semester.is_finished %}
+                    <table class='finished_semester_table'><tbody>
+                        <tr>
+                            <td class='s_s_table_data' style='width: 85%'>Total Hours Passed</td>
+                            <td class='s_s_table_data'>15</td>
+                        </tr>
+                        <tr>
+                            <td class='s_s_table_data'>GPA Hours</td>
+                            <td class='s_s_table_data'>11</td>
+                        </tr>
+                        <tr>
+                            <td class='s_s_table_data'>Semester GPA</td>
+                            <td class='s_s_table_data' style='font-size: 1.2em'>3.45</td>
+                        </tr>
+                    </tbody></table>
+                {% endif %}
+                {% if semester.is_current %}
+                    <table class='current_semester_table'><tbody>
+                        <tr>
+                            <td colspan='3' class='s_s_table_data' style='text-align: center'>
+                                Prospective Semester GPA
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='s_s_table_data gpa_data_number'>2.60</td>
+                            <td class='s_s_table_data gpa_data_number'>3.84</td>
+                            <td class='s_s_table_data gpa_data_number'>3.92</td>
+                        </tr>
+                        <tr>
+                            <td class='s_s_table_data gpa_data_name'>minimum</td>
+                            <td class='s_s_table_data gpa_data_name'>current</td>
+                            <td class='s_s_table_data gpa_data_name'>maximum</td>
+                        </tr>
+                    </tbody></table>
+                {% endif %}
+                {% if semester.is_future %}
+
+                {% endif %}
             </div>
         {% endfor %}
 
@@ -123,7 +161,7 @@
         </form>
     </div>
 
-    <div class='semester_square'>
+    <!--div class='semester_square'>
         <div class='s_s_name_div'>
             <p class='s_s_name'>Fall 2013 - Sample Current</p>
             <div class='hidden_in_s_s_inline'>
@@ -334,8 +372,8 @@
                 </td>
             </tr>
         </tbody></table>
-    </div>
+    </div-->
 
-    </div>
+    </div> <!-- end semester_squares_wrapper -->
 
 {%  endblock %}

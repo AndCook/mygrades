@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 import json
-from datetime import datetime
+from datetime import datetime, date
 
 
 @csrf_protect
@@ -16,9 +16,16 @@ def overview(request):
 
     if request.method == 'GET':
         semesters = Semester.objects.filter(user=request.user)
+        semesters = semesters.order_by('start_date')
         for semester in semesters:
             courses = Course.objects.filter(semester=semester)
             semester.courses = courses
+            start_date = semester.start_date
+            end_date = semester.end_date
+            current_date = date.today()
+            semester.is_future = current_date < start_date <= end_date
+            semester.is_current = start_date <= current_date <= end_date
+            semester.is_finished = start_date <= end_date < current_date
         return render_to_response('overview.html',
                                   {'semesters': semesters,
                                    'semester_form': SemesterForm(),

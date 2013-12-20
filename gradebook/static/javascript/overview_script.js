@@ -16,15 +16,20 @@ $(function() {
         big_square.addClass('large_semester_square');
         big_square.removeClass('semester_square');
 
+        var new_width = Math.max(.65*$(window).innerWidth(), 600);
+        var new_height = Math.max(.65*$(window).innerHeight(), 450);
+
         $(this).after(big_square);
 
         big_square.animate({
-            width: '65%',
-            height: '65%',
-            left: '17.5%',
-            top: '17.5%'
+            width: new_width,
+            height: new_height,
+            left: ($(window).innerWidth() - new_width) / 2,
+            top: ($(window).innerHeight() - new_height) / 2
         }, 200, function() {
             locked = false;
+            big_square.css('min-width', '600px');
+            big_square.css('min-height', '450px');
         });
         var over = $('#overlay');
         over.css('height', $('#middle_section').height());
@@ -36,6 +41,11 @@ $(function() {
         big_square.css('font-size', '1.3em');
         big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
         big_square.find('.hidden_in_s_s_block').css('display', 'block');
+
+        $(window).resize(function () {
+            big_square.css('left', ($(window).innerWidth() - big_square.width()) / 2);
+            big_square.css('top', ($(window).innerHeight() - big_square.height()) / 2);
+        });
     });
     ////////////////////// shrinking large square //////////////////////
     $('#overlay, #header, #footer').click( function() {
