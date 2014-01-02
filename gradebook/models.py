@@ -10,6 +10,9 @@ class Semester(models.Model):
     user = models.ForeignKey(User, default=None)
     start_date = models.DateField(default=datetime.date.today)
     end_date = models.DateField(default=datetime.date.today)
+    is_finished = models.BooleanField(default=False)
+    is_current = models.BooleanField(default=False)
+    is_future = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
@@ -20,15 +23,16 @@ class SemesterForm(forms.ModelForm):
         model = Semester
         fields = ['name', 'start_date', 'end_date']
         widgets = {'name': forms.TextInput(attrs={'autocomplete': 'off'}),
-                   'start_date': forms.DateInput(format='%d %b, %Y',
+                   'start_date': forms.DateInput(format='%b %d, %Y',
                                                  attrs={'class': 'start_date_input'}),
-                   'end_date': forms.DateInput(format='%d %b, %Y',
+                   'end_date': forms.DateInput(format='%b %d, %Y',
                                                attrs={'class': 'end_date_input'})
                    }
 
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
+    hours = models.IntegerField(default=3)
     number = models.CharField(max_length=200)
     instructor = models.CharField(max_length=200)
     semester = models.ForeignKey(Semester)
@@ -38,9 +42,15 @@ class Course(models.Model):
 
 
 class CourseForm(forms.ModelForm):
+    hours = forms.ChoiceField(choices=[(i, i) for i in range(8)])
+
     class Meta:
         model = Course
         fields = ['name', 'number', 'instructor']
+        widgets = {'name': forms.TextInput(attrs={'autocomplete': 'off'}),
+                   'number': forms.TextInput(attrs={'autocomplete': 'off'}),
+                   'instructor': forms.TextInput(attrs={'autocomplete': 'off'}),
+                   }
 
 
 class Category(models.Model):

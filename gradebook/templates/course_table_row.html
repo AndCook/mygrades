@@ -1,0 +1,13 @@
+<tr class='course_table_row' id='course_{{ course.id }}'>
+    <td class='s_s_table_data course_number'>{{ course.number }}</td>
+    <td class='s_s_table_data course_name'>
+        <a href='/gradebook/course_detail/{{ course.id }}/' class='course_link'>
+            {{ course.name }}
+        </a>
+    </td>
+    <td class='s_s_table_data course_instructor'>{{ course.instructor }}</td>
+    <td class='s_s_table_data course_hours'>{{ course.hours }} hrs</td>
+    <td class='s_s_table_data course_grade'>100.0%</td>
+    <td class='mini_link course_edit'>edit</td>
+    <td class='mini_link course_delete'>delete</td>
+</tr>

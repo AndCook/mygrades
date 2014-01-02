@@ -14,81 +14,7 @@
     <div id='semester_squares_wrapper'>
 
         {% for semester in semesters %}
-            <div class='semester_square' id='semester_{{ semester.id }}'>
-                <div class='s_s_name_div'>
-                    <p class='s_s_name'>{{ semester.name }}</p>
-                    <div class='hidden_in_s_s_inline'>
-                        <p class='mini_link s_s_rename'>rename</p>
-                        <p class='mini_link s_s_delete'>delete</p>
-                    </div>
-                </div>
-
-                <div style='text-align: center'>
-                    <p class='hidden_in_s_s_inline s_s_dates' style='margin-right: 5px;'>
-                        {{ semester.start_date }} to {{ semester.end_date }}
-                    </p>
-                    <p class='hidden_in_s_s_inline mini_link s_s_change_dates'>edit</p>
-                </div>
-
-                <table class='semester_square_course_table'><tbody>
-                    {% if semester.courses %}
-                    {% for course in semester.courses %}
-                        <tr>
-                            <td class='s_s_table_data course_number'>{{ course.number }}</td>
-                            <td class='s_s_table_data course_name'>
-                                <a href='/gradebook/course_detail/{{ course.id }}/' class='course_link'>
-                                    {{ course.name }}
-                                </a>
-                            </td>
-                            <td class='s_s_table_data course_grade'>100.0%</td>
-                        </tr>
-                    {% endfor %}
-                    {% endif %}
-                    <tr class='hidden_in_s_s_block add_course_tr'>
-                        <td colspan='3'>
-                            <p class='mini_link add_course'>+ add course</p>
-                        </td>
-                    </tr>
-                </tbody></table>
-                {% if semester.is_finished %}
-                    <table class='finished_semester_table'><tbody>
-                        <tr>
-                            <td class='s_s_table_data' style='width: 85%'>Total Hours Passed</td>
-                            <td class='s_s_table_data'>15</td>
-                        </tr>
-                        <tr>
-                            <td class='s_s_table_data'>GPA Hours</td>
-                            <td class='s_s_table_data'>11</td>
-                        </tr>
-                        <tr>
-                            <td class='s_s_table_data'>Semester GPA</td>
-                            <td class='s_s_table_data' style='font-size: 1.2em'>3.45</td>
-                        </tr>
-                    </tbody></table>
-                {% endif %}
-                {% if semester.is_current %}
-                    <table class='current_semester_table'><tbody>
-                        <tr>
-                            <td colspan='3' class='s_s_table_data' style='text-align: center'>
-                                Prospective Semester GPA
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class='s_s_table_data gpa_data_number'>2.60</td>
-                            <td class='s_s_table_data gpa_data_number'>3.84</td>
-                            <td class='s_s_table_data gpa_data_number'>3.92</td>
-                        </tr>
-                        <tr>
-                            <td class='s_s_table_data gpa_data_name'>minimum</td>
-                            <td class='s_s_table_data gpa_data_name'>current</td>
-                            <td class='s_s_table_data gpa_data_name'>maximum</td>
-                        </tr>
-                    </tbody></table>
-                {% endif %}
-                {% if semester.is_future %}
-
-                {% endif %}
-            </div>
+            {% include 'semester_square.html' with semester=semester %}
         {% endfor %}
 
         <div id='add_semester_button'>
@@ -97,7 +23,7 @@
             </div>
         </div>
 
-    <!--/div--><!-- end semester_squares_wrapper -->
+    </div> <!-- end semester_squares_wrapper -->
 
     <div id='add_semester_dialog_box' title='Add Semester'>
         <form id='add_semester_form' style='text-align: center'>
@@ -149,7 +75,6 @@
     <div id='add_course_dialog_box' title='Add Course'>
         <form id='add_course_form'>
             <h2 class='form_title'>Add Course</h2>
-
             <p>Course Name (ex. "Intro to Psychology") (required)</p>
             <p class='validation_tips' style='display: none; color: darkred'></p>
             {{ course_form.name }}
@@ -157,223 +82,35 @@
             {{ course_form.number }}
             <p>Course Instructor (optional)</p>
             {{ course_form.instructor }}
-
+            <p>Number of Hours (required)</p>
+            {{ course_form.hours }}
         </form>
     </div>
 
-    <!--div class='semester_square'>
-        <div class='s_s_name_div'>
-            <p class='s_s_name'>Fall 2013 - Sample Current</p>
-            <div class='hidden_in_s_s_inline'>
-                <p class='mini_link'>rename</p>
-                <p class='mini_link'>delete</p>
-            </div>
-        </div>
-
-        <div style='text-align: center'>
-            <p class='hidden_in_s_s_inline s_s_dates' style='margin-right: 5px;'>
-                Aug. 28, 2013 to Dec. 14, 2013
-            </p>
-            <p class='hidden_in_s_s_inline mini_link'>edit</p>
-        </div>
-
-        <table class='semester_square_course_table'><tbody>
-            <tr>
-                <td class='s_s_table_data course_number'>CS 439H</td>
-                <td class='s_s_table_data course_name'>Operating Systems: Honors</td>
-                <td class='s_s_table_data course_grade'>96.3%</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>M 341</td>
-                <td class='s_s_table_data course_name'>Linear Algebra</td>
-                <td class='s_s_table_data course_grade'>92.6%</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>ARH 301</td>
-                <td class='s_s_table_data course_name'>Introduction to Art History</td>
-                <td class='s_s_table_data course_grade'>78.1%</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>SPN 601D</td>
-                <td class='s_s_table_data course_name'>Introductory Spanish</td>
-                <td class='s_s_table_data course_grade'>54.6%</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>PED 103L</td>
-                <td class='s_s_table_data course_name'>Beggining Social Dance</td>
-                <td class='s_s_table_data course_grade'>100.0%</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>ENS 107L</td>
-                <td class='s_s_table_data course_name'>Longhorn Band</td>
-                <td class='s_s_table_data course_grade'>96.3%</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>M 362K</td>
-                <td class='s_s_table_data course_name'>Probability 1</td>
-                <td class='s_s_table_data course_grade'>54.6%</td>
-            </tr>
-            <tr class='hidden_in_s_s_block add_course_tr'>
-                <td colspan='3'>
-                    <p class='mini_link'>+ add course</p>
-                </td>
-            </tr>
-        </tbody></table>
-
-        <table class='current_semester_table'><tbody>
-            <tr>
-                <td colspan='3' class='s_s_table_data' style='text-align: center'>
-                    Prospective Semester GPA
-                </td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data gpa_data_number'>2.60</td>
-                <td class='s_s_table_data gpa_data_number'>3.84</td>
-                <td class='s_s_table_data gpa_data_number'>3.92</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data gpa_data_name'>minimum</td>
-                <td class='s_s_table_data gpa_data_name'>current</td>
-                <td class='s_s_table_data gpa_data_name'>maximum</td>
-            </tr>
-        </tbody></table>
+    <div id='edit_course_dialog_box' title='Edit Course'>
+        <form id='edit_course_form'>
+            <h2 class='form_title'>Edit Course</h2>
+            <p>Course Name (ex. "Intro to Psychology") (required)</p>
+            <p class='validation_tips' style='display: none; color: darkred'></p>
+            {{ course_form.name }}
+            <p>Course Number (ex. "PSY 301") (optional)</p>
+            {{ course_form.number }}
+            <p>Course Instructor (optional)</p>
+            {{ course_form.instructor }}
+            <p>Number of Hours (required)</p>
+            {{ course_form.hours }}
+        </form>
     </div>
 
-    <div class='semester_square'>
-        <div class='s_s_name_div'>
-            <p class='s_s_name'>Fall 2013 - Sample Finished</p>
-            <div class='hidden_in_s_s_inline'>
-                <p class='mini_link'>rename</p>
-                <p class='mini_link'>delete</p>
-            </div>
-        </div>
-
-        <div style='text-align: center'>
-            <p class='hidden_in_s_s_inline s_s_dates' style='margin-right: 5px;'>
-                Aug. 28, 2013 to Dec. 14, 2013
+    <div id='delete_course_dialog_box' title='Delete Course'>
+        <form id='delete_course_form'>
+            <h2 class='form_title'>Delete Course</h2>
+            <p>
+                Are you sure you want to delete this course?
+                All data relating to this course, including categories
+                and assignments, will be deleted.
             </p>
-            <p class='hidden_in_s_s_inline mini_link'>edit</p>
-        </div>
-
-        <table class='semester_square_course_table'><tbody>
-            <tr>
-                <td class='s_s_table_data course_number'>CS 439H</td>
-                <td class='s_s_table_data course_name'>Operating Systems: Honors</td>
-                <td class='s_s_table_data course_grade'>A</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>M 341</td>
-                <td class='s_s_table_data course_name'>Linear Algebra</td>
-                <td class='s_s_table_data course_grade'>A-</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>ARH 301</td>
-                <td class='s_s_table_data course_name'>Introduction to Art History</td>
-                <td class='s_s_table_data course_grade'>C+</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>SPN 601D</td>
-                <td class='s_s_table_data course_name'>Introductory Spanish</td>
-                <td class='s_s_table_data course_grade'>F</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>PED 103L</td>
-                <td class='s_s_table_data course_name'>Beggining Social Dance</td>
-                <td class='s_s_table_data course_grade'>A</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>ENS 107L</td>
-                <td class='s_s_table_data course_name'>Longhorn Band</td>
-                <td class='s_s_table_data course_grade'>Pass</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>M 362K</td>
-                <td class='s_s_table_data course_name'>Probability 1</td>
-                <td class='s_s_table_data course_grade'>Credit</td>
-            </tr>
-            <tr class='hidden_in_s_s_block add_course_tr'>
-                <td colspan='3'>
-                    <p class='mini_link'>+ add course</p>
-                </td>
-            </tr>
-        </tbody></table>
-
-        <table class='finished_semester_table'><tbody>
-            <tr>
-                <td class='s_s_table_data' style='width: 85%'>Total Hours Passed</td>
-                <td class='s_s_table_data'>15</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data'>GPA Hours</td>
-                <td class='s_s_table_data'>11</td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data'>Semester GPA</td>
-                <td class='s_s_table_data' style='font-size: 1.2em'>3.45</td>
-            </tr>
-        </tbody></table>
+        </form>
     </div>
-
-    <div class='semester_square'>
-        <div class='s_s_name_div'>
-            <p class='s_s_name'>Fall 2013 - Sample Future</p>
-            <div class='hidden_in_s_s_inline'>
-                <p class='mini_link'>rename</p>
-                <p class='mini_link'>delete</p>
-            </div>
-        </div>
-
-        <div style='text-align: center'>
-            <p class='hidden_in_s_s_inline s_s_dates' style='margin-right: 5px;'>
-                Aug. 28, 2013 to Dec. 14, 2013
-            </p>
-            <p class='hidden_in_s_s_inline mini_link'>edit</p>
-        </div>
-
-        <table class='semester_square_course_table'><tbody>
-            <tr>
-                <td class='s_s_table_data course_number'>CS 439H</td>
-                <td class='s_s_table_data course_name'>Operating Systems: Honors</td>
-                <td class='s_s_table_data course_grade'></td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>M 341</td>
-                <td class='s_s_table_data course_name'>Linear Algebra</td>
-                <td class='s_s_table_data course_grade'></td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>ARH 301</td>
-                <td class='s_s_table_data course_name'>Introduction to Art History</td>
-                <td class='s_s_table_data course_grade'></td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>SPN 601D</td>
-                <td class='s_s_table_data course_name'>Introductory Spanish</td>
-                <td class='s_s_table_data course_grade'></td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>PED 103L</td>
-                <td class='s_s_table_data course_name'>Beggining Social Dance</td>
-                <td class='s_s_table_data course_grade'></td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>ENS 107L</td>
-                <td class='s_s_table_data course_name'>Longhorn Band</td>
-                <td class='s_s_table_data course_grade'></td>
-            </tr>
-            <tr>
-                <td class='s_s_table_data course_number'>M 362K</td>
-                <td class='s_s_table_data course_name'>Probability 1</td>
-                <td class='s_s_table_data course_grade'></td>
-            </tr>
-            <tr class='hidden_in_s_s_block add_course_tr'>
-                <td colspan='3'>
-                    <p class='mini_link'>+ add course</p>
-                </td>
-            </tr>
-        </tbody></table>
-    </div-->
-
-    </div> <!-- end semester_squares_wrapper -->
 
 {%  endblock %}

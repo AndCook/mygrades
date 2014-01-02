@@ -125,7 +125,7 @@
 }
 
 .s_s_table_data { /*semester_square_table_data*/
-    padding: .2em 0;
+    padding: .1em 0;
     font-size: .8em;
 
     color: $white_text;
@@ -139,6 +139,10 @@
     width: 20%;
 }
 
+.course_hours {
+    width: 0;
+}
+
 .course_link {
     color: $white_text;
     text-decoration: none;
@@ -148,8 +152,23 @@
     width: 65%;
 }
 
+.course_instructor {
+    width: 0;
+}
+
 .course_grade {
     width: 15%;
+}
+
+.course_edit, .course_delete {
+    width: 0;
+    overflow: hidden;
+}
+
+.finished_semester_table {
+    width: 95%;
+    margin: auto;
+    table-layout: fixed;
 }
 
 .current_semester_table {
@@ -170,8 +189,13 @@
     font-size: .7em;
 }
 
-.finished_semester_table {
+.future_semester_table {
     width: 95%;
     margin: auto;
     table-layout: fixed;
+}
+
+#id_hours {//select field in add course form
+    display: block;
+    margin: auto;
 }

@@ -3,7 +3,6 @@ $(function() {
     var locked = false;
     ////////////////////// expanding a square //////////////////////
     semwrap.on('click', '.semester_square', function() {
-        //console.log('expand');
         if (locked)
             return;
         locked = true;
@@ -27,9 +26,9 @@ $(function() {
             left: ($(window).innerWidth() - new_width) / 2,
             top: ($(window).innerHeight() - new_height) / 2
         }, 200, function() {
-            locked = false;
             big_square.css('min-width', '600px');
             big_square.css('min-height', '450px');
+            locked = false;
         });
         var over = $('#overlay');
         over.css('height', $('#middle_section').height());
@@ -41,12 +40,23 @@ $(function() {
         big_square.css('font-size', '1.3em');
         big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
         big_square.find('.hidden_in_s_s_block').css('display', 'block');
+        resize_course_table_columns();
 
         $(window).resize(function () {
             big_square.css('left', ($(window).innerWidth() - big_square.width()) / 2);
             big_square.css('top', ($(window).innerHeight() - big_square.height()) / 2);
         });
     });
+    function resize_course_table_columns() {
+        var big_square = $('.large_semester_square');
+        big_square.find('.course_number').css('width', '13%');
+        big_square.find('.course_hours').css('width', '8%');
+        big_square.find('.course_name').css('width', '35%');
+        big_square.find('.course_instructor').css('width', '25%');
+        big_square.find('.course_grade').css('width', '10%');
+        big_square.find('.course_edit').css('width', '4%');
+        big_square.find('.course_delete').css('width', '5%');
+    }
     ////////////////////// shrinking large square //////////////////////
     $('#overlay, #header, #footer').click( function() {
         if (locked)
@@ -72,35 +82,43 @@ $(function() {
     add_semester_start_date_button.datepicker({
         changeMonth: true,
         changeYear: true,
-        dateFormat: 'M. d, yy',
+        dateFormat: 'M d, yy',
         numberOfMonths: 2,
         minDate: '-6Y',
         maxDate: '+6Y',
         showOn: 'button',
         buttonText: getDateFormatted(),
         showAnim: 'slideDown',
-        // You can put more options here.
         onClose: function( selectedDate ) {
             if (selectedDate !== '')
                 add_semester_start_date_button.datepicker('option', 'buttonText', selectedDate);
-            add_semester_end_date_button.datepicker('option', 'minDate', selectedDate);
+            var end_date = Date.parse(add_semester_end_date_button.val());
+            var start_date = Date.parse(selectedDate);
+            if (start_date > end_date) {
+                add_semester_end_date_button.val(selectedDate);
+                add_semester_end_date_button.datepicker('option', 'buttonText', selectedDate);
+            }
         }
     });
     add_semester_end_date_button.datepicker({
         changeMonth: true,
         changeYear: true,
-        dateFormat: 'M. d, yy',
+        dateFormat: 'M d, yy',
         numberOfMonths: 2,
         minDate: '-6Y',
         maxDate: '+6Y',
         showOn: 'button',
         buttonText: getDateFormatted(),
         showAnim: 'slideDown',
-        // You can put more options here.
         onClose: function( selectedDate ) {
             if (selectedDate !== '')
                 add_semester_end_date_button.datepicker('option', 'buttonText', selectedDate);
-            add_semester_start_date_button.datepicker('option', 'maxDate', selectedDate);
+            var start_date = Date.parse(add_semester_start_date_button.val());
+            var end_date = Date.parse(selectedDate);
+            if (start_date > end_date) {
+                add_semester_start_date_button.val(selectedDate);
+                add_semester_start_date_button.datepicker('option', 'buttonText', selectedDate);
+            }
         }
     });
     function getDateFormatted() {
@@ -108,23 +126,25 @@ $(function() {
         var day = currentTime.getDate();
         var year = currentTime.getFullYear();
         switch (currentTime.getMonth() + 1) {
-            case 1: return 'Jan. ' + day + ', ' + year;
-            case 2: return 'Feb. ' + day + ', ' + year;
-            case 3: return 'Mar. ' + day + ', ' + year;
-            case 4: return 'Apr. ' + day + ', ' + year;
-            case 5: return 'May. ' + day + ', ' + year;
-            case 6: return 'Jun. ' + day + ', ' + year;
-            case 7: return 'Jul. ' + day + ', ' + year;
-            case 8: return 'Aug. ' + day + ', ' + year;
-            case 9: return 'Sep. ' + day + ', ' + year;
-            case 10: return 'Oct. ' + day + ', ' + year;
-            case 11: return 'Nov. ' + day + ', ' + year;
-            case 12: return 'Dec. ' + day + ', ' + year;
+            case 1: return 'Jan ' + day + ', ' + year;
+            case 2: return 'Feb ' + day + ', ' + year;
+            case 3: return 'Mar ' + day + ', ' + year;
+            case 4: return 'Apr ' + day + ', ' + year;
+            case 5: return 'May ' + day + ', ' + year;
+            case 6: return 'Jun ' + day + ', ' + year;
+            case 7: return 'Jul ' + day + ', ' + year;
+            case 8: return 'Aug ' + day + ', ' + year;
+            case 9: return 'Sep ' + day + ', ' + year;
+            case 10: return 'Oct ' + day + ', ' + year;
+            case 11: return 'Nov ' + day + ', ' + year;
+            case 12: return 'Dec ' + day + ', ' + year;
             default: return '';
         }
     }
     var add_semester_dialog = $('#add_semester_dialog_box');
     $('#add_semester_button').click(function() {
+        add_semester_start_date_button.val(add_semester_start_date_button.datepicker('option', 'buttonText'));
+        add_semester_end_date_button.val(add_semester_end_date_button.datepicker('option', 'buttonText'));
         add_semester_dialog.dialog('open');
     });
 	add_semester_dialog.dialog({
@@ -161,32 +181,7 @@ $(function() {
                         success: function(data) {
                             add_semester_dialog.dialog('close');
                             reset_add_semester_form();
-                            $('#add_semester_button').before(
-                                "<div class='semester_square' id='semester_" + data.id + "'>" +
-                                "    <div class='s_s_name_div'>" +
-                                "       <p class='s_s_name'>" + semester_name + "</p>" +
-                                "       <div class='hidden_in_s_s_inline'>" +
-                                "           <p class='mini_link s_s_rename'>rename</p>" +
-                                "           <p class='mini_link s_s_delete'>delete</p>" +
-                                "       </div>" +
-                                "    </div>" +
-
-                                "    <div style='text-align: center'>" +
-                                "        <p class='hidden_in_s_s_inline s_s_dates' style='margin-right: 5px;'>" +
-                                "            " + start_date + " to " + end_date +
-                                "        </p>" +
-                                "        <p class='hidden_in_s_s_inline mini_link s_s_change_dates'>edit</p>" +
-                                "    </div>" +
-
-                                "    <table class='semester_square_course_table'><tbody>" +
-                                "        <tr class='hidden_in_s_s_block add_course_tr'>" +
-                                "            <td colspan='3'>" +
-                                "                <p class='mini_link add_course'>+ add course</p>" +
-                                "            </td>" +
-                                "        </tr>" +
-                                "    </tbody></table>" +
-                                "</div>"
-                            );
+                            $('#add_semester_button').before(data);
                         }
                     });
                 }
@@ -308,35 +303,43 @@ $(function() {
     change_dates_start_date_button.datepicker({
         changeMonth: true,
         changeYear: true,
-        dateFormat: 'M. d, yy',
+        dateFormat: 'M d, yy',
         numberOfMonths: 2,
         minDate: '-6Y',
         maxDate: '+6Y',
         showOn: 'button',
         buttonText: getDateFormatted(),
         showAnim: 'slideDown',
-        // You can put more options here.
         onClose: function( selectedDate ) {
             if (selectedDate !== '')
                 change_dates_start_date_button.datepicker('option', 'buttonText', selectedDate);
-            change_dates_end_date_button.datepicker('option', 'minDate', selectedDate);
+            var end_date = Date.parse(change_dates_end_date_button.val());
+            var start_date = Date.parse(selectedDate);
+            if (start_date > end_date) {
+                change_dates_end_date_button.val(selectedDate);
+                change_dates_end_date_button.datepicker('option', 'buttonText', selectedDate);
+            }
         }
     });
     change_dates_end_date_button.datepicker({
         changeMonth: true,
         changeYear: true,
-        dateFormat: 'M. d, yy',
+        dateFormat: 'M d, yy',
         numberOfMonths: 2,
         minDate: '-6Y',
         maxDate: '+6Y',
         showOn: 'button',
         buttonText: getDateFormatted(),
         showAnim: 'slideDown',
-        // You can put more options here.
         onClose: function( selectedDate ) {
             if (selectedDate !== '')
                 change_dates_end_date_button.datepicker('option', 'buttonText', selectedDate);
-            change_dates_start_date_button.datepicker('option', 'maxDate', selectedDate);
+            var start_date = Date.parse(change_dates_start_date_button.val());
+            var end_date = Date.parse(selectedDate);
+            if (start_date > end_date) {
+                change_dates_start_date_button.val(selectedDate);
+                change_dates_start_date_button.datepicker('option', 'buttonText', selectedDate);
+            }
         }
     });
     var change_dates_dialog = $('#change_dates_dialog_box');
@@ -375,11 +378,16 @@ $(function() {
                             'new_start_date': new_start_date,
                             'new_end_date': new_end_date
                         },
-                        success: function() {
+                        success: function(data) {
                             change_dates_dialog.dialog('close');
                             reset_change_dates_form();
-                            $('#' + semester_id).find('.s_s_dates').text(new_start_date + ' to ' + new_end_date);
-                            $('.large_semester_square').find('.s_s_dates').text(new_start_date + ' to ' + new_end_date);
+                            $('#' + semester_id).replaceWith(data);
+                            var big_square = $('.large_semester_square');
+                            // must use duplicate jquery selectors here - ignore error
+                            big_square.html($('#' + semester_id).html());
+                            big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
+                            big_square.find('.hidden_in_s_s_block').css('display', 'block');
+                            resize_course_table_columns();
                         }
                     });
                 }
@@ -406,8 +414,8 @@ $(function() {
     ////////////////////// adding courses //////////////////////
     var add_course_dialog = $('#add_course_dialog_box');
     semwrap.on('click', '.add_course', function() {
-        //console.log('add course');
         add_course_dialog.dialog('open');
+        $('#id_hours').val(3);
     });
 	add_course_dialog.dialog({
 		autoOpen: false,
@@ -422,6 +430,7 @@ $(function() {
                     var course_name = form.find('#id_name').val();
                     var course_number = form.find('#id_number').val();
                     var course_instructor = form.find('#id_instructor').val();
+                    var course_hours = form.find('#id_hours').val();
 
                     if (course_name === '') {
                         var val = form.find('.validation_tips');
@@ -446,25 +455,14 @@ $(function() {
                             'course_name': course_name,
                             'course_number': course_number,
                             'course_instructor': course_instructor,
+                            'course_hours': course_hours,
                             'semester_id': semester_id.split("_").pop()
                         },
-                        success: function() {
+                        success: function(data) {
                             add_course_dialog.dialog('close');
                             clear_course_form_contents();
-                            $('#' + semester_id).find('.add_course_tr').before(
-                                "<tr>" +
-                                "    <td class='s_s_table_data course_number'>" + course_number + "</td>" +
-                                "    <td class='s_s_table_data course_name'>" + course_name + "</td>" +
-                                "    <td class='s_s_table_data course_grade'>" + "100.0%" + "</td>" +
-                                "</tr>"
-                            );
-                            $('.large_semester_square').find('.add_course_tr').before(
-                                "<tr>" +
-                                "    <td class='s_s_table_data course_number'>" + course_number + "</td>" +
-                                "    <td class='s_s_table_data course_name'>" + course_name + "</td>" +
-                                "    <td class='s_s_table_data course_grade'>" + "100.0%" + "</td>" +
-                                "</tr>"
-                            );
+                            $('#' + semester_id).find('.add_course_tr').before(data);
+                            $('.large_semester_square').find('.add_course_tr').before(data);
                         }
                     });
                 }
@@ -484,6 +482,127 @@ $(function() {
         form.find('#id_number').val('');
         form.find('#id_instructor').val('');
     }
+    ////////////////////// editing courses //////////////////////
+    var edit_course_dialog = $('#edit_course_dialog_box');
+    var course_id = -1;
+    semwrap.on('click', '.course_edit', function() {
+        var course_tr = $(this).closest('.course_table_row');
+        course_id = course_tr.attr('id').split('_').pop();
+        var course_name = course_tr.find('.course_name').text().trim();
+        var course_number = course_tr.find('.course_number').text().trim();
+        var course_instructor = course_tr.find('.course_instructor').text().trim();
+        var course_hours = course_tr.find('.course_hours').text().trim().substr(0,1);
+
+        edit_course_dialog.find('#id_name').val(course_name);
+        edit_course_dialog.find('#id_number').val(course_number);
+        edit_course_dialog.find('#id_instructor').val(course_instructor);
+        edit_course_dialog.find('#id_hours').val(course_hours);
+
+        edit_course_dialog.find('#id_name').css('color', '#222222');
+        edit_course_dialog.find('#id_number').css('color', '#222222');
+        edit_course_dialog.find('#id_instructor').css('color', '#222222');
+
+        edit_course_dialog.dialog('open');
+    });
+	edit_course_dialog.dialog({
+		autoOpen: false,
+		width: 350,
+        resizable: false,
+		modal: true,
+		buttons: {
+			'Edit Course': {
+                text: 'Edit Course',
+                click: function() {
+                    var form = $('#edit_course_form');
+                    var course_name = form.find('#id_name').val();
+                    var course_number = form.find('#id_number').val();
+                    var course_instructor = form.find('#id_instructor').val();
+                    var course_hours = form.find('#id_hours').val();
+
+                    if (course_name === '') {
+                        var val = form.find('.validation_tips');
+                        val.css('display', 'block');
+                        val.text('Course name is required - try again');
+                        return;
+                    }
+
+                    if (course_number === '')
+                        course_number = ' ';
+                    if (course_instructor === '')
+                        course_instructor = ' ';
+
+                    $.ajax({
+                        type:"POST",
+                        url: "/gradebook/overview/",
+                        contentType: "application/x-www-form-urlencoded",
+                        data: {
+                            'post_action': 'edit_course',
+                            'course_id': course_id,
+                            'course_name': course_name,
+                            'course_number': course_number,
+                            'course_instructor': course_instructor,
+                            'course_hours': course_hours
+                        },
+                        success: function(data) {
+                            edit_course_dialog.dialog('close');
+                            clear_course_form_contents();
+                            $('#course_' + course_id).replaceWith(data);
+                            $('.large_semester_square').find('#course_' + course_id).replaceWith(data);
+                            resize_course_table_columns();
+                        }
+                    });
+                }
+	      	},
+		  	Cancel: function() {
+	  			edit_course_dialog.dialog('close');
+                clear_course_form_contents();
+		  	}
+        },
+        close: function() {
+            clear_course_form_contents();
+        }
+	});
+    ////////////////////// deleting courses //////////////////////
+    var delete_course_dialog = $('#delete_course_dialog_box');
+    semwrap.on('click', '.course_delete', function() {
+        var course_tr = $(this).closest('.course_table_row');
+        course_id = course_tr.attr('id').split('_').pop();
+        delete_course_dialog.dialog('open');
+    });
+	delete_course_dialog.dialog({
+		autoOpen: false,
+		width: 350,
+        resizable: false,
+		modal: true,
+		buttons: {
+			'Delete Course': {
+                text: 'Delete Course',
+                click: function() {
+
+                    $.ajax({
+                        type:"POST",
+                        url: "/gradebook/overview/",
+                        contentType: "application/x-www-form-urlencoded",
+                        data: {
+                            'post_action': 'delete_course',
+                            'course_id': course_id
+                        },
+                        success: function(data) {
+                            delete_course_dialog.dialog('close');
+                            $('#course_' + course_id).remove();
+                            $('.large_semester_square').find('#course_' + course_id).remove();
+                            //resize_course_table_columns();
+                        }
+                    });
+                }
+	      	},
+		  	Cancel: function() {
+	  			delete_course_dialog.dialog('close');
+		  	}
+        },
+        close: function() {
+        }
+	});
     ////////////////////// disable coure_link's in semester_square //////////////////////
     semwrap.on('click', '.semester_square .course_link', function(e) {
         e.preventDefault();
