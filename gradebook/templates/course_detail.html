@@ -9,7 +9,29 @@
 
 {% block base_content %}
 
-    <h1>{{ course.name }}</h1>
+    <h1 class='course_name' id='course_{{ course.id }}'>{{ course.name }}</h1>
+
+    <div id='report_final_grade_div'>
+        <p style='font-size: 1em'>Final Grade</p>
+        <p id='final_grade' style='font-size: 1.5em; margin: 5px'>
+            {{ course.final_grade }}
+        </p>
+        <div id='report_final_grade' style='font-size: .8em'>
+            {% if course.final_grade == '#' %}
+                Report Final Grade
+            {% else %}
+                Change Final Grade
+            {% endif %}
+        </div>
+    </div>
+
+    <div id='report_final_grade_dialog_box' title='Report Final Grade'>
+        <form id='report_final_grade_form'>
+            <h2 class='form_title'>Report Final Grade</h2>
+            <p>Choose your final grade. If you don't see what you want here, then too bad.</p>
+            {{ course_form.final_grade }}
+        </form>
+    </div>
 
     {% comment %}
     <div id='add-assignment-dialog-form' title='Add new assignment'>

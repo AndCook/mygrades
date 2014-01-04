@@ -1,13 +1,18 @@
-#report_final_grade_div {
-  padding: 5px 15px;
-  text-align: center;
-  border: 1px #aaaaaa solid;
-  border-radius: 3px;
-  display: inline-block; }
+@import '../../../mygrades/static/css/global_variables.scss';
 
-#id_final_grade {
-  display: block;
-  margin: auto; }
+
+#report_final_grade_div {
+    padding: 5px 15px;
+    text-align: center;
+    border: 1px $border_gray solid;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+#id_final_grade {//select field in course form
+    display: block;
+    margin: auto;
+}
 
 /*.sortable-table {
     width: 90%;
@@ -88,6 +93,7 @@
     vertical-align: text-bottom;
     position: relative;
 }*/
+
 /*.ui-dialog {
     font-size: .825em;
 }

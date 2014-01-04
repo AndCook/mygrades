@@ -209,6 +209,9 @@ $(function() {
     ////////////////////// renaming semesters //////////////////////
     var rename_semester_dialog = $('#rename_semester_dialog_box');
     semwrap.on('click', '.s_s_rename', function() {
+        var semester_name = $(this).closest('.s_s_name_div').find('.s_s_name').text().trim();
+        rename_semester_dialog.find('#id_name').val(semester_name);
+        rename_semester_dialog.find('#id_name').css('color', '#222222');
         rename_semester_dialog.dialog('open');
     });
 	rename_semester_dialog.dialog({
@@ -218,7 +221,7 @@ $(function() {
 		modal: true,
 		buttons: {
 			'Rename Semester': {
-                text: 'Rename Semester',
+                text: 'Save',
                 click: function() {
                     var form = $('#rename_semester_form');
                     var new_name = form.find('#id_name').val();
@@ -271,7 +274,7 @@ $(function() {
 		modal: true,
 		buttons: {
 			'Delete Semester': {
-                text: 'Delete Semester',
+                text: 'Delete',
                 click: function() {
                     var semester_id = $('.large_semester_square').attr('id');
 
@@ -360,7 +363,7 @@ $(function() {
 		modal: true,
 		buttons: {
 			'Change Dates': {
-                text: 'Change Dates',
+                text: 'Save',
                 click: function() {
                     var form = $('#change_dates_form');
                     var new_start_date = change_dates_start_date_button.val();
@@ -461,8 +464,13 @@ $(function() {
                         success: function(data) {
                             add_course_dialog.dialog('close');
                             clear_course_form_contents();
-                            $('#' + semester_id).find('.add_course_tr').before(data);
-                            $('.large_semester_square').find('.add_course_tr').before(data);
+                            $('#' + semester_id).replaceWith(data);
+                            var big_square = $('.large_semester_square');
+                            // must use duplicate jquery selectors here - ignore error
+                            big_square.html($('#' + semester_id).html());
+                            big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
+                            big_square.find('.hidden_in_s_s_block').css('display', 'block');
+                            resize_course_table_columns();
                         }
                     });
                 }
@@ -502,6 +510,8 @@ $(function() {
         edit_course_dialog.find('#id_number').css('color', '#222222');
         edit_course_dialog.find('#id_instructor').css('color', '#222222');
 
+        edit_course_dialog.find('a').attr('href', '/gradebook/course_detail/' + course_id + '/');
+
         edit_course_dialog.dialog('open');
     });
 	edit_course_dialog.dialog({
@@ -511,7 +521,7 @@ $(function() {
 		modal: true,
 		buttons: {
 			'Edit Course': {
-                text: 'Edit Course',
+                text: 'Save',
                 click: function() {
                     var form = $('#edit_course_form');
                     var course_name = form.find('#id_name').val();
@@ -546,8 +556,13 @@ $(function() {
                         success: function(data) {
                             edit_course_dialog.dialog('close');
                             clear_course_form_contents();
-                            $('#course_' + course_id).replaceWith(data);
-                            $('.large_semester_square').find('#course_' + course_id).replaceWith(data);
+                            var semester_id = $('#course_' + course_id).closest('.semester_square').attr('id');
+                            $('#' + semester_id).replaceWith(data);
+                            var big_square = $('.large_semester_square');
+                            // must use duplicate jquery selectors here - ignore error
+                            big_square.html($('#' + semester_id).html());
+                            big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
+                            big_square.find('.hidden_in_s_s_block').css('display', 'block');
                             resize_course_table_columns();
                         }
                     });
@@ -576,7 +591,7 @@ $(function() {
 		modal: true,
 		buttons: {
 			'Delete Course': {
-                text: 'Delete Course',
+                text: 'Delete',
                 click: function() {
 
                     $.ajax({
@@ -589,9 +604,14 @@ $(function() {
                         },
                         success: function(data) {
                             delete_course_dialog.dialog('close');
-                            $('#course_' + course_id).remove();
-                            $('.large_semester_square').find('#course_' + course_id).remove();
-                            //resize_course_table_columns();
+                            var semester_id = $('#course_' + course_id).closest('.semester_square').attr('id');
+                            $('#' + semester_id).replaceWith(data);
+                            var big_square = $('.large_semester_square');
+                            // must use duplicate jquery selectors here - ignore error
+                            big_square.html($('#' + semester_id).html());
+                            big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
+                            big_square.find('.hidden_in_s_s_block').css('display', 'block');
+                            resize_course_table_columns();
                         }
                     });
                 }

@@ -1,11 +1,12 @@
 from django.shortcuts import render_to_response
-from gradebook.models import Semester, SemesterForm, Course, CourseForm, Category, Assignment
+from gradebook.models import Semester, SemesterForm, Course, CourseForm
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 import json
 from datetime import datetime, date
+from gradebook.models import letter_grade_to_gpa_points, PASSING_GRADES, GPA_GRADES
 
 
 @csrf_protect
@@ -15,16 +16,14 @@ def overview(request):
         return HttpResponseRedirect('/account/settings/')
 
     if request.method == 'GET':
+        #for semester in Semester.objects.all():
+        #    recount_hours(semester)
+
         semesters = Semester.objects.filter(user=request.user)
         semesters = semesters.order_by('start_date')
         for semester in semesters:
-            start_date = semester.start_date
-            end_date = semester.end_date
-            current_date = date.today()
-            semester.is_future = current_date < start_date <= end_date
-            semester.is_current = start_date <= current_date <= end_date
-            semester.is_finished = start_date <= end_date < current_date
-            semester.save()
+            if not semester.is_finished:
+                recheck_semester_dates(semester)
             semester.courses = Course.objects.filter(semester=semester)
         return render_to_response('overview.html',
                                   {'semesters': semesters,
@@ -48,11 +47,7 @@ def overview(request):
                 end_date = datetime.today()
             semester = Semester(name=semester_name, user=request.user,
                                 start_date=start_date, end_date=end_date)
-            current_date = datetime.today()
-            semester.is_future = (current_date < start_date <= end_date)
-            semester.is_current = (start_date <= current_date <= end_date)
-            semester.is_finished = (start_date <= end_date < current_date)
-            semester.save()
+            recheck_semester_dates(semester)  # semester.save included in method
             return render_to_response('semester_square.html', {'semester': semester}, RequestContext(request))
         elif post_action == 'rename_semester':
             semester_id = request.POST['semester_id']
@@ -79,13 +74,7 @@ def overview(request):
                 new_end_date_string = request.POST['new_end_date']
                 if new_end_date_string != '':
                     semester.end_date = datetime.strptime(new_end_date_string, '%b %d, %Y')
-                current_date = datetime.today()
-                start_date = semester.start_date
-                end_date = semester.end_date
-                semester.is_future = (current_date < start_date <= end_date)
-                semester.is_current = (start_date <= current_date <= end_date)
-                semester.is_finished = (start_date <= end_date < current_date)
-                semester.save()
+                recheck_semester_dates(semester)  # semester.save included in method
                 semester.courses = Course.objects.filter(semester=semester)
                 return render_to_response('semester_square.html', {'semester': semester}, RequestContext(request))
             return HttpResponse(json.dumps({}), mimetype='application/json')
@@ -93,7 +82,7 @@ def overview(request):
             course_name = request.POST['course_name']
             course_number = request.POST['course_number']
             course_instructor = request.POST['course_instructor']
-            course_hours = request.POST['course_hours']
+            course_hours = int(request.POST['course_hours'])
             semester_id = request.POST['semester_id']
             semesters = Semester.objects.filter(id=semester_id)
             if semesters.__len__() == 1:
@@ -101,7 +90,13 @@ def overview(request):
                                 instructor=course_instructor, hours=course_hours,
                                 semester=semesters[0])
                 course.save()
-                return render_to_response('course_table_row.html', {'course': course}, RequestContext(request))
+                course.semester.hours_planned += course.hours
+                course.semester.save()
+                course.semester.courses = Course.objects.filter(semester=course.semester)
+                return render_to_response('semester_square.html',
+                                          {'semester': course.semester},
+                                          RequestContext(request))
+            return HttpResponse(json.dumps({}), mimetype='application/json')
         elif post_action == 'edit_course':
             course_id = request.POST['course_id']
             courses = Course.objects.filter(id=course_id)
@@ -110,23 +105,89 @@ def overview(request):
                 course.name = request.POST['course_name']
                 course.number = request.POST['course_number']
                 course.instructor = request.POST['course_instructor']
-                course.hours = request.POST['course_hours']
+
+                course.semester.hours_planned -= course.hours
+                if course.final_grade in PASSING_GRADES:
+                    course.semester.hours_passed -= course.hours
+                if course.final_grade in GPA_GRADES:
+                    course.semester.gpa_hours -= course.hours
+                    course.semester.gpa_points -= course.gpa_points
+
+                course.hours = int(request.POST['course_hours'])
+                course.gpa_points = letter_grade_to_gpa_points(course.final_grade, course.hours)
+
+                course.semester.hours_planned += course.hours
+                if course.final_grade in PASSING_GRADES:
+                    course.semester.hours_passed += course.hours
+                if course.final_grade in GPA_GRADES:
+                    course.semester.gpa_hours += course.hours
+                    course.semester.gpa_points += course.gpa_points
+                    if course.semester.gpa_hours != 0:
+                        course.semester.final_gpa = round(course.semester.gpa_points / course.semester.gpa_hours, 3)
+                    else:
+                        course.semester.final_gpa = 0
+                course.semester.save()
                 course.save()
-                return render_to_response('course_table_row.html', {'course': course}, RequestContext(request))
+                course.semester.courses = Course.objects.filter(semester=course.semester)
+                return render_to_response('semester_square.html',
+                                          {'semester': course.semester},
+                                          RequestContext(request))
+            return HttpResponse(json.dumps({}), mimetype='application/json')
         elif post_action == 'delete_course':
             course_id = request.POST['course_id']
             courses = Course.objects.filter(id=course_id)
             if courses.__len__() == 1:
-                courses[0].delete()
+                course = courses[0]
+                course.semester.hours_planned -= course.hours
+                if course.final_grade in PASSING_GRADES:
+                    course.semester.hours_passed -= course.hours
+                if course.final_grade in GPA_GRADES:
+                    course.semester.gpa_hours -= course.hours
+                    course.semester.gpa_points -= course.gpa_points
+                    if course.semester.gpa_hours != 0:
+                        course.semester.final_gpa = round(course.semester.gpa_points / course.semester.gpa_hours, 3)
+                    else:
+                        course.semester.final_gpa = 0
+                course.semester.save()
+                course.delete()
+                course.semester.courses = Course.objects.filter(semester=course.semester)
+                return render_to_response('semester_square.html',
+                                          {'semester': course.semester},
+                                          RequestContext(request))
             return HttpResponse(json.dumps({}), mimetype='application/json')
 
 
-@login_required
-def semester_detail(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/account/settings/')
+def recheck_semester_dates(semester):
+    start_date = semester.start_date
+    end_date = semester.end_date
+    if type(end_date) is type(datetime(day=1, month=1, year=1)):
+        current_date = datetime.today()
+    else:
+        current_date = date.today()
+    semester.is_future = (current_date < start_date <= end_date)
+    semester.is_current = start_date <= current_date <= end_date
+    semester.is_finished = start_date <= end_date < current_date
+    semester.save()
 
-    return render_to_response('semester_detail.html', RequestContext(request))
+
+def recount_hours(semester):
+    course_list = Course.objects.filter(semester=semester)
+    semester.hours_planned = 0
+    semester.hours_passed = 0
+    semester.gpa_hours = 0
+    semester.gpa_points = 0
+    for course in course_list:
+        semester.hours_planned += course.hours
+        if course.final_grade in PASSING_GRADES:
+            semester.hours_passed += course.hours
+        if course.final_grade in GPA_GRADES:
+            semester.gpa_hours += course.hours
+            semester.gpa_points += course.gpa_points
+    if semester.gpa_hours != 0:
+        semester.final_gpa = round(semester.gpa_points / semester.gpa_hours, 3)
+    else:
+        semester.final_gpa = 0
+    semester.save()
 
 
 @login_required
@@ -134,16 +195,47 @@ def course_detail(request, course_id):
     if not request.user.is_active:
         return HttpResponseRedirect('/account/settings/')
 
-    courses = Course.objects.filter(id=course_id)
-    # make sure course_id is valid
-    if courses.__len__() != 1:
-        return Http404()
-    course = courses[0]
-    semester = course.semester
-    # make sure current user has access to requested course
-    if request.user != semester.user:
-        return Http404
+    if request.method == 'GET':
+        courses = Course.objects.filter(id=course_id)
+        # make sure course_id is valid
+        if courses.__len__() != 1:
+            return Http404()
+        course = courses[0]
+        semester = course.semester
+        # make sure current user has access to requested course
+        if request.user != semester.user:
+            return Http404()
 
-    return render_to_response('course_detail.html',
-                              {'course': course},
-                              RequestContext(request))
+        return render_to_response('course_detail.html',
+                                  {'course': course,
+                                   'course_form': CourseForm()},
+                                  RequestContext(request))
+
+    if request.is_ajax():
+        post_action = request.POST['post_action']
+        if post_action == 'report_final_grade':
+            courses = Course.objects.filter(id=course_id)
+            if courses.__len__() == 1:
+                course = courses[0]
+
+                if course.final_grade in PASSING_GRADES:
+                    course.semester.hours_passed -= course.hours
+                if course.final_grade in GPA_GRADES:
+                    course.semester.gpa_hours -= course.hours
+                    course.semester.gpa_points -= course.gpa_points
+
+                course.final_grade = request.POST['final_grade']
+                course.gpa_points = letter_grade_to_gpa_points(course.final_grade, course.hours)
+
+                if course.final_grade in PASSING_GRADES:
+                    course.semester.hours_passed += course.hours
+                if course.final_grade in GPA_GRADES:
+                    course.semester.gpa_hours += course.hours
+                    course.semester.gpa_points += course.gpa_points
+                if course.semester.gpa_hours != 0:
+                    course.semester.final_gpa = round(course.semester.gpa_points / course.semester.gpa_hours, 3)
+                else:
+                    course.semester.final_gpa = 0
+                course.semester.save()
+                course.save()
+            return HttpResponse(json.dumps({}), mimetype='application/json')

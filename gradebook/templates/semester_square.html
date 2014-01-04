@@ -17,7 +17,7 @@
     <table class='semester_square_course_table'><tbody>
         {% if semester.courses %}
             {% for course in semester.courses %}
-                {% include 'course_table_row.html' with course=course %}
+                {% include 'course_table_row.html' with course=course%}
             {% endfor %}
         {% endif %}
         <tr class='hidden_in_s_s_block add_course_tr'>
@@ -27,16 +27,28 @@
     {% if semester.is_finished %}
         <table class='finished_semester_table'><tbody>
             <tr>
-                <td class='s_s_table_data' style='width: 85%'>Total Hours Passed</td>
-                <td class='s_s_table_data'>15</td>
+                <td class='s_s_table_data' style='width: 80%'>Total Hours Passed</td>
+                <td class='s_s_table_data'>{{ semester.hours_passed }}</td>
             </tr>
             <tr>
                 <td class='s_s_table_data'>GPA Hours</td>
-                <td class='s_s_table_data'>11</td>
+                <td class='s_s_table_data'>{{ semester.gpa_hours }}</td>
             </tr>
+            {% if semester.gpa_hours != 0 %}
+                <tr>
+                    <td class='s_s_table_data'>GPA Points</td>
+                    <td class='s_s_table_data'>{{ semester.gpa_points }}</td>
+                </tr>
+            {% endif %}
             <tr>
                 <td class='s_s_table_data'>Semester GPA</td>
-                <td class='s_s_table_data' style='font-size: 1.2em'>3.45</td>
+                <td class='s_s_table_data' style='font-size: 1.2em'>
+                    {% if semester.final_gpa == 0 %}
+                        ---
+                    {% else %}
+                        {{ semester.final_gpa }}
+                    {% endif %}
+                </td>
             </tr>
         </tbody></table>
     {% endif %}
@@ -63,7 +75,7 @@
         <table class='current_semester_table'><tbody>
             <tr>
                 <td class='s_s_table_data' style='width: 85%'>Hours planned</td>
-                <td class='s_s_table_data'>15</td>
+                <td class='s_s_table_data'>{{ semester.hours_planned }}</td>
             </tr>
         </tbody></table>
     {% endif %}

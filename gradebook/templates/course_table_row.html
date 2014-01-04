@@ -6,8 +6,18 @@
         </a>
     </td>
     <td class='s_s_table_data course_instructor'>{{ course.instructor }}</td>
-    <td class='s_s_table_data course_hours'>{{ course.hours }} hrs</td>
-    <td class='s_s_table_data course_grade'>100.0%</td>
+    <td class='s_s_table_data course_hours' {% if course.semester.is_future %}style='width: 15%'{% endif %}>
+        {{ course.hours }} hrs
+    </td>
+    <td class='s_s_table_data course_grade' {% if course.semester.is_future %}style='width: 0'{% endif %}>
+        {% if course.semester.is_future %}
+            ---
+        {% elif course.final_grade == '#'%}
+            94.7%
+        {% else %}
+            {{ course.final_grade }}
+        {% endif %}
+    </td>
     <td class='mini_link course_edit'>edit</td>
     <td class='mini_link course_delete'>delete</td>
 </tr>

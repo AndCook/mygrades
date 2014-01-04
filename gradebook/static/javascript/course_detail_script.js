@@ -1,5 +1,59 @@
+$(function() {
+    var report_final_grade_dialog = $('#report_final_grade_dialog_box');
+    $('#report_final_grade').button().click(function() {
+        report_final_grade_dialog.dialog('open');
+    });
+    report_final_grade_dialog.dialog({
+		autoOpen: false,
+		width: 350,
+        resizable: false,
+		modal: true,
+		buttons: {
+			'Report Grade': {
+                text: 'Save Grade',
+                click: function() {
+
+                    var course_id = $('.course_name').attr('id').split('_').pop();
+                    var final_grade = $('#report_final_grade_form').find('#id_final_grade').val();
+
+                    $.ajax({
+                        type:"POST",
+                        url: "/gradebook/course_detail/" + course_id + "/",
+                        contentType: "application/x-www-form-urlencoded",
+                        data: {
+                            'post_action': 'report_final_grade',
+                            'final_grade': final_grade
+                        },
+                        success: function() {
+                            report_final_grade_dialog.dialog('close');
+                            $('#final_grade').text(final_grade);
+                            var report_final_grade_button = $('#report_final_grade').find('.ui-button-text');
+                            console.log(final_grade);
+                            if (final_grade === '#')
+                                report_final_grade_button.text('Report Final Grade');
+                            else
+                                report_final_grade_button.text('Change Final Grade');
+                        }
+                    });
+                }
+	      	},
+		  	Cancel: function() {
+	  			report_final_grade_dialog.dialog('close');
+		  	}
+        },
+        close: function() {
+        }
+	});
+});
+
+
+
+
+
+
+
 // sorting of the data in the assignments table and categories table
-$(function(){
+/*$(function(){
     var assignmentsTable = $("#assignments-table")
     var categoriesTable = $("#categories-table")
 
@@ -97,4 +151,4 @@ $(function() {
 	$( ".delete-button" ).button().click(function() {
 		// do stuff
 	});
-});
+});*/

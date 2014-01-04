@@ -10,9 +10,16 @@ class Semester(models.Model):
     user = models.ForeignKey(User, default=None)
     start_date = models.DateField(default=datetime.date.today)
     end_date = models.DateField(default=datetime.date.today)
+
     is_finished = models.BooleanField(default=False)
     is_current = models.BooleanField(default=False)
     is_future = models.BooleanField(default=False)
+
+    hours_planned = models.IntegerField(default=0)
+    hours_passed = models.IntegerField(default=0)
+    gpa_hours = models.IntegerField(default=0)
+    gpa_points = models.FloatField(default=0)
+    final_gpa = models.FloatField(default=0)
 
     def __unicode__(self):
         return self.name
@@ -29,6 +36,51 @@ class SemesterForm(forms.ModelForm):
                                                attrs={'class': 'end_date_input'})
                    }
 
+NONE_YET = '#'
+GRADE_CHOICES = (
+    (NONE_YET, 'None Yet'),
+    ('A+', 'A+'),
+    ('A', 'A'),
+    ('A-', 'A-'),
+    ('B+', 'B+'),
+    ('B', 'B'),
+    ('B-', 'B-'),
+    ('C+', 'C+'),
+    ('C', 'C'),
+    ('C-', 'C-'),
+    ('D+', 'D+'),
+    ('D', 'D'),
+    ('D-', 'D-'),
+    ('F', 'F'),
+    ('CR', 'Credit'),
+    ('NC', 'No Credit'),
+    ('P', 'Pass'),
+    ('FL', 'Fail'),
+    ('W', 'Withdrawl')
+)
+PASSING_GRADES = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'CR', 'P']
+GPA_GRADES = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F']
+
+
+def letter_grade_to_gpa_points(letter_grade, hours):
+    gpa_points = 0
+    if letter_grade[0] == 'A':
+        gpa_points = 4
+    elif letter_grade[0] == 'B':
+        gpa_points = 3
+    elif letter_grade[0] == 'C':
+        gpa_points = 2
+    elif letter_grade[0] == 'D':
+        gpa_points = 1
+    if len(str(letter_grade)) == 2:
+        if letter_grade[1] == '+':
+            gpa_points += 0.33
+        elif letter_grade[1] == '-':
+            gpa_points -= 0.33
+        else:  # to account for CR
+            gpa_points = 0
+    return gpa_points * hours
+
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
@@ -36,6 +88,11 @@ class Course(models.Model):
     number = models.CharField(max_length=200)
     instructor = models.CharField(max_length=200)
     semester = models.ForeignKey(Semester)
+
+    final_grade = models.CharField(max_length=2,
+                                   choices=GRADE_CHOICES,
+                                   default=NONE_YET)
+    gpa_points = models.FloatField(default=0)
 
     def __unicode__(self):
         return self.number + " - " + self.name
@@ -46,7 +103,7 @@ class CourseForm(forms.ModelForm):
 
     class Meta:
         model = Course
-        fields = ['name', 'number', 'instructor']
+        fields = ['name', 'number', 'instructor', 'final_grade']
         widgets = {'name': forms.TextInput(attrs={'autocomplete': 'off'}),
                    'number': forms.TextInput(attrs={'autocomplete': 'off'}),
                    'instructor': forms.TextInput(attrs={'autocomplete': 'off'}),

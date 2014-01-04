@@ -3,11 +3,12 @@ from django.contrib import admin
 
 
 class SemesterAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'name', 'start_date', 'end_date', 'is_finished', 'is_current', 'is_future']
+    list_display = ['id', 'user', 'name', 'start_date', 'end_date', 'is_finished', 'is_current', 'is_future',
+                    'hours_planned', 'hours_passed', 'gpa_hours', 'gpa_points', 'final_gpa']
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['id', 'number', 'name', 'hours', 'instructor', 'semester']
+    list_display = ['id', 'number', 'name', 'hours', 'instructor', 'semester', 'final_grade', 'gpa_points']
 
 
 class CategoryAdmin(admin.ModelAdmin):
