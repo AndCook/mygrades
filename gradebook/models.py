@@ -19,7 +19,8 @@ class Semester(models.Model):
     hours_passed = models.IntegerField(default=0)
     gpa_hours = models.IntegerField(default=0)
     gpa_points = models.FloatField(default=0)
-    final_gpa = models.FloatField(default=0)
+    final_gpa = models.FloatField(default=-1.0)
+    cumulative_gpa = models.FloatField(default=-1.0)
 
     def __unicode__(self):
         return self.name

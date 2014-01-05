@@ -26,27 +26,37 @@
     </tbody></table>
     {% if semester.is_finished %}
         <table class='finished_semester_table'><tbody>
-            <tr>
+            <tr class='hidden_in_s_s_block'>
                 <td class='s_s_table_data' style='width: 80%'>Total Hours Passed</td>
                 <td class='s_s_table_data'>{{ semester.hours_passed }}</td>
             </tr>
-            <tr>
+            <tr class='hidden_in_s_s_block'>
                 <td class='s_s_table_data'>GPA Hours</td>
                 <td class='s_s_table_data'>{{ semester.gpa_hours }}</td>
             </tr>
             {% if semester.gpa_hours != 0 %}
-                <tr>
+                <tr class='hidden_in_s_s_block'>
                     <td class='s_s_table_data'>GPA Points</td>
                     <td class='s_s_table_data'>{{ semester.gpa_points }}</td>
                 </tr>
             {% endif %}
             <tr>
-                <td class='s_s_table_data'>Semester GPA</td>
+                <td class='s_s_table_data' style='width: 80%'>Semester GPA</td>
                 <td class='s_s_table_data' style='font-size: 1.2em'>
-                    {% if semester.final_gpa == 0 %}
+                    {% if semester.final_gpa == -1.0 %}
                         ---
                     {% else %}
                         {{ semester.final_gpa }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class='s_s_table_data'>Cumulative GPA</td>
+                <td class='s_s_table_data' style='font-size: 1.2em'>
+                    {% if semester.cumulative_gpa == -1.0 %}
+                        ---
+                    {% else %}
+                        {{ semester.cumulative_gpa }}
                     {% endif %}
                 </td>
             </tr>

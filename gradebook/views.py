@@ -18,6 +18,7 @@ def overview(request):
     if request.method == 'GET':
         #for semester in Semester.objects.all():
         #    recount_hours(semester)
+        #recalculate_cumulative_gpa(request.user)
 
         semesters = Semester.objects.filter(user=request.user)
         semesters = semesters.order_by('start_date')
@@ -48,6 +49,7 @@ def overview(request):
             semester = Semester(name=semester_name, user=request.user,
                                 start_date=start_date, end_date=end_date)
             recheck_semester_dates(semester)  # semester.save included in method
+            recalculate_cumulative_gpa(request.user)
             return render_to_response('semester_square.html', {'semester': semester}, RequestContext(request))
         elif post_action == 'rename_semester':
             semester_id = request.POST['semester_id']
@@ -75,6 +77,7 @@ def overview(request):
                 if new_end_date_string != '':
                     semester.end_date = datetime.strptime(new_end_date_string, '%b %d, %Y')
                 recheck_semester_dates(semester)  # semester.save included in method
+                recalculate_cumulative_gpa(request.user)
                 semester.courses = Course.objects.filter(semester=semester)
                 return render_to_response('semester_square.html', {'semester': semester}, RequestContext(request))
             return HttpResponse(json.dumps({}), mimetype='application/json')
@@ -125,8 +128,10 @@ def overview(request):
                     if course.semester.gpa_hours != 0:
                         course.semester.final_gpa = round(course.semester.gpa_points / course.semester.gpa_hours, 3)
                     else:
-                        course.semester.final_gpa = 0
+                        course.semester.final_gpa = -1.0
+
                 course.semester.save()
+                recalculate_cumulative_gpa(request.user)
                 course.save()
                 course.semester.courses = Course.objects.filter(semester=course.semester)
                 return render_to_response('semester_square.html',
@@ -147,8 +152,10 @@ def overview(request):
                     if course.semester.gpa_hours != 0:
                         course.semester.final_gpa = round(course.semester.gpa_points / course.semester.gpa_hours, 3)
                     else:
-                        course.semester.final_gpa = 0
+                        course.semester.final_gpa = -1.0
+
                 course.semester.save()
+                recalculate_cumulative_gpa(request.user)
                 course.delete()
                 course.semester.courses = Course.objects.filter(semester=course.semester)
                 return render_to_response('semester_square.html',
@@ -186,8 +193,22 @@ def recount_hours(semester):
     if semester.gpa_hours != 0:
         semester.final_gpa = round(semester.gpa_points / semester.gpa_hours, 3)
     else:
-        semester.final_gpa = 0
+        semester.final_gpa = -1.0
     semester.save()
+
+
+def recalculate_cumulative_gpa(user):
+    semesters = Semester.objects.filter(user=user, is_finished=True).order_by('start_date')
+    cumulative_gpa_hours = 0
+    cumulative_gpa_points = 0
+    for semester in semesters:
+        cumulative_gpa_hours += semester.gpa_hours
+        cumulative_gpa_points += semester.gpa_points
+        if cumulative_gpa_hours != 0:
+            semester.cumulative_gpa = round(cumulative_gpa_points / cumulative_gpa_hours, 3)
+        else:
+            semester.cumulative_gpa = -1.0
+        semester.save()
 
 
 @login_required
@@ -235,7 +256,9 @@ def course_detail(request, course_id):
                 if course.semester.gpa_hours != 0:
                     course.semester.final_gpa = round(course.semester.gpa_points / course.semester.gpa_hours, 3)
                 else:
-                    course.semester.final_gpa = 0
+                    course.semester.final_gpa = -1.0
+
                 course.semester.save()
+                recalculate_cumulative_gpa(request.user)
                 course.save()
             return HttpResponse(json.dumps({}), mimetype='application/json')

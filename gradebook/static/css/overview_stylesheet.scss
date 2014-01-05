@@ -21,6 +21,7 @@
     min-width: $semester_square_width;
     width: 31%;
     min-height: 300px;
+    padding-bottom: 10px;
     margin: 10px 1%;
     border-radius: 5px;
     text-align: left;
@@ -198,4 +199,10 @@
 #id_hours {//select field in course form
     display: block;
     margin: auto;
+}
+
+#gpa_over_time_chart {
+    width:750px;
+    height:400px;
+    margin: 15px;
 }
