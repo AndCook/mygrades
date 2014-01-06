@@ -4,7 +4,8 @@ from django.contrib import admin
 
 class SemesterAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'name', 'start_date', 'end_date', 'is_finished', 'is_current', 'is_future',
-                    'hours_planned', 'hours_passed', 'gpa_hours', 'gpa_points', 'final_gpa']
+                    'hours_planned', 'hours_passed', 'gpa_hours', 'gpa_points', 'final_gpa',
+                    'cumulative_gpa', 'cumulative_hours_passed']
 
 
 class CourseAdmin(admin.ModelAdmin):

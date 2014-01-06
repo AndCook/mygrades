@@ -1,0 +1,302 @@
+<script>
+    $(document).ready(function () {
+        var list_of_charts = [
+            'None',
+            'Cumulative GPA over Time',
+            'Total Hours Passed over Time',
+            'Hours per Grade Earned',
+            'Distribution of Grades over Time',
+            'GPA per Semester'
+        ];
+
+        var charts_list_combo_box = $('#charts_list_combo_box');
+        var chart_div = $('#chart_div');
+
+        charts_list_combo_box.jqxComboBox({
+            selectedIndex: 0,
+            source: list_of_charts,
+            width: 250,
+            height: 25
+        });
+        charts_list_combo_box.bind('select', function (event) {
+            var args = event.args;
+            if (typeof args === 'undefined')
+                return;
+            switch (args.index) {
+                case 0:
+                    chart_div.empty();
+                    break;
+                case 1:
+                    chart_div.jqxChart(cumulative_gpa_settings);
+                    break;
+                case 2:
+                    chart_div.jqxChart(total_hours_passed_settings);
+                    break;
+                case 3:
+                    chart_div.jqxChart(hours_per_grade_earned_settings);
+                    break;
+                case 4:
+                    chart_div.jqxChart(distributon_of_grades_settings);
+                    break;
+                case 5:
+                    chart_div.jqxChart(gpa_per_semester_settings);
+                    break;
+            }
+        });
+////////////////////// Cumulative GPA over Time //////////////////////
+        var cumulative_gpa_data = [
+            {% for semester in semesters %}
+                {% if semester.cumulative_gpa != -1.0 %}
+                    { 'Semester': '{{ semester.name }}', 'GPA': {{ semester.cumulative_gpa }} },
+                {% endif %}
+            {% endfor %}
+        ];
+        var lowest_gpa = 4.3;
+        var highest_gpa = 0.0;
+        for (var i = 0; i < cumulative_gpa_data.length; i += 1) {
+            var gpa = cumulative_gpa_data[i].GPA;
+            if (gpa < lowest_gpa)
+                lowest_gpa = gpa;
+            if (gpa > highest_gpa)
+                highest_gpa = gpa;
+        }
+        lowest_gpa = Math.max(Math.round( (lowest_gpa -.1) * 10) / 10, 0);
+        highest_gpa = Math.min(Math.round( (highest_gpa +.1) * 10) / 10, 4.3);
+        var cumulative_gpa_settings = {
+            title: 'Cumulative GPA over Time',
+            description: '',
+            showLegend: false,
+            padding: { left: 10, top: 5, right: 50, bottom: 5 },
+            source: cumulative_gpa_data,
+            categoryAxis:
+            {
+                dataField: 'Semester'
+            },
+            colorScheme: 'scheme04',
+            seriesGroups: [
+                {
+                    type: 'line',
+                    valueAxis:
+                    {
+                        unitInterval: (highest_gpa - lowest_gpa)/20,
+                        minValue: lowest_gpa,
+                        maxValue: highest_gpa
+                    },
+                    series: [
+                        { dataField: 'GPA', displayText: 'GPA' }
+                    ]
+                }
+            ]
+        };
+////////////////////// Total Hours Passed over Time //////////////////////
+        var total_hours_passed_data = [
+            {% for semester in semesters %}
+                {
+                    Semester: '{{ semester.name }}',
+                    Finished: {% if semester.is_finished %}{{ semester.cumulative_hours_passed }}{% else %}0{% endif %},
+                    Current: {% if semester.is_current %}{{ semester.cumulative_hours_passed }}{% else %}0{% endif %},
+                    Future: {% if semester.is_future %}{{ semester.cumulative_hours_passed }}{% else %}0{% endif %}
+                },
+            {% endfor %}
+        ];
+        var max_cumulative_hours = Math.max(
+            Math.round(total_hours_passed_data[total_hours_passed_data.length - 1].Finished / 10 + 1) * 10,
+            Math.round(total_hours_passed_data[total_hours_passed_data.length - 1].Current / 10 + 1) * 10,
+            Math.round(total_hours_passed_data[total_hours_passed_data.length - 1].Future / 10 + 1) * 10);
+        var total_hours_passed_settings = {
+            title: 'Total Hours Passed over Time',
+            description: '',
+            //showLegend: false,
+            padding: { left: 10, top: 5, right: 50, bottom: 5 },
+            source: total_hours_passed_data,
+            categoryAxis:
+            {
+                dataField: 'Semester'
+            },
+            colorScheme: 'scheme01',
+            seriesGroups: [
+                {
+                    type: 'line',
+                    valueAxis:
+                    {
+                        unitInterval: Math.round(max_cumulative_hours / 10),
+                        minValue: 0,
+                        maxValue: max_cumulative_hours
+                    },
+                    series: [
+                        { dataField: 'Future', displayText: 'Future' },
+                        { dataField: 'Finished', displayText: 'Finished' },
+                        { dataField: 'Current', displayText: 'Current' }
+                    ]
+                }
+            ]
+        };
+////////////////////// Hours per Grade Earned //////////////////////
+        var grades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-',
+            'D+', 'D', 'D-', 'F', 'CR', 'NC', 'P', 'FL', 'W'];
+        var hours_count = [];
+        for (i = 0; i < grades.length; i++)
+            hours_count.push(0);
+        {% for semester in semesters %}
+            {% if semester.is_finished %}
+                {% for course in semester.courses %}
+                    {% if course.final_grade != '#' %}
+                        hours_count[grades.indexOf('{{ course.final_grade }}')] += {{ course.hours }};
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        var hours_per_grade_earned_data = [];
+        var max_hours = 0;
+        for (i = 0; i < hours_count.length; i++) {
+            if (hours_count[i] !== 0) {
+                hours_per_grade_earned_data.push({ Grade: grades[i], Hours: hours_count[i] });
+                if (hours_count[i] > max_hours)
+                    max_hours = hours_count[i];
+            }
+        }
+        var hours_per_grade_earned_settings = {
+            title: 'Hours per Grade Earned',
+            description: '',
+            showLegend: false,
+            padding: { left: 10, top: 5, right: 50, bottom: 5 },
+            source: hours_per_grade_earned_data,
+            categoryAxis:
+            {
+                dataField: 'Grade'
+            },
+            colorScheme: 'scheme11',
+            seriesGroups: [
+                {
+                    type: 'column',
+                    valueAxis:
+                    {
+                        unitInterval: Math.round(max_hours / 10),
+                        minValue: 0,
+                        maxValue: max_hours
+                    },
+                    series: [
+                        { dataField: 'Hours', displayText: 'Hours' }
+                    ]
+                }
+            ]
+        };
+////////////////////// Distribution of Grades over Time //////////////////////
+        var distribution_of_grades_data = [];
+        {% for semester in semesters %}
+            {% if semester.is_finished %}
+                hours_count = [];
+                for (i = 0; i < grades.length; i++)
+                    hours_count.push(0);
+                {% for course in semester.courses %}
+                    hours_count[grades.indexOf('{{ course.final_grade }}')] += {{ course.hours }};
+                {% endfor %}
+
+                var dict = {Semester: '{{ semester.name }}'};
+                for (i = 0; i < grades.length; i++)
+                    dict[grades[i]] = hours_count[i];
+                distribution_of_grades_data.push(dict);
+            {% endif %}
+        {% endfor %}
+        var distributon_of_grades_settings = {
+            title: 'Distribution of Grades over Time',
+            description: '',
+            showLegend: true,
+            toolTipShowDelay: 0,
+            toolTipHideDelay: 10000,
+            padding: { left: 10, top: 5, right: 50, bottom: 5 },
+            source: distribution_of_grades_data,
+            categoryAxis:
+            {
+                dataField: 'Semester'
+            },
+            colorScheme: 'scheme01',
+            seriesGroups: [
+                {
+                    type: 'stackedcolumn100',
+                    columnsGapPercent: 0,
+                    valueAxis:
+                    {
+                        unitInterval: 20
+                    },
+                    series: [
+                        { dataField: 'A+', displayText: 'A+' },
+                        { dataField: 'A', displayText: 'A' },
+                        { dataField: 'A-', displayText: 'A-' },
+                        { dataField: 'B+', displayText: 'B+' },
+                        { dataField: 'B', displayText: 'B' },
+                        { dataField: 'B-', displayText: 'B-' },
+                        { dataField: 'C+', displayText: 'C+' },
+                        { dataField: 'C', displayText: 'C' },
+                        { dataField: 'C-', displayText: 'C-' },
+                        { dataField: 'D+', displayText: 'D+' },
+                        { dataField: 'D', displayText: 'D' },
+                        { dataField: 'D-', displayText: 'D-' },
+                        { dataField: 'F', displayText: 'F' },
+                        { dataField: 'CR', displayText: 'CR' },
+                        { dataField: 'NC', displayText: 'NC' },
+                        { dataField: 'P', displayText: 'P' },
+                        { dataField: 'FL', displayText: 'FL' },
+                        { dataField: 'W', displayText: 'W' }
+                    ]
+                }
+            ]
+        };
+////////////////////// GPA per Semester //////////////////////
+        var gpa_per_semester_data = [
+            {% for semester in semesters %}
+                {% if semester.is_finished and semester.final_gpa != -1.0 %}
+                    {Semester: '{{ semester.name }}', GPA: {{semester.final_gpa}}},
+                {% endif %}
+            {% endfor %}
+        ];
+        lowest_gpa = 4.3;
+        highest_gpa = 0.0;
+        for (i = 0; i < gpa_per_semester_data.length; i += 1) {
+            gpa = gpa_per_semester_data[i].GPA;
+            if (gpa < lowest_gpa)
+                lowest_gpa = gpa;
+            if (gpa > highest_gpa)
+                highest_gpa = gpa;
+        }
+        lowest_gpa = Math.max(Math.round( (lowest_gpa -.1) * 10) / 10, 0);
+        highest_gpa = Math.min(Math.round( (highest_gpa +.1) * 10) / 10, 4.3);
+        var gpa_per_semester_settings = {
+            title: 'Distribution of Grades over Time',
+            description: '',
+            showLegend: true,
+            padding: { left: 10, top: 5, right: 50, bottom: 5 },
+            source: gpa_per_semester_data,
+            categoryAxis:
+            {
+                dataField: 'Semester'
+            },
+            colorScheme: 'scheme01',
+            seriesGroups: [
+                {
+                    type: 'column',
+                    columnsGapPercent: 100,
+                    valueAxis:
+                    {
+                        unitInterval: (highest_gpa - lowest_gpa) / 20,
+                        minValue: lowest_gpa,
+                        maxValue: highest_gpa
+                    },
+                    series: [
+                        { dataField: 'GPA', displayText: 'GPA' }
+                    ]
+                }
+            ]
+        };
+    });
+</script>
+
+{% if semesters %}
+    <div id='charts_wrapper'>
+        <p id='charts_label'>Select a chart to display:</p>
+
+        <div id='charts_list_combo_box'></div>
+
+        <div id='chart_div'></div>
+    </div>
+{% endif %}

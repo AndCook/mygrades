@@ -74,7 +74,7 @@
     }
 }
 
-.hidden_in_s_s_inline, .hidden_in_s_s_block {
+.hidden_in_s_s_inline, .hidden_in_s_s_block, .hidden_in_s_s_table_row {
     display: none;
 }
 
@@ -199,10 +199,4 @@
 #id_hours {//select field in course form
     display: block;
     margin: auto;
-}
-
-#gpa_over_time_chart {
-    width:750px;
-    height:400px;
-    margin: 15px;
 }

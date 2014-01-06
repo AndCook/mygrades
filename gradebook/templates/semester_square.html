@@ -20,22 +20,22 @@
                 {% include 'course_table_row.html' with course=course%}
             {% endfor %}
         {% endif %}
-        <tr class='hidden_in_s_s_block add_course_tr'>
-            <td><p class='mini_link add_course'>+ add course</p></td>
+        <tr class='hidden_in_s_s_table_row add_course_tr'>
+            <td colspan='7' style='text-align: center'><p class='mini_link add_course'>+ add course</p></td>
         </tr>
     </tbody></table>
     {% if semester.is_finished %}
         <table class='finished_semester_table'><tbody>
-            <tr class='hidden_in_s_s_block'>
-                <td class='s_s_table_data' style='width: 80%'>Total Hours Passed</td>
+            <tr class='hidden_in_s_s_table_row'>
+                <td class='s_s_table_data' style='width: 80%'>Hours Passed</td>
                 <td class='s_s_table_data'>{{ semester.hours_passed }}</td>
             </tr>
-            <tr class='hidden_in_s_s_block'>
+            <tr class='hidden_in_s_s_table_row'>
                 <td class='s_s_table_data'>GPA Hours</td>
                 <td class='s_s_table_data'>{{ semester.gpa_hours }}</td>
             </tr>
             {% if semester.gpa_hours != 0 %}
-                <tr class='hidden_in_s_s_block'>
+                <tr class='hidden_in_s_s_table_row'>
                     <td class='s_s_table_data'>GPA Points</td>
                     <td class='s_s_table_data'>{{ semester.gpa_points }}</td>
                 </tr>
@@ -49,6 +49,10 @@
                         {{ semester.final_gpa }}
                     {% endif %}
                 </td>
+            </tr>
+            <tr class='hidden_in_s_s_table_row'>
+                <td class='s_s_table_data'>Total Hours Passed</td>
+                <td class='s_s_table_data'>{{ semester.cumulative_hours_passed }}</td>
             </tr>
             <tr>
                 <td class='s_s_table_data'>Cumulative GPA</td>

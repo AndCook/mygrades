@@ -2,59 +2,15 @@
 
 {% block extra_head %}
     <script src='/static/javascript/jqxchart.js'></script>
+    <script src='/static/javascript/jqxcombobox.js'></script>
+    <script src='/static/javascript/jqxlistbox.js'></script>
+    <script src='/static/javascript/jqxbuttons.js'></script>
+    <script src='/static/javascript/jqxscrollbar.js'></script>
 
     <link rel='stylesheet' type='text/css' href='/static/css/overview_stylesheet.css' />
     <script src='/static/javascript/overview_script.js'></script>
-    <script>
-        var gpa_over_time_data = [
-            {% for semester in semesters %}
-                {% if semester.cumulative_gpa != -1.0 %}
-                    { 'x': '{{ semester.name }}', 'y': {{ semester.cumulative_gpa }} },
-                {% endif %}
-            {% endfor %}
-        ];
-        var lowest_gpa = 4.3;
-        var highest_gpa = 0.0;
-        for (var i = 0; i < gpa_over_time_data.length; i += 1) {
-            var gpa = gpa_over_time_data[i].y;
-            if (gpa < lowest_gpa)
-                lowest_gpa = gpa;
-            if (gpa > highest_gpa)
-                highest_gpa = gpa;
-        }
-        lowest_gpa = Math.max(Math.round( (lowest_gpa -.1) * 10) / 10, 0);
-        highest_gpa = Math.min(Math.round( (highest_gpa +.1) * 10) / 10, 4.3);
-        $(document).ready(function () {
-            var settings = {
-                title: 'Cumulative GPA over Time',
-                description: '',
-                //enableAnimations: true,
-                showLegend: false,
-                padding: { left: 10, top: 5, right: 50, bottom: 5 },
-                source: gpa_over_time_data,
-                categoryAxis:
-                {
-                    dataField: 'x'
-                },
-                colorScheme: 'scheme04',
-                seriesGroups: [
-                    {
-                        type: 'line',
-                        valueAxis:
-                        {
-                            unitInterval: (highest_gpa - lowest_gpa)/20,
-                            minValue: lowest_gpa,
-                            maxValue: highest_gpa
-                        },
-                        series: [
-                            { dataField: 'y', displayText: 'GPA' }
-                        ]
-                    }
-                ]
-            };
-            $('#gpa_over_time_chart').jqxChart(settings);
-        });
-    </script>
+
+    <link rel='stylesheet' type='text/css' href='/static/css/overview_charts_stylesheet.css' />
 {% endblock %}
 
 {% block base_content %}
@@ -77,9 +33,7 @@
 
     </div> <!-- end semester_squares_wrapper -->
 
-    {% if semesters %}
-        <div id='gpa_over_time_chart'></div>
-    {% endif %}
+    {% include 'overview_charts.html' with semesters=semesters %}
 
     <div id='add_semester_dialog_box' title='Add Semester'>
         <form id='add_semester_form' style='text-align: center'>

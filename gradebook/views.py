@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 import json
 from datetime import datetime, date
 from gradebook.models import letter_grade_to_gpa_points, PASSING_GRADES, GPA_GRADES
+from account.models import User
 
 
 @csrf_protect
@@ -18,7 +19,8 @@ def overview(request):
     if request.method == 'GET':
         #for semester in Semester.objects.all():
         #    recount_hours(semester)
-        #recalculate_cumulative_gpa(request.user)
+        #for user in User.objects.all():
+        #    recalculate_cumulative_gpa(user)
 
         semesters = Semester.objects.filter(user=request.user)
         semesters = semesters.order_by('start_date')
@@ -131,8 +133,8 @@ def overview(request):
                         course.semester.final_gpa = -1.0
 
                 course.semester.save()
-                recalculate_cumulative_gpa(request.user)
                 course.save()
+                recalculate_cumulative_gpa(request.user)
                 course.semester.courses = Course.objects.filter(semester=course.semester)
                 return render_to_response('semester_square.html',
                                           {'semester': course.semester},
@@ -198,16 +200,22 @@ def recount_hours(semester):
 
 
 def recalculate_cumulative_gpa(user):
-    semesters = Semester.objects.filter(user=user, is_finished=True).order_by('start_date')
+    cumulative_hours_passed = 0
     cumulative_gpa_hours = 0
     cumulative_gpa_points = 0
-    for semester in semesters:
+    for semester in Semester.objects.filter(user=user, is_finished=True).order_by('start_date'):
+        cumulative_hours_passed += semester.hours_passed
         cumulative_gpa_hours += semester.gpa_hours
         cumulative_gpa_points += semester.gpa_points
         if cumulative_gpa_hours != 0:
             semester.cumulative_gpa = round(cumulative_gpa_points / cumulative_gpa_hours, 3)
         else:
             semester.cumulative_gpa = -1.0
+        semester.cumulative_hours_passed = cumulative_hours_passed
+        semester.save()
+    for semester in Semester.objects.filter(user=user, is_finished=False).order_by('start_date'):
+        cumulative_hours_passed += semester.hours_planned
+        semester.cumulative_hours_passed = cumulative_hours_passed
         semester.save()
 
 
@@ -259,6 +267,6 @@ def course_detail(request, course_id):
                     course.semester.final_gpa = -1.0
 
                 course.semester.save()
-                recalculate_cumulative_gpa(request.user)
                 course.save()
+                recalculate_cumulative_gpa(request.user)
             return HttpResponse(json.dumps({}), mimetype='application/json')

@@ -40,6 +40,7 @@ $(function() {
         big_square.css('font-size', '1.3em');
         big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
         big_square.find('.hidden_in_s_s_block').css('display', 'block');
+        big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
         resize_course_table_columns();
 
         $(window).resize(function () {
@@ -390,6 +391,7 @@ $(function() {
                             big_square.html($('#' + semester_id).html());
                             big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
                             big_square.find('.hidden_in_s_s_block').css('display', 'block');
+                            big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
                             resize_course_table_columns();
                         }
                     });
@@ -470,6 +472,7 @@ $(function() {
                             big_square.html($('#' + semester_id).html());
                             big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
                             big_square.find('.hidden_in_s_s_block').css('display', 'block');
+                            big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
                             resize_course_table_columns();
                         }
                     });
@@ -563,6 +566,7 @@ $(function() {
                             big_square.html($('#' + semester_id).html());
                             big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
                             big_square.find('.hidden_in_s_s_block').css('display', 'block');
+                            big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
                             resize_course_table_columns();
                         }
                     });
@@ -611,6 +615,7 @@ $(function() {
                             big_square.html($('#' + semester_id).html());
                             big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
                             big_square.find('.hidden_in_s_s_block').css('display', 'block');
+                            big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
                             resize_course_table_columns();
                         }
                     });
