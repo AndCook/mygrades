@@ -89,16 +89,31 @@
             ]
         };
 ////////////////////// Total Hours Passed over Time //////////////////////
-        var total_hours_passed_data = [
-            {% for semester in semesters %}
-                {
-                    Semester: '{{ semester.name }}',
-                    Finished: {% if semester.is_finished %}{{ semester.cumulative_hours_passed }}{% else %}0{% endif %},
-                    Current: {% if semester.is_current %}{{ semester.cumulative_hours_passed }}{% else %}0{% endif %},
-                    Future: {% if semester.is_future %}{{ semester.cumulative_hours_passed }}{% else %}0{% endif %}
-                },
-            {% endfor %}
-        ];
+        var total_hours_passed_data = [{Semester: '{{ semester.name }}',
+            Finished: 0, Current: null, Future: null}];
+        {% for semester in semesters %}
+            {% if semester.is_finished %}
+                total_hours_passed_data.push({Semester: '{{ semester.name }}',
+                    Finished: {{semester.cumulative_hours_passed}}, Current: null, Future: null});
+            {% else %}
+                var prev = total_hours_passed_data.pop();
+                {% if semester.is_current %}
+                    if (prev['Current'] === null && prev['Finished'] !== null)
+                        prev['Current'] = prev['Finished'];
+                    total_hours_passed_data.push(prev);
+                    total_hours_passed_data.push({Semester: '{{ semester.name }}',
+                        Finished: null, Current: {{semester.cumulative_hours_passed}}, Future: null});
+                {% else %}
+                    if (prev['Future'] === null && prev['Current'] !== null)
+                        prev['Future'] = prev['Current'];
+                    else if (prev['Future'] === null && prev['Finished'] !== null)
+                        prev['Future'] = prev['Finished'];
+                    total_hours_passed_data.push(prev);
+                    total_hours_passed_data.push({Semester: '{{ semester.name }}',
+                        Finished: null, Current: null, Future: {{semester.cumulative_hours_passed}}});
+                {% endif %}
+            {% endif %}
+        {% endfor %}
         var max_cumulative_hours = Math.max(
             Math.round(total_hours_passed_data[total_hours_passed_data.length - 1].Finished / 10 + 1) * 10,
             Math.round(total_hours_passed_data[total_hours_passed_data.length - 1].Current / 10 + 1) * 10,
@@ -163,17 +178,21 @@
             source: hours_per_grade_earned_data,
             categoryAxis:
             {
-                dataField: 'Grade'
+                dataField: 'Grade',
+                textRotationAngle: 90
             },
             colorScheme: 'scheme11',
             seriesGroups: [
                 {
                     type: 'column',
+                    orientation: 'horizontal',
+                    columnsGapPercent: 100,
                     valueAxis:
                     {
-                        unitInterval: Math.round(max_hours / 10),
+                        flip: true,
+                        unitInterval: Math.round(max_hours * 1.2 / 18),
                         minValue: 0,
-                        maxValue: max_hours
+                        maxValue: max_hours*1.2
                     },
                     series: [
                         { dataField: 'Hours', displayText: 'Hours' }
@@ -182,6 +201,9 @@
             ]
         };
 ////////////////////// Distribution of Grades over Time //////////////////////
+        var has_grade = [];
+        for (i = 0; i < grades.length; i++)
+            has_grade[i] = false;
         var distribution_of_grades_data = [];
         {% for semester in semesters %}
             {% if semester.is_finished %}
@@ -193,11 +215,21 @@
                 {% endfor %}
 
                 var dict = {Semester: '{{ semester.name }}'};
-                for (i = 0; i < grades.length; i++)
-                    dict[grades[i]] = hours_count[i];
+                for (i = 0; i < grades.length; i++) {
+                    if (hours_count[i] === 0)
+                        dict[grades[i]] = null;
+                    else {
+                        has_grade[i] = true;
+                        dict[grades[i]] = hours_count[i];
+                    }
+                }
                 distribution_of_grades_data.push(dict);
             {% endif %}
         {% endfor %}
+        var series = [];
+        for (i = 0; i < grades.length; i++)
+            if (has_grade[i])
+                series.push({ dataField: grades[i], displayText: grades[i] });
         var distributon_of_grades_settings = {
             title: 'Distribution of Grades over Time',
             description: '',
@@ -219,26 +251,7 @@
                     {
                         unitInterval: 20
                     },
-                    series: [
-                        { dataField: 'A+', displayText: 'A+' },
-                        { dataField: 'A', displayText: 'A' },
-                        { dataField: 'A-', displayText: 'A-' },
-                        { dataField: 'B+', displayText: 'B+' },
-                        { dataField: 'B', displayText: 'B' },
-                        { dataField: 'B-', displayText: 'B-' },
-                        { dataField: 'C+', displayText: 'C+' },
-                        { dataField: 'C', displayText: 'C' },
-                        { dataField: 'C-', displayText: 'C-' },
-                        { dataField: 'D+', displayText: 'D+' },
-                        { dataField: 'D', displayText: 'D' },
-                        { dataField: 'D-', displayText: 'D-' },
-                        { dataField: 'F', displayText: 'F' },
-                        { dataField: 'CR', displayText: 'CR' },
-                        { dataField: 'NC', displayText: 'NC' },
-                        { dataField: 'P', displayText: 'P' },
-                        { dataField: 'FL', displayText: 'FL' },
-                        { dataField: 'W', displayText: 'W' }
-                    ]
+                    series: series
                 }
             ]
         };
@@ -262,7 +275,7 @@
         lowest_gpa = Math.max(Math.round( (lowest_gpa -.1) * 10) / 10, 0);
         highest_gpa = Math.min(Math.round( (highest_gpa +.1) * 10) / 10, 4.3);
         var gpa_per_semester_settings = {
-            title: 'Distribution of Grades over Time',
+            title: 'GPA per Semester',
             description: '',
             showLegend: true,
             padding: { left: 10, top: 5, right: 50, bottom: 5 },

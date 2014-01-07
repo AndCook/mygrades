@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 import json
 from datetime import datetime, date
 from gradebook.models import letter_grade_to_gpa_points, PASSING_GRADES, GPA_GRADES
-from account.models import User
+#from account.models import User
 
 
 @csrf_protect

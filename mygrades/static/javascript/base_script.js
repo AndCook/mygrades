@@ -47,7 +47,6 @@ $(document).ready(function() {
     });
 });
 
-
 // login dialog box
 $(function() {
 	$( "#login_dialog_box" ).dialog({
