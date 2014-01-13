@@ -19,7 +19,7 @@ def overview(request):
     if request.method == 'GET':
         #for semester in Semester.objects.all():
         #    recount_hours(semester)
-        #for user in User.objects.all():
+        #for user in User.objects.all():  # import User from account.models
         #    recalculate_cumulative_gpa(user)
 
         semesters = Semester.objects.filter(user=request.user)

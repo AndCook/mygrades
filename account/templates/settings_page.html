@@ -2,7 +2,7 @@
 
 {% block extra_head %}
     <link rel='stylesheet' type='text/css' href='/static/css/settings_stylesheet.css' />
-    <!--script type='text/javascript' src='/static/javascript/settings_script.js'></script-->
+    <script type='text/javascript' src='/static/javascript/settings_script.js'></script>
 {% endblock %}
 
 {% block base_content %}
@@ -46,7 +46,8 @@
                 </td>
 
                 <td id='change_settings_div'>
-                    <form method='post' action='/account/settings/' name='change_settings_form'>{% csrf_token %}
+                    <form id='change_settings_form' method='post' action='/account/settings/'
+                          name='change_settings_form'>{% csrf_token %}
                         <p style='text-align: center'>Enter <b>only</b> information you would like to change</p>
                         {{ change_settings_form.non_field_errors }}
 
@@ -66,7 +67,7 @@
                         {{ change_settings_form.last_name }}
 
                         <div class='horizontal_line'>
-                            <input type='submit' value='Change Settings'/>
+                            <input id='settings_form_submit_button' type='submit' value='Change Settings'/>
                         </div>
                     </form>
                 </td>

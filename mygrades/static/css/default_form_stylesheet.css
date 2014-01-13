@@ -32,18 +32,19 @@ form p, form label {
   font-size: 1em; }
 
 input {
-  width: 80%;
-  height: 2em;
-  margin: 10px auto;
-  padding: 1px 5px;
   font-size: 1em;
-  line-height: 2em;
   border: 1px #aaaaaa solid;
   border-radius: 2px;
   display: block;
-  color: #999999; }
+  color: #222222; }
+  input[type=text], input[type=password] {
+    width: 80%;
+    height: 2em;
+    line-height: 2em;
+    margin: 10px auto;
+    padding: 1px 5px; }
   input:focus {
-    border-color: #f9fcef; }
+    border-color: #222222; }
   input[type=submit] {
     width: 10em;
     margin: 15px 7.5% 15px auto;
@@ -53,6 +54,29 @@ input {
     margin-bottom: 12px;
     width: 95%;
     padding: .4em; }
+
+textarea {
+  width: 80%;
+  height: 10em;
+  margin: 10px auto;
+  padding: 1px 5px;
+  resize: none;
+  font-size: 1em;
+  line-height: 1.5em;
+  border: 1px #aaaaaa solid;
+  border-radius: 2px;
+  display: block;
+  color: #222222; }
+  textarea:focus {
+    border-color: #222222; }
+
+*:focus {
+  outline: none; }
+
+.jqx-validator-hint {
+  font-size: 1em;
+  height: 1.5em;
+  line-height: 1.5em; }
 
 fieldset {
   padding: 0;

@@ -1,7 +1,39 @@
 {% extends 'base.html' %}
 
+{% block extra_head %}
+    <script src='/static/jqwidgets/jqxinput.js'></script>
+    <script src='/static/jqwidgets/jqxvalidator.js'></script>
+
+    <script src='/static/javascript/contact_us_script.js'></script>
+{% endblock %}
+
 {% block base_content %}
 
-    <h1>Contact Us</h1>
+    <div class='form_wrapper' style='width: 80%; min-width: 340px'>
+        <form id='contact_form' method='post' action='/contact_us/' name='contact_form'>
+
+            <h2 class='form_title'>Contact Us</h2>
+
+            <p>
+    Have any thoughts on how we can improve this website, find something that doesn't work, or just want to tell us how amazing we are? Then fill out this form and let us know!
+            </p>
+
+            <label for='name_input'></label>
+            <input type='text' id='name_input' style='width: 284px' autocomplete='off' placeholder='Your Name'/>
+
+            <label for='email_input'></label>
+            <input type='text' id='email_input' style='width: 284px' autocomplete='off'  placeholder='Your E-mail'/>
+
+            <label for='comment_input'></label>
+            <textarea id='comment_input' rows='5' style='min-width: 284px' placeholder='Type your message here.'></textarea>
+
+            <div class='horizontal_line'>
+                <label for='contact_form_submit_button'></label>
+                <input id='contact_form_submit_button' type='submit' value='Submit' style='width: 6.5em'/>
+                <p id='success_message' style='display: none'>Comment successfully submitted. Thanks for your feedback.</p>
+            </div>
+
+        </form>
+    </div>
 
 {% endblock %}

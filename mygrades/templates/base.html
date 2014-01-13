@@ -15,13 +15,19 @@
         <!-- jquery-ui stylesheet -->
         <link rel='stylesheet' href='/static/css/jquery-ui.css' />
         <!-- jqx stylesheet and scripts-->
-        <link rel='stylesheet' href='/static/css/jqx.base.css' />
-        <script type='text/javascript' src='/static/javascript/jqxcore.js'></script>
-        <script type='text/javascript' src='/static/javascript/jqxdata.js'></script>
+        <link rel='stylesheet' href='/static/jqwidgets/styles/jqx.base.css' />
+        <script type='text/javascript' src='/static/jqwidgets/jqxcore.js'></script>
+        <script type='text/javascript' src='/static/jqwidgets/jqxdata.js'></script>
+        <script type='text/javascript' src='/static/jqwidgets/jqxbuttons.js'></script>
+        <script type='text/javascript' src='/static/jqwidgets/jqxvalidator.js'></script>
+        <script type='text/javascript' src='/static/jqwidgets/jqxpasswordinput.js'></script>
 
         <link rel='stylesheet' href='/static/css/base_stylesheet.css' />
         <link rel='stylesheet' href='/static/css/default_form_stylesheet.css' />
 		<script type='text/javascript' src='/static/javascript/base_script.js'></script>
+
+        <!-- font(s) -->
+        <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
 
         {% block extra_head %}{% endblock %}
 	</head>
@@ -95,23 +101,39 @@
         </div><!-- end header -->
 
         <div id='login_dialog_box' title='Login'>
-            <form method='post' action='/account/login/' name='login_form'>{% csrf_token %}
+            <form id='login_dialog_form' method='post' action='/account/login/' name='login_form'>{% csrf_token %}
                 <h2 class='form_title'>Login</h2>
+
+                <p class='error' style='display: none'>Invalid email/password combination</p>
 
                 {% for field in login_form %}
                     {{ field }}
                 {% endfor %}
 
                 <a href='/account/forgot_password/' style='margin-left: 10%;color: #333333;'>Forget your password?</a>
+
+                <div class='horizontal_line' style='text-align: right; margin-top: 1em'>
+                    <input id='login_dialog_submit_button' type='submit' value='Login'
+                           style='width: 5em; display: inline-block; margin: .75em .4em .5em 0'/>
+                    <input id='login_dialog_cancel_button' type='submit' value='Cancel'
+                           style='width: 5em; display: inline-block; margin: .75em .4em .5em 0'/>
+                </div>
             </form>
         </div><!-- end login_dialog_box div -->
 
         <div id='signup_dialog_box' title='Sign up'>
-            <form method='post' action='/account/signup/' name='signup_form'>{% csrf_token %}
+            <form id='signup_dialog_form' method='post' action='/account/signup/' name='signup_form'>{% csrf_token %}
                 <h2 class='form_title'>Sign Up</h2>
                 {% for field in signup_form %}
                     {{ field }}
                 {% endfor %}
+
+                <div class='horizontal_line' style='text-align: right; margin-top: 1em'>
+                    <input id='signup_dialog_submit_button' type='submit' value='Sign-up'
+                           style='width: 5em; display: inline-block; margin: .75em .4em .5em 0'/>
+                    <input id='signup_dialog_cancel_button' type='submit' value='Cancel'
+                           style='width: 5em; display: inline-block; margin: .75em .4em .5em 0'/>
+                </div>
             </form>
         </div><!-- end signup_dialog_box div -->
 

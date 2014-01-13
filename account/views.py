@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -12,12 +12,21 @@ from mygrades.settings import EMAIL_HOST_USER
 from random import choice
 from string import ascii_letters, digits
 from account.models import UserProfile
+import json
 
 
 def my_login(request):
     # if the user is already logged in, send them to the overview page
     if request.user.is_authenticated():
         return HttpResponseRedirect('/gradebook/overview/')
+
+    if request.is_ajax():
+        get_action = request.GET['get_action']
+        if get_action == 'check_valid_login':
+            email = request.GET['email']
+            password = request.GET['password']
+            valid = authenticate(username=email, password=password) is not None
+            return HttpResponse(json.dumps({'is_valid': valid}), mimetype='application/json')
 
     if request.method == 'POST':
         form = MyLoginForm(request.POST)
@@ -41,31 +50,38 @@ def my_signup(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/gradebook/overview/')
 
+    if request.is_ajax():
+        get_action = request.GET['get_action']
+        if get_action == 'is_email_unique':
+            email = request.GET['email_in_question']
+            unique = User.objects.filter(username=email).count() == 0
+            return HttpResponse(json.dumps({'is_unique': unique}), mimetype='application/json')
+
     if request.method == 'POST':
         form = MyUserCreationForm(request.POST)
 
         if form.is_valid():
             password1 = form.cleaned_data.get('password1')
-            password2 = form.cleaned_data.get('password2')
-            if password1 != password2:
-                form.errors.setdefault('password1', ErrorList()).append(form.error_messages['password_mismatch'])
-            else:
-                email = form.cleaned_data.get('email')
-                user = User.objects.create_user(username=email,
-                                                password=password1,
-                                                email=email)
-                user.first_name = form.cleaned_data.get('first_name')
-                user.last_name = form.cleaned_data.get('last_name')
-                user.is_active = False  # user is inactive until email is validated
-                user.save()
-                prof = UserProfile(user=user)
-                prof.save()
+            #password2 = form.cleaned_data.get('password2')
+            #if password1 != password2:
+            #    form.errors.setdefault('password1', ErrorList()).append(form.error_messages['password_mismatch'])
+            #else:
+            email = form.cleaned_data.get('email')
+            user = User.objects.create_user(username=email,
+                                            password=password1,
+                                            email=email)
+            user.first_name = form.cleaned_data.get('first_name')
+            user.last_name = form.cleaned_data.get('last_name')
+            user.is_active = False  # user is inactive until email is validated
+            user.save()
+            prof = UserProfile(user=user)
+            prof.save()
 
-                send_validation_email(user)
+            send_validation_email(user)
 
-                login(request, authenticate(username=email, password=password1))
+            login(request, authenticate(username=email, password=password1))
 
-                return HttpResponseRedirect('/account/settings/')
+            return HttpResponseRedirect('/account/settings/')
     else:
         form = MyUserCreationForm()
     return render_to_response('signup_page.html',
@@ -75,6 +91,13 @@ def my_signup(request):
 
 @login_required
 def my_settings(request):
+    if request.is_ajax():
+        get_action = request.GET['get_action']
+        if get_action == 'is_email_unique':
+            email = request.GET['email_in_question']
+            unique = (User.objects.filter(username=email).count() == 0 or request.user.username == email)
+            return HttpResponse(json.dumps({'is_unique': unique}), mimetype='application/json')
+
     if request.method == 'POST':
         form = MyChangeSettingsForm(request.POST)
 
@@ -127,14 +150,14 @@ def my_change_password(request):
                 errors.append(form.error_messages['password_incorrect'])
             else:
                 password1 = form.cleaned_data.get('new_password1')
-                password2 = form.cleaned_data.get('new_password2')
-                if password1 != password2:
-                    form.errors.setdefault('new_password1',
-                                           ErrorList()).append(form.error_messages['password_mismatch'])
-                else:
-                    request.user.set_password(password1)
-                    request.user.save()
-                    return HttpResponseRedirect('/account/settings/')
+                #password2 = form.cleaned_data.get('new_password2')
+                #if password1 != password2:
+                #    form.errors.setdefault('new_password1',
+                #                           ErrorList()).append(form.error_messages['password_mismatch'])
+                #else:
+                request.user.set_password(password1)
+                request.user.save()
+                return HttpResponseRedirect('/account/settings/')
     else:
         form = MyPasswordChangeForm()
     return render_to_response('change_password_page.html',

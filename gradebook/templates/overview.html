@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block extra_head %}
-    <script src='/static/javascript/jqxchart.js'></script>
-    <script src='/static/javascript/jqxcombobox.js'></script>
-    <script src='/static/javascript/jqxlistbox.js'></script>
-    <script src='/static/javascript/jqxbuttons.js'></script>
-    <script src='/static/javascript/jqxscrollbar.js'></script>
+    <script src='/static/jqwidgets/jqxchart.js'></script>
+    <script src='/static/jqwidgets/jqxcombobox.js'></script>
+    <script src='/static/jqwidgets/jqxlistbox.js'></script>
+    <script src='/static/jqwidgets/jqxbuttons.js'></script>
+    <script src='/static/jqwidgets/jqxscrollbar.js'></script>
 
     <link rel='stylesheet' type='text/css' href='/static/css/overview_stylesheet.css' />
     <script src='/static/javascript/overview_script.js'></script>
@@ -33,7 +33,9 @@
 
     </div> <!-- end semester_squares_wrapper -->
 
-    {% include 'overview_charts.html' with semesters=semesters %}
+    {% if semesters %}
+        {% include 'overview_charts.html' with semesters=semesters %}
+    {% endif %}
 
     <div id='add_semester_dialog_box' title='Add Semester'>
         <form id='add_semester_form' style='text-align: center'>

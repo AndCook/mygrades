@@ -43,22 +43,24 @@ form p, form label {
 }
 
 input {
-    width: 80%;
-    height: 2em;
-    margin: 10px auto;
-    padding: 1px 5px;
+    &[type=text], &[type=password] {
+        width: 80%;
+        height: 2em;
+        line-height: 2em;
+        margin: 10px auto;
+        padding: 1px 5px;
+    }
 
     font-size: 1em;
-    line-height: 2em;
 
     border: 1px $border_gray solid;
     border-radius: 2px;
 
     display: block;
-    color: #999999;
+    color: $black_text;
 
     &:focus {
-        border-color: $white_text;
+        border-color: $black_text;
     }
 
     &[type=submit] {
@@ -73,6 +75,37 @@ input {
         width:95%;
         padding: .4em;
     }
+}
+
+textarea {
+    width: 80%;
+    height: 10em;
+    margin: 10px auto;
+    padding: 1px 5px;
+    resize: none;
+
+    font-size: 1em;
+    line-height: 1.5em;
+
+    border: 1px $border_gray solid;
+    border-radius: 2px;
+
+    display: block;
+    color: $black_text;
+
+    &:focus {
+        border-color: $black_text;
+    }
+}
+
+*:focus {
+    outline: none;
+}
+
+.jqx-validator-hint {
+    font-size: 1em;
+    height: 1.5em;
+    line-height: 1.5em;
 }
 
 fieldset {

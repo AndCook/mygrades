@@ -57,7 +57,7 @@
     text-align: center;
     color: #f9fcef; }
 
-.hidden_in_s_s_inline, .hidden_in_s_s_block, .hidden_in_s_s_table_row {
+.hidden_in_s_s_inline, .hidden_in_s_s_block, .hidden_in_s_s_table_row, .hidden_in_s_s_table_cell {
   display: none; }
 
 .mini_link {

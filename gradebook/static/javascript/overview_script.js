@@ -41,6 +41,7 @@ $(function() {
         big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
         big_square.find('.hidden_in_s_s_block').css('display', 'block');
         big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
+        big_square.find('.hidden_in_s_s_table_cell').css('display', 'table-cell');
         resize_course_table_columns();
 
         $(window).resize(function () {
@@ -392,6 +393,7 @@ $(function() {
                             big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
                             big_square.find('.hidden_in_s_s_block').css('display', 'block');
                             big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
+                            big_square.find('.hidden_in_s_s_table_cell').css('display', 'table-cell');
                             resize_course_table_columns();
                         }
                     });
@@ -473,6 +475,7 @@ $(function() {
                             big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
                             big_square.find('.hidden_in_s_s_block').css('display', 'block');
                             big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
+                            big_square.find('.hidden_in_s_s_table_cell').css('display', 'table-cell');
                             resize_course_table_columns();
                         }
                     });
@@ -567,6 +570,7 @@ $(function() {
                             big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
                             big_square.find('.hidden_in_s_s_block').css('display', 'block');
                             big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
+                            big_square.find('.hidden_in_s_s_table_cell').css('display', 'table-cell');
                             resize_course_table_columns();
                         }
                     });
@@ -616,6 +620,7 @@ $(function() {
                             big_square.find('.hidden_in_s_s_inline').css('display', 'inline-block');
                             big_square.find('.hidden_in_s_s_block').css('display', 'block');
                             big_square.find('.hidden_in_s_s_table_row').css('display', 'table-row');
+                            big_square.find('.hidden_in_s_s_table_cell').css('display', 'table-cell');
                             resize_course_table_columns();
                         }
                     });
