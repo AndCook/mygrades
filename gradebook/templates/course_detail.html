@@ -7,6 +7,7 @@
     <script src='/static/jqwidgets/jqxscrollbar.js'></script>
 
     <link rel='stylesheet' type='text/css' href='/static/css/course_detail_stylesheet.css' />
+    <link rel='stylesheet' type='text/css' href='/static/css/course_categories_stylesheet.css' />
     <script src='/static/javascript/course_detail_script.js'></script>
 
     <script type='text/javascript' src='/static/javascript/jquery-tablesorter.js'></script>
@@ -43,6 +44,8 @@
             {{ course_form.final_grade }}
         </form>
     </div>
+
+    {% include 'course_categories.html' with course=course %}
 
     {% comment %}
     <div id='add-assignment-dialog-form' title='Add new assignment'>

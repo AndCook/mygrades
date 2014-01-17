@@ -219,6 +219,33 @@ def recalculate_cumulative_gpa(user):
         semester.save()
 
 
+@csrf_protect
+@login_required
+def current_courses(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/account/settings/')
+
+    if request.method == 'GET':
+        #for semester in Semester.objects.all():
+        #    recount_hours(semester)
+        #for user in User.objects.all():  # import User from account.models
+        #    recalculate_cumulative_gpa(user)
+
+        semesters = Semester.objects.filter(user=request.user)
+        for semester in semesters:
+            if not semester.is_finished:
+                recheck_semester_dates(semester)
+        semesters = semesters.filter(is_current=True)
+        semesters = semesters.order_by('start_date')
+        for semester in semesters:
+            semester.courses = Course.objects.filter(semester=semester)
+        return render_to_response('current_courses.html',
+                                  {'semesters': semesters,
+                                   'course_form': CourseForm()},
+                                  RequestContext(request))
+
+
+@csrf_protect
 @login_required
 def course_detail(request, course_id):
     if not request.user.is_active:
