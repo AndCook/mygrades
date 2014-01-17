@@ -235,6 +235,7 @@ def course_detail(request, course_id):
         if request.user != semester.user:
             return Http404()
 
+        course.semester.courses = Course.objects.filter(semester=course.semester)
         return render_to_response('course_detail.html',
                                   {'course': course,
                                    'course_form': CourseForm()},

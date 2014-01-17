@@ -8,7 +8,7 @@ from django.forms.util import ErrorList
 from django.core.mail import EmailMessage
 from account.forms import MyLoginForm, MyUserCreationForm,\
     MyChangeSettingsForm, MyPasswordChangeForm, MyPasswordResetFormEmail, MyPasswordResetFormPasswords
-from mygrades.settings import EMAIL_HOST_USER
+from mygrades.settings import EMAIL_HOST_USER, BASE_PATH
 from random import choice
 from string import ascii_letters, digits
 from account.models import UserProfile
@@ -222,8 +222,8 @@ def send_validation_email(user):
     subject = 'mygrades Validation Email'
     message = 'Hello ' + user.first_name + ' ' + user.last_name + ',\n\n'\
               'Thank you for registering with mygrades.\n' \
-              'To get started, validate your email by clicking the following link.\n\n' \
-              'http://127.0.0.1:7654/account/validate_email/' + validation_code + '/\n'
+              'To get started, validate your email by clicking the following link.\n\n' + \
+              BASE_PATH + '/account/validate_email/' + validation_code + '/\n'
     message = EmailMessage(subject, message, EMAIL_HOST_USER, [user.email])
     message.send(fail_silently=True)
 
@@ -238,7 +238,7 @@ def send_forgotten_password_email(email):
     subject = 'mygrades Forgot Password'
     message = 'Hello ' + user.first_name + ' ' + user.last_name + ',\n\n'\
               'You are receiving this email because you claimed to have forgotten your password on mygrades.\n' \
-              'If this is a mistake, ignore this email. Else, follow the link below to reset your password.\n\n' \
-              'http://127.0.0.1:7654/account/forgot_password/' + validation_code + '/\n'
+              'If this is a mistake, ignore this email. Else, follow the link below to reset your password.\n\n' + \
+              BASE_PATH + '/account/forgot_password/' + validation_code + '/\n'
     message = EmailMessage(subject, message, EMAIL_HOST_USER, [user.email])
     message.send()

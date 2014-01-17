@@ -1,0 +1,45 @@
+<script>
+    $(document).ready(function () {
+        var course_selector_combo_box = $('#course_selector_combo_box');
+        var button = $('#course_selector_go_button');
+        var course_id_list = [];
+        var list_of_courses = [];
+        {% for course in course.semester.courses %}
+            course_id_list.push({{ course.id }});
+            list_of_courses.push({html: '<div id={{ course.id }}>{{ course.name }}</div>', title: '{{ course.name }}'});
+        {% endfor %}
+        var selected_index = course_id_list.indexOf({{ course.id }});
+        course_selector_combo_box.jqxComboBox({
+            selectedIndex: selected_index,
+            source: list_of_courses,
+            width: 250,
+            height: 25
+        });
+        course_selector_combo_box.bind('select', function (event) {
+            var args = event.args;
+            if (args === undefined)
+                return;
+            if (args.index !== selected_index) {
+                button.jqxButton({disabled: false });
+            }
+            else
+                button.jqxButton({disabled: true});
+        });
+        button.jqxButton({width: 75, disabled: true});
+        button.click(function(event) {
+            var html_string = course_selector_combo_box.jqxComboBox('getSelectedItem').html;
+            var id_index = html_string.indexOf(' id=') + 4;
+            var id = html_string.substring(id_index, html_string.indexOf('>', id_index));
+            var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-1)-1;
+            var href = window.location.href.substring(0, backslash_index) + id + '/';
+            window.location = href;
+        });
+    });
+</script>
+
+<div id='course_selector_wrapper'>
+    <p id='course_selector_label'>Select another course: </p>
+
+    <div id='course_selector_combo_box'></div>
+    <div id='course_selector_go_button'>Go!!!</div>
+</div>

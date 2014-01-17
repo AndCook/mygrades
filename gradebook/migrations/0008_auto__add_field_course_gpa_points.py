@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Course.gpa_points'
         db.add_column(u'gradebook_course', 'gpa_points',
-                      self.gf('django.db.models.fields.DecimalField')(default=0.0, max_digits=3, decimal_places=2),
+                      self.gf('django.db.models.fields.FloatField')(default=0.0),
                       keep_default=False)
 
 

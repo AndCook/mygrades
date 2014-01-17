@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block extra_head %}
+    <script src='/static/jqwidgets/jqxcombobox.js'></script>
+    <script src='/static/jqwidgets/jqxlistbox.js'></script>
+    <script src='/static/jqwidgets/jqxbuttons.js'></script>
+    <script src='/static/jqwidgets/jqxscrollbar.js'></script>
+
     <link rel='stylesheet' type='text/css' href='/static/css/course_detail_stylesheet.css' />
     <script src='/static/javascript/course_detail_script.js'></script>
 
@@ -10,6 +15,10 @@
 {% block base_content %}
 
     <h1 class='course_name' id='course_{{ course.id }}'>{{ course.name }}</h1>
+
+    {% if course.semester.courses|length > 1 %}
+        {% include 'course_selector.html' with course=course %}
+    {% endif %}
 
     {% if not course.semester.is_future %}
         <div id='report_final_grade_div'>
