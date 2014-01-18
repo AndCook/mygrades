@@ -4,15 +4,22 @@
     <link rel='stylesheet' type='text/css' href='/static/css/overview_stylesheet.css' />
     <link rel='stylesheet' href='/static/css/current_courses_stylesheet.css' />
     <script src='/static/javascript/current_courses.js'></script>
+    <script src='/static/javascript/course_add_edit_delete.js'></script>
+    <script src='/static/javascript/semester_add_edit_delete.js'></script>
 {% endblock %}
 
 {% block base_content %}
 
     <h1>Current Courses</h1>
 
-    {% for semester in semesters %}
-        {% if semester.is_current %}
-            {% include 'semester_square.html' with semester=semester %}
-        {% endif %}
-    {% endfor %}
+    <div id='semester_squares_wrapper'>
+        {% for semester in semesters %}
+            {% if semester.is_current %}
+                {% include 'semester_square.html' with semester=semester %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {% include 'course_semester_add_edit_delete_dialogs.html' with semesters=semesters %}
+
 {% endblock %}

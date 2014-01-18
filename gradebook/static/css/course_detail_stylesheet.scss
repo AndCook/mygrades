@@ -1,8 +1,33 @@
 @import '../../../mygrades/static/css/global_variables.scss';
 
+#course_selector_wrapper {
+    margin: .75em;
+}
+
+#course_selector_label {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#course_selector_drop_down_button {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.course_selector_tree_item {
+    max-width: 185px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#course_selector_go_button {
+    display: inline-block;
+}
 
 #report_final_grade_div {
     padding: 5px 15px;
+    margin: .75em;
     text-align: center;
     border: 1px $border_gray solid;
     border-radius: 3px;

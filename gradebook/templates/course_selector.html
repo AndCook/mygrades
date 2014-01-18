@@ -1,45 +1,76 @@
 <script>
     $(document).ready(function () {
-        var course_selector_combo_box = $('#course_selector_combo_box');
         var button = $('#course_selector_go_button');
-        var course_id_list = [];
-        var list_of_courses = [];
-        {% for course in course.semester.courses %}
-            course_id_list.push({{ course.id }});
-            list_of_courses.push({html: '<div id={{ course.id }}>{{ course.name }}</div>', title: '{{ course.name }}'});
-        {% endfor %}
-        var selected_index = course_id_list.indexOf({{ course.id }});
-        course_selector_combo_box.jqxComboBox({
-            selectedIndex: selected_index,
-            source: list_of_courses,
-            width: 250,
-            height: 25
-        });
-        course_selector_combo_box.bind('select', function (event) {
-            var args = event.args;
-            if (args === undefined)
-                return;
-            if (args.index !== selected_index) {
-                button.jqxButton({disabled: false });
-            }
-            else
-                button.jqxButton({disabled: true});
-        });
-        button.jqxButton({width: 75, disabled: true});
+        button.jqxButton({width: 45});
+        button.css('display', 'none');
         button.click(function(event) {
-            var html_string = course_selector_combo_box.jqxComboBox('getSelectedItem').html;
-            var id_index = html_string.indexOf(' id=') + 4;
-            var id = html_string.substring(id_index, html_string.indexOf('>', id_index));
-            var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-1)-1;
-            var href = window.location.href.substring(0, backslash_index) + id + '/';
-            window.location = href;
+            var val = tree.jqxTree('getSelectedItem').element.innerHTML;
+            var id_index = val.indexOf('id="course_') + 11;
+            var end_id_index = val.indexOf('">', id_index);
+            var id = parseInt(val.substring(id_index, end_id_index));
+            var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2)+1;
+            window.location = window.location.href.substring(0, backslash_index) + id + '/';
         });
+
+        var drop_down = $('#course_selector_drop_down_button');
+        var tree = $('#course_selector_tree');
+        var original_selected_course_id = {{ course.id }};
+        drop_down.jqxDropDownButton({ width: 250, height: 25});
+        tree.on('select', function (event) {
+            var args = event.args;
+            var item = tree.jqxTree('getItem', args.element);
+            var dropDownContent = '<div class="course_selector_tree_item"' +
+                    'style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
+            drop_down.jqxDropDownButton('setContent', dropDownContent);
+            drop_down.jqxDropDownButton('close');
+
+            var val = tree.jqxTree('getSelectedItem').element.innerHTML;
+            var id_index = val.indexOf('id="course_') + 11;
+            var end_id_index = val.indexOf('">', id_index);
+            var selected_id = parseInt(val.substring(id_index, end_id_index));
+            if (original_selected_course_id !== selected_id)
+                button.css('display', 'inline-block');
+            else
+                button.css('display', 'none');
+        });
+        tree.jqxTree({ width: 250, height: 220});
     });
 </script>
 
 <div id='course_selector_wrapper'>
-    <p id='course_selector_label'>Select another course: </p>
+    <p id='course_selector_label'>Change<br>course: </p>
 
-    <div id='course_selector_combo_box'></div>
-    <div id='course_selector_go_button'>Go!!!</div>
+    <div id='course_selector_drop_down_button'>
+        <div style="border: none;" id='course_selector_tree'>
+            <ul>
+                <li item-expanded='true'>
+                    <div class='course_selector_tree_item'>{{ course.semester.name }}</div>
+                    <ul>
+                        {% for course_ in course.semester.courses %}
+                            <li {% if course == course_ %}item-selected='true'{% endif %}>
+                                <div class='course_selector_tree_item' id='course_{{ course_.id }}'>
+                                    {{ course_.name }}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% for semester in all_other_semesters %}
+                    <li>
+                        <div class='course_selector_tree_item'>{{ semester.name }}</div>
+                        <ul>
+                            {% for course_ in semester.courses %}
+                                <li>
+                                    <div class='course_selector_tree_item' id='course_{{ course_.id }}'>
+                                        {{ course_.name }}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div id='course_selector_go_button'>Go</div>
 </div>

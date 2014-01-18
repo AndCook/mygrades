@@ -241,6 +241,7 @@ def current_courses(request):
             semester.courses = Course.objects.filter(semester=semester)
         return render_to_response('current_courses.html',
                                   {'semesters': semesters,
+                                   'semester_form': SemesterForm(),
                                    'course_form': CourseForm()},
                                   RequestContext(request))
 
@@ -257,14 +258,18 @@ def course_detail(request, course_id):
         if courses.__len__() != 1:
             return Http404()
         course = courses[0]
-        semester = course.semester
         # make sure current user has access to requested course
-        if request.user != semester.user:
+        if request.user != course.semester.user:
             return Http404()
 
         course.semester.courses = Course.objects.filter(semester=course.semester)
+        semesters = Semester.objects.filter(user=request.user)
+        semesters = semesters.exclude(id=course.semester.id)
+        for semester in semesters:
+            semester.courses = Course.objects.filter(semester=semester)
         return render_to_response('course_detail.html',
                                   {'course': course,
+                                   'all_other_semesters': semesters,
                                    'course_form': CourseForm()},
                                   RequestContext(request))
 

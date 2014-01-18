@@ -1,4 +1,4 @@
-$(function() {
+$(document).ready(function() {
     var report_final_grade_dialog = $('#report_final_grade_dialog_box');
     $('#report_final_grade').button().click(function() {
         report_final_grade_dialog.dialog('open');
