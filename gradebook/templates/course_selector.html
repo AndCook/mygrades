@@ -3,7 +3,7 @@
         var button = $('#course_selector_go_button');
         button.jqxButton({width: 45});
         button.css('display', 'none');
-        button.click(function(event) {
+        button.click(function() {
             var val = tree.jqxTree('getSelectedItem').element.innerHTML;
             var id_index = val.indexOf('id="course_') + 11;
             var end_id_index = val.indexOf('">', id_index);
@@ -56,18 +56,20 @@
                     </ul>
                 </li>
                 {% for semester in all_other_semesters %}
-                    <li>
-                        <div class='course_selector_tree_item'>{{ semester.name }}</div>
-                        <ul>
-                            {% for course_ in semester.courses %}
-                                <li>
-                                    <div class='course_selector_tree_item' id='course_{{ course_.id }}'>
-                                        {{ course_.name }}
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </li>
+                    {% if semester.courses|length >= 1 %}
+                        <li>
+                            <div class='course_selector_tree_item'>{{ semester.name }}</div>
+                            <ul>
+                                {% for course_ in semester.courses %}
+                                    <li>
+                                        <div class='course_selector_tree_item' id='course_{{ course_.id }}'>
+                                            {{ course_.name }}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         </div>

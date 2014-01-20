@@ -1,52 +1,51 @@
 $(document).ready(function() {
-    var categories = $('#categories_wrapper');
+    var categories_wrapper = $('#categories_wrapper');
     ////////////////////// adding categories //////////////////////
     var add_category_dialog = $('#add_category_dialog_box');
     var add_category_form = $('#add_category_form');
-    var add_category_is_validated = false;
+    var add_category_form_is_validated = false;
     add_category_form.jqxValidator({
-            focus: false,
-            rules: [
-                { input: '#add_category_form #name_input', message: 'Name is required', action: 'keyup, blur', rule: 'required' },
-                { input: '#add_category_form #worth_input', message: 'Worth is required', action: 'keyup, blur', rule: 'required' },
-                { input: '#add_category_form #worth_input', message: 'Worth must be a number', action: 'keyup', rule: 'number' },
-                {
-                    input: '#add_category_form #worth_input', message: 'Worth must be between 0 and 100',
-                        action: 'keyup', rule: function (input) {
-                            input = parseFloat(input.val());
-                            return input >= 0  && input <= 100;
-                        }
-                },
-                {
-                    input: '#add_category_form #worth_input', message: 'Worth is too large',
-                        action: 'keyup', rule: function (input) {
-                            if (input.val() == '')
-                                return false;
-                            var result = false;
-                            var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
-                            var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
-                            $.ajax({
-                                type:'GET',
-                                async: false,
-                                url: '/gradebook/course_detail/' + id + '/',
-                                contentType: 'application/x-www-form-urlencoded',
-                                data: {
-                                    'get_action': 'category_size_check',
-                                    'worth': input.val()
-                                },
-                                success: function(data) {
-                                    result = data.is_valid;
-                                }
-                            });
-                            return result;
-                        }
-                }
-            ],
-            onError: function() {add_category_is_validated = false;},
-            onSuccess: function() {add_category_is_validated = true;}
-        });
-
-    categories.on('click', '#add_category_button', function() {
+        focus: false,
+        rules: [
+            { input: '#add_category_form #name_input', message: 'Name is required', action: 'keyup, blur', rule: 'required' },
+            { input: '#add_category_form #worth_input', message: 'Worth is required', action: 'keyup, blur', rule: 'required' },
+            { input: '#add_category_form #worth_input', message: 'Worth must be a number', action: 'keyup', rule: 'number' },
+            {
+                input: '#add_category_form #worth_input', message: 'Worth must be between 0 and 100',
+                    action: 'keyup', rule: function (input) {
+                        input = parseFloat(input.val());
+                        return input >= 0  && input <= 100;
+                    }
+            },
+            {
+                input: '#add_category_form #worth_input', message: 'Worth is too large',
+                    action: 'keyup', rule: function (input) {
+                        if (input.val() === '')
+                            return false;
+                        var result = false;
+                        var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
+                        var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
+                        $.ajax({
+                            type:'GET',
+                            async: false,
+                            url: '/gradebook/course_detail/' + id + '/',
+                            contentType: 'application/x-www-form-urlencoded',
+                            data: {
+                                'get_action': 'add_category_size_check',
+                                'worth': input.val()
+                            },
+                            success: function(data) {
+                                result = data.is_valid;
+                            }
+                        });
+                        return result;
+                    }
+            }
+        ],
+        onError: function() {add_category_form_is_validated = false;},
+        onSuccess: function() {add_category_form_is_validated = true;}
+    });
+    categories_wrapper.on('click', '#add_category_button', function() {
         add_category_dialog.dialog('open');
     });
 	add_category_dialog.dialog({
@@ -56,14 +55,13 @@ $(document).ready(function() {
 		modal: true,
 		buttons: {
 			'Add Category': {
-                text: 'Add Category',
+                text: 'Add',
                 click: function() {
                     add_category_form.jqxValidator('validate');
-                    if (!add_category_is_validated)
+                    if (!add_category_form_is_validated)
                         return;
-                    var form = $('#add_category_form');
-                    var category_name = form.find('#name_input').val();
-                    var category_worth = form.find('#worth_input').val();
+                    var category_name = add_category_form.find('#name_input').val();
+                    var category_worth = add_category_form.find('#worth_input').val();
                     var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
                     var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
                     $.ajax({
@@ -77,7 +75,7 @@ $(document).ready(function() {
                         },
                         success: function(data) {
                             add_category_dialog.dialog('close');
-                            clear_category_form_contents();
+                            clear_add_category_form_contents();
                             var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
                             var category_wrapper = $('#categories_wrapper');
                             category_wrapper.html(data_inside);
@@ -87,31 +85,123 @@ $(document).ready(function() {
 	      	},
 		  	Cancel: function() {
 	  			add_category_dialog.dialog('close');
-                clear_category_form_contents();
+                clear_add_category_form_contents();
                 add_category_form.jqxValidator('hide');
 		  	}
         },
         close: function() {
-            clear_category_form_contents();
+            clear_add_category_form_contents();
         }
 	});
-    function clear_category_form_contents() {
-        var form = $('#add_category_form');
-        form.find('#name_input').val('');
-        form.find('#worth_input').val('');
+    function clear_add_category_form_contents() {
+        add_category_form.find('#name_input').val('');
+        add_category_form.find('#worth_input').val('');
     }
     ////////////////////// editing categories //////////////////////
-
+    var edit_category_dialog = $('#edit_category_dialog_box');
+    var edit_category_form = $('#edit_category_form');
+    var edit_category_form_is_validated = false;
+    edit_category_form.jqxValidator({
+        focus: false,
+        rules: [
+            { input: '#edit_category_form #name_input', message: 'Name is required', action: 'keyup, blur', rule: 'required' },
+            { input: '#edit_category_form #worth_input', message: 'Worth is required', action: 'keyup, blur', rule: 'required' },
+            { input: '#edit_category_form #worth_input', message: 'Worth must be a number', action: 'keyup', rule: 'number' },
+            {
+                input: '#edit_category_form #worth_input', message: 'Worth must be between 0 and 100',
+                    action: 'keyup', rule: function (input) {
+                        input = parseFloat(input.val());
+                        return input >= 0  && input <= 100;
+                    }
+            },
+            {
+                input: '#edit_category_form #worth_input', message: 'Worth is too large',
+                    action: 'keyup', rule: function (input) {
+                        if (input.val() === '')
+                            return false;
+                        var result = false;
+                        var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
+                        var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
+                        $.ajax({
+                            type:'GET',
+                            async: false,
+                            url: '/gradebook/course_detail/' + id + '/',
+                            contentType: 'application/x-www-form-urlencoded',
+                            data: {
+                                'get_action': 'edit_category_size_check',
+                                'original_worth': original_category_worth,
+                                'new_worth': input.val()
+                            },
+                            success: function(data) {
+                                result = data.is_valid;
+                            }
+                        });
+                        return result;
+                    }
+            }
+        ],
+        onError: function() {edit_category_form_is_validated = false;},
+        onSuccess: function() {edit_category_form_is_validated = true;}
+    });
+    var category_id;
+    var original_category_worth;
+    categories_wrapper.on('click', '#edit_category_button', function() {
+        var category_table_row = $(this).closest('.category_table_row');
+        category_id = category_table_row.attr('id').split('_').pop();
+        edit_category_form.find('#name_input').val(category_table_row.find('#category_name').text().trim());
+        original_category_worth = category_table_row.find('#category_worth').text().trim();
+        edit_category_form.find('#worth_input').val(original_category_worth);
+        edit_category_dialog.dialog('open');
+    });
+	edit_category_dialog.dialog({
+		autoOpen: false,
+		width: 350,
+        resizable: false,
+		modal: true,
+		buttons: {
+			'Edit Category': {
+                text: 'Save',
+                click: function() {
+                    edit_category_form.jqxValidator('validate');
+                    if (!edit_category_form_is_validated)
+                        return;
+                    var category_name = edit_category_form.find('#name_input').val();
+                    var category_worth = edit_category_form.find('#worth_input').val();
+                    var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
+                    var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
+                    $.ajax({
+                        type:'POST',
+                        url: '/gradebook/course_detail/' + id + '/',
+                        contentType: 'application/x-www-form-urlencoded',
+                        data: {
+                            'post_action': 'edit_category',
+                            'category_id': category_id,
+                            'category_name': category_name,
+                            'category_worth': category_worth
+                        },
+                        success: function(data) {
+                            edit_category_dialog.dialog('close');
+                            var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
+                            var category_wrapper = $('#categories_wrapper');
+                            category_wrapper.html(data_inside);
+                        }
+                    });
+                }
+	      	},
+		  	Cancel: function() {
+	  			edit_category_dialog.dialog('close');
+                edit_category_form.jqxValidator('hide');
+		  	}
+        },
+        close: function() {}
+	});
     ////////////////////// deleting categories //////////////////////
     var delete_category_dialog = $('#delete_category_dialog_box');
-    var category_id;
     var category_worth;
-
-    categories.on('click', '#delete_category_button', function() {
+    categories_wrapper.on('click', '#delete_category_button', function() {
         var category_table_row = $(this).closest('.category_table_row');
         category_id = category_table_row.attr('id').split('_').pop();
         category_worth = category_table_row.find('#category_worth').text().trim();
-        console.log(category_worth);
         delete_category_dialog.dialog('open');
     });
 	delete_category_dialog.dialog({

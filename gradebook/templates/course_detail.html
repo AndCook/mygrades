@@ -49,16 +49,29 @@
 
     {% include 'course_categories.html' with categories=categories %}
 
-    <div id='add_category_dialog_box' title='Add Category'>
+    <div id='add_category_dialog_box'>
         <form id='add_category_form'>
 
-            <h2 class='form_title'>Add Category</h2>
+            <h2 class='form_title'>Add Course</h2>
 
             <label for='name_input'></label>
             <input type='text' id='name_input' autocomplete='off' placeholder='Category Name'/>
 
             <label for='worth_input'></label>
-            <input type='text' id='worth_input' autocomplete='off'  placeholder='Category Worth in Percent'/>
+            <input type='text' id='worth_input' autocomplete='off'  placeholder='Category Worth out of 100'/>
+        </form>
+    </div>
+
+    <div id='edit_category_dialog_box'>
+        <form id='edit_category_form'>
+
+            <h2 class='form_title'>Edit Course</h2>
+
+            <label for='name_input'></label>
+            <input type='text' id='name_input' autocomplete='off' placeholder='Category Name'/>
+
+            <label for='worth_input'></label>
+            <input type='text' id='worth_input' autocomplete='off'  placeholder='Category Worth out of 100'/>
         </form>
     </div>
 
