@@ -364,3 +364,36 @@ def course_detail(request, course_id):
                                           {'categories': categories,
                                            'not_specified_category': not_specified_category},
                                           RequestContext(request))
+        if post_action == 'delete_category':
+            courses = Course.objects.filter(id=course_id)
+            if courses.__len__() == 1:
+                course = courses[0]
+                category_id = request.POST['category_id']
+                category_worth = request.POST['category_worth']
+                category = Category.objects.filter(id=category_id, course=course)
+                if category.__len__() != 1:
+                    return
+                category = category[0]
+                print '1'
+                not_specified = Category.objects.filter(name='Not Specified', course=course)
+                if not_specified.__len__() != 1:
+                    return
+                print '2'
+                not_specified = not_specified[0]
+                print category_worth
+                not_specified.worth += float(category_worth)
+                print '4'
+                category.delete()
+                not_specified.save()
+
+                categories = Category.objects.filter(course=course)
+                not_specified_category = categories.filter(name='Not Specified')
+                if not_specified_category.__len__() != 1:
+                    return
+                not_specified_category = not_specified_category[0]
+                categories = categories.exclude(name='Not Specified')
+
+                return render_to_response('course_categories.html',
+                                          {'categories': categories,
+                                           'not_specified_category': not_specified_category},
+                                          RequestContext(request))

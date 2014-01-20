@@ -5,6 +5,8 @@
   width: 95%;
   margin: auto; }
 
-#add_category_button:hover {
-  text-decoration: underline;
-  cursor: pointer; }
+#add_category_button, #delete_category_button, #edit_category_button {
+  color: blue; }
+  #add_category_button:hover, #delete_category_button:hover, #edit_category_button:hover {
+    text-decoration: underline;
+    cursor: pointer; }

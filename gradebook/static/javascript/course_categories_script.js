@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    var categories = $('#categories_wrapper');
     ////////////////////// adding categories //////////////////////
     var add_category_dialog = $('#add_category_dialog_box');
     var add_category_form = $('#add_category_form');
@@ -45,7 +46,7 @@ $(document).ready(function() {
             onSuccess: function() {add_category_is_validated = true;}
         });
 
-    $('#categories_wrapper').on('click', '#add_category_button', function() {
+    categories.on('click', '#add_category_button', function() {
         add_category_dialog.dialog('open');
     });
 	add_category_dialog.dialog({
@@ -102,4 +103,50 @@ $(document).ready(function() {
     ////////////////////// editing categories //////////////////////
 
     ////////////////////// deleting categories //////////////////////
+    var delete_category_dialog = $('#delete_category_dialog_box');
+    var category_id;
+    var category_worth;
+
+    categories.on('click', '#delete_category_button', function() {
+        var category_table_row = $(this).closest('.category_table_row');
+        category_id = category_table_row.attr('id').split('_').pop();
+        category_worth = category_table_row.find('#category_worth').text().trim();
+        console.log(category_worth);
+        delete_category_dialog.dialog('open');
+    });
+	delete_category_dialog.dialog({
+		autoOpen: false,
+		width: 350,
+        resizable: false,
+		modal: true,
+		buttons: {
+			'Delete': {
+                text: 'Delete',
+                click: function() {
+                    var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
+                    var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
+                    $.ajax({
+                        type:'POST',
+                        url: '/gradebook/course_detail/' + id + '/',
+                        contentType: 'application/x-www-form-urlencoded',
+                        data: {
+                            'post_action': 'delete_category',
+                            'category_id': category_id,
+                            'category_worth': category_worth
+                        },
+                        success: function(data) {
+                            delete_category_dialog.dialog('close');
+                            var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
+                            var category_wrapper = $('#categories_wrapper');
+                            category_wrapper.html(data_inside);
+                        }
+                    });
+                }
+	      	},
+		  	Cancel: function() {
+	  			delete_category_dialog.dialog('close');
+		  	}
+        },
+        close: function() {}
+	});
 });

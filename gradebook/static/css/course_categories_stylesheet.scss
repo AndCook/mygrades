@@ -7,7 +7,8 @@
     margin: auto;
 }
 
-#add_category_button {
+#add_category_button, #delete_category_button, #edit_category_button {
+    color: blue;
     &:hover {
         text-decoration: underline;
         cursor: pointer;
