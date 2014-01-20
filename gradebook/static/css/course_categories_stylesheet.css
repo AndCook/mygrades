@@ -5,8 +5,29 @@
   width: 95%;
   margin: auto; }
 
-#add_category_button, #delete_category_button, #edit_category_button {
-  color: blue; }
-  #add_category_button:hover, #delete_category_button:hover, #edit_category_button:hover {
-    text-decoration: underline;
-    cursor: pointer; }
+#category_first_row {
+  background-color: #890000;
+  border: 1px solid #890000; }
+  #category_first_row > td:first-child {
+    border-top-left-radius: 5px; }
+  #category_first_row > td:last-child {
+    border-top-right-radius: 5px; }
+
+#category_last_row {
+  border: 1px solid; }
+  #category_last_row > td:first-child {
+    border-bottom-left-radius: 5px; }
+  #category_last_row > td:last-child {
+    border-bottom-right-radius: 5px; }
+
+.category_table_row {
+  color: #f9fcef;
+  line-height: 1em; }
+  .category_table_row td {
+    padding: 4px; }
+
+.dark_row {
+  background-color: #2b405c; }
+
+.light_row {
+  background-color: #576d7f; }

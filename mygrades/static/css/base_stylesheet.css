@@ -59,6 +59,14 @@ h1 {
     background-color: #576d7f;
     cursor: pointer; }
 
+.mini_link {
+  margin: 0;
+  color: darkturquoise;
+  font-size: .6em; }
+  .mini_link:hover {
+    text-decoration: underline;
+    cursor: pointer; }
+
 #account_button {
   height: 45px; }
   #account_button:hover {

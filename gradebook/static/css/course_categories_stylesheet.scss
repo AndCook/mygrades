@@ -1,3 +1,5 @@
+@import '../../../mygrades/static/css/global_variables.scss';
+
 #categories_table {
     width: 100%;
 }
@@ -7,10 +9,41 @@
     margin: auto;
 }
 
-#add_category_button, #delete_category_button, #edit_category_button {
-    color: blue;
-    &:hover {
-        text-decoration: underline;
-        cursor: pointer;
+#category_first_row {
+    background-color: $dark_red;
+
+    border: 1px solid $dark_red;
+    > td:first-child {
+        border-top-left-radius: 5px;
     }
+    > td:last-child {
+        border-top-right-radius: 5px;
+    }
+}
+
+#category_last_row {
+    border: 1px solid;
+    > td:first-child {
+        border-bottom-left-radius: 5px;
+    }
+    > td:last-child {
+        border-bottom-right-radius: 5px;
+    }
+}
+
+.category_table_row {
+    color: $white_text;
+    line-height: 1em;
+
+    td {
+        padding: 4px;
+    }
+}
+
+.dark_row {
+    background-color: $dark_shade;
+}
+
+.light_row {
+    background-color: $medium_shade;
 }

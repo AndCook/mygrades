@@ -60,14 +60,6 @@
 .hidden_in_s_s_inline, .hidden_in_s_s_block, .hidden_in_s_s_table_row, .hidden_in_s_s_table_cell {
   display: none; }
 
-.mini_link {
-  margin: 0;
-  color: darkturquoise;
-  font-size: .6em; }
-  .mini_link:hover {
-    text-decoration: underline;
-    cursor: pointer; }
-
 #add_semester_button {
   min-width: 330px;
   width: calc(31% - 10px);

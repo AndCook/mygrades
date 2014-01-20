@@ -148,8 +148,8 @@ $(document).ready(function() {
     categories_wrapper.on('click', '#edit_category_button', function() {
         var category_table_row = $(this).closest('.category_table_row');
         category_id = category_table_row.attr('id').split('_').pop();
-        edit_category_form.find('#name_input').val(category_table_row.find('#category_name').text().trim());
-        original_category_worth = category_table_row.find('#category_worth').text().trim();
+        edit_category_form.find('#name_input').val(category_table_row.find('#category_name').text().split(' ')[0]);
+        original_category_worth = category_table_row.find('#category_worth').text().split(' ')[0];
         edit_category_form.find('#worth_input').val(original_category_worth);
         edit_category_dialog.dialog('open');
     });

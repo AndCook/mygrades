@@ -79,17 +79,6 @@
     display: none;
 }
 
-.mini_link  {
-    margin: 0;
-    color: $link_color;
-    font-size: .6em;
-
-    &:hover {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-}
-
 #add_semester_button {
     min-width: $semester_square_width - 10px;
     width: calc(31% - 10px);
