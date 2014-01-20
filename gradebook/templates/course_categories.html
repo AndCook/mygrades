@@ -1,41 +1,81 @@
-<table id='categories_table'>
-    <thead>
-        <tr>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-        </tr>
-        <tr>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-        </tr>
-        <tr>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-        </tr>
-        <tr>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-            <td>asdf</td>
-        </tr>
-    </tbody>
-</table>
+<div id='categories_wrapper'>
+    <table id='categories_table'>
+        <thead>
+            <tr>
+                <td colspan='5'><h3>Categories</h3></td>
+            </tr>
+            <tr>
+                <td>Category</td>
+                <td>Worth</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.name }}</td>
+                    <td>{{ category.worth }}</td>
+                    <td id='edit_category_button'>Edit</td>
+                    <td id='delete_category_button'>Delete</td>
+                </tr>
+            {% endfor %}
+            {% if not_specified_category.worth != 0 %}
+                <tr>
+                    <td>Not Specified</td>
+                    <td>{{ not_specified_category.worth }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td id='add_category_button'>+ add category</td>
+            </tr>
+            {% comment %}<tr>
+                <td>Tests</td>
+                <td>20%</td>
+                <td>280/300</td>
+                <td>93.33%</td>
+                <td>18.67%</td>
+            </tr>
+            <tr>
+                <td>Quizzes</td>
+                <td>10%</td>
+                <td>42/60</td>
+                <td>70%</td>
+                <td>7%</td>
+            </tr>
+            <tr>
+                <td>Homework</td>
+                <td>10%</td>
+                <td>1345/1500</td>
+                <td>89.67%</td>
+                <td>8.97%</td>
+            </tr>
+            <tr>
+                <td>Final</td>
+                <td>40%</td>
+                <td>3/80</td>
+                <td>3.75%</td>
+                <td>1.5%</td>
+            </tr>
+            <tr>
+                <td>Research Paper</td>
+                <td>15%</td>
+                <td>100/100</td>
+                <td>100%</td>
+                <td>15%</td>
+            </tr>
+            <tr>
+                <td>Presentation</td>
+                <td>5%</td>
+                <td>0/16</td>
+                <td>0%</td>
+                <td>0%</td>
+            </tr>
+            <tr>
+                <td>Total</td>
+                <td>100%</td>
+                <td>1770/2056</td>
+                <td></td>
+                <td>51.14%</td>
+            </tr>{% endcomment %}
+        </tbody>
+    </table>
+</div>

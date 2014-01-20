@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response
-from gradebook.models import Semester, SemesterForm, Course, CourseForm
+from gradebook.models import Semester, SemesterForm, Course, CourseForm, Category
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
@@ -21,6 +21,9 @@ def overview(request):
         #    recount_hours(semester)
         #for user in User.objects.all():  # import User from account.models
         #    recalculate_cumulative_gpa(user)
+        #for course in Course.objects.all():
+        #    category = Category(name='Not Specified', worth=100, course=course)
+        #    category.save()
 
         semesters = Semester.objects.filter(user=request.user)
         semesters = semesters.order_by('start_date')
@@ -95,6 +98,8 @@ def overview(request):
                                 instructor=course_instructor, hours=course_hours,
                                 semester=semesters[0])
                 course.save()
+                category = Category(name='Not Specified', worth=100, course=course)
+                category.save()
                 course.semester.hours_planned += course.hours
                 course.semester.save()
                 course.semester.courses = Course.objects.filter(semester=course.semester)
@@ -246,6 +251,14 @@ def current_courses(request):
                                   RequestContext(request))
 
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
 @csrf_protect
 @login_required
 def course_detail(request, course_id):
@@ -253,6 +266,19 @@ def course_detail(request, course_id):
         return HttpResponseRedirect('/account/settings/')
 
     if request.method == 'GET':
+        if request.is_ajax():
+            get_action = request.GET['get_action']
+            if get_action == 'category_size_check':
+                courses = Course.objects.filter(id=course_id)
+                if courses.__len__() == 1:
+                    course = courses[0]
+                    not_specified = Category.objects.filter(name='Not Specified', course=course)
+                    if not_specified.__len__() != 1:
+                        return
+                    not_specified_worth = not_specified[0].worth
+                    worth = request.GET['worth']
+                    is_valid = is_number(worth) and float(worth) <= not_specified_worth
+                    return HttpResponse(json.dumps({'is_valid': is_valid}), mimetype='application/json')
         courses = Course.objects.filter(id=course_id)
         # make sure course_id is valid
         if courses.__len__() != 1:
@@ -262,6 +288,13 @@ def course_detail(request, course_id):
         if request.user != course.semester.user:
             return Http404()
 
+        categories = Category.objects.filter(course=course)
+        not_specified_category = categories.filter(name='Not Specified')
+        if not_specified_category.__len__() != 1:
+            return Http404()
+        not_specified_category = not_specified_category[0]
+        categories = categories.exclude(name='Not Specified')
+
         course.semester.courses = Course.objects.filter(semester=course.semester)
         semesters = Semester.objects.filter(user=request.user)
         semesters = semesters.exclude(id=course.semester.id)
@@ -269,6 +302,8 @@ def course_detail(request, course_id):
             semester.courses = Course.objects.filter(semester=semester)
         return render_to_response('course_detail.html',
                                   {'course': course,
+                                   'categories': categories,
+                                   'not_specified_category': not_specified_category,
                                    'all_other_semesters': semesters,
                                    'course_form': CourseForm()},
                                   RequestContext(request))
@@ -303,3 +338,29 @@ def course_detail(request, course_id):
                 course.save()
                 recalculate_cumulative_gpa(request.user)
             return HttpResponse(json.dumps({}), mimetype='application/json')
+        if post_action == 'add_category':
+            courses = Course.objects.filter(id=course_id)
+            if courses.__len__() == 1:
+                course = courses[0]
+                category_name = request.POST['category_name']
+                category_worth = request.POST['category_worth']
+                category = Category(name=category_name, worth=category_worth, course=course)
+                not_specified = Category.objects.filter(name='Not Specified', course=course)
+                if not_specified.__len__() != 1:
+                    return
+                not_specified = not_specified[0]
+                not_specified.worth -= float(category_worth)
+                category.save()
+                not_specified.save()
+
+                categories = Category.objects.filter(course=course)
+                not_specified_category = categories.filter(name='Not Specified')
+                if not_specified_category.__len__() != 1:
+                    return
+                not_specified_category = not_specified_category[0]
+                categories = categories.exclude(name='Not Specified')
+
+                return render_to_response('course_categories.html',
+                                          {'categories': categories,
+                                           'not_specified_category': not_specified_category},
+                                          RequestContext(request))

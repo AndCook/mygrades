@@ -28,7 +28,6 @@ $(document).ready(function() {
                             report_final_grade_dialog.dialog('close');
                             $('#final_grade').text(final_grade);
                             var report_final_grade_button = $('#report_final_grade').find('.ui-button-text');
-                            console.log(final_grade);
                             if (final_grade === '#')
                                 report_final_grade_button.text('Report Final Grade');
                             else

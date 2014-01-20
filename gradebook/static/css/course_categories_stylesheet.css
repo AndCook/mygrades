@@ -1,3 +1,10 @@
 #categories_table {
+  width: 100%; }
+
+#categories_wrapper {
   width: 95%;
-  background-color: blue; }
+  margin: auto; }
+
+#add_category_button:hover {
+  text-decoration: underline;
+  cursor: pointer; }

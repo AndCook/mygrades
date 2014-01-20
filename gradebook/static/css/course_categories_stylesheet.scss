@@ -1,5 +1,15 @@
 #categories_table {
-    width: 95%;
-    background-color: blue;
+    width: 100%;
+}
 
+#categories_wrapper {
+    width: 95%;
+    margin: auto;
+}
+
+#add_category_button {
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
 }

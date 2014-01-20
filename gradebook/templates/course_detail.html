@@ -10,6 +10,7 @@
     <link rel='stylesheet' type='text/css' href='/static/css/course_detail_stylesheet.css' />
     <link rel='stylesheet' type='text/css' href='/static/css/course_categories_stylesheet.css' />
     <script src='/static/javascript/course_detail_script.js'></script>
+    <script src='/static/javascript/course_categories_script.js'></script>
 
     <script type='text/javascript' src='/static/javascript/jquery-tablesorter.js'></script>
 {% endblock %}
@@ -46,6 +47,19 @@
         </form>
     </div>
 
-    {% include 'course_categories.html' with course=course %}
+    {% include 'course_categories.html' with categories=categories %}
+
+    <div id='add_category_dialog_box' title='Add Category'>
+        <form id='add_category_form'>
+
+            <h2 class='form_title'>Add Category</h2>
+
+            <label for='name_input'></label>
+            <input type='text' id='name_input' autocomplete='off' placeholder='Category Name'/>
+
+            <label for='worth_input'></label>
+            <input type='text' id='worth_input' autocomplete='off'  placeholder='Category Worth in Percent'/>
+        </form>
+    </div>
 
 {% endblock %}
