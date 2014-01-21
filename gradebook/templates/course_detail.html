@@ -50,7 +50,7 @@
         </form>
     </div>
 
-    {% include 'course_categories_assignments.html' with categories=categories  not_specified_category=not_specified_category %}
+    {% include 'course_categories_assignments.html' %}
 
     <div id='add_category_dialog_box'>
         <form id='add_category_form'>
@@ -95,7 +95,7 @@
             <label for='name_input'></label>
             <input type='text' id='name_input' autocomplete='off' placeholder='Assignment Name'/>
 
-            <p style='display: inline-block; margin: 0 0 0 10%; width: 75px; vertical-align: middle' >Category: </p>
+            <p style='display: inline-block; margin: 0 0 0 10%; width: 75px; vertical-align: middle'>Category: </p>
 
             <div id='add_category_input' style='margin: auto; display: inline-block; vertical-align: middle'>
                 <div id='add_category_tree'>
@@ -125,13 +125,13 @@
             <label for='name_input'></label>
             <input type='text' id='name_input' autocomplete='off' placeholder='Assignment Name'/>
 
-            <p style='display: inline-block; margin: 0 0 0 10%; vertical-align: middle'>Category: </p>
+            <p style='display: inline-block; margin: 0 0 0 10%; width: 75px; vertical-align: middle'>Category: </p>
 
             <div id='edit_category_input' style='margin: auto; display: inline-block; vertical-align: middle'>
                 <div id='edit_category_tree'>
                     <ul>
                         {% for category in categories %}
-                            <li id='{{ category_name }}'><div id='category_{{ category_id }}'>{{ category_name }}</div></li>
+                            <li id='{{ category.name }}'><div id='category_{{ category.id }}'>{{ category.name }}</div></li>
                         {% endfor %}
                     </ul>
                 </div>

@@ -223,7 +223,7 @@ $(document).ready(function() {
                         success: function(data) {
                             delete_category_dialog.dialog('close');
                             var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
-                            categories_wrapper.html(data_inside);
+                            categories_assignments_wrapper.html(data_inside);
                         }
                     });
                 }

@@ -5,7 +5,7 @@
                 <td>Category</td>
                 <td>Worth</td>
                 <td>Points Earned / <br>Total Points</td>
-                <td>Percentage<br>of category</td>
+                <td>Percentage<br>of Category</td>
                 <td>Weighted <br>Percentage</td>
                 <td><!-- edit --></td>
                 <td><!-- delete --></td>
@@ -34,12 +34,26 @@
                         <p class='mini_link' id='delete_category_button'>delete</p>
                     </td>
                 </tr>
+                {% if category.actual_total_points != category.total_points %}
+                    <tr class='categories_table_row {{ rowcolors }}'>
+                        <td colspan='2' style='text-align: right'>minimum</td>
+                        <td>{{ category.actual_points_earned|floatformat:'-2' }} / {{ category.total_points|floatformat:'-2' }}</td>
+                        <td>{{ category.min_category_percentage|floatformat:'-2' }} %</td>
+                        <td colspan='3'>{{ category.min_category_weighted_percentage|floatformat:'-2' }} %</td>
+                    </tr>
+                    <tr class='categories_table_row {{ rowcolors }}'>
+                        <td colspan='2' style='text-align: right'>maximum</td>
+                        <td>{{ category.max_points_earned|floatformat:'-2' }} / {{ category.total_points|floatformat:'-2' }}</td>
+                        <td>{{ category.max_category_percentage|floatformat:'-2' }} %</td>
+                        <td colspan='3'>{{ category.max_category_weighted_percentage|floatformat:'-2' }} %</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
-            {% if not_specified_category.worth != 0 %}
+            {% if course.not_specified_worth != 0 %}
                 {% cycle rowcolors %}
                 <tr class='categories_table_row {{ rowcolors }}'>
                     <td>Not Specified</td>
-                    <td colspan='6'>{{ not_specified_category.worth|floatformat:'-2' }} %</td>
+                    <td colspan='6'>{{ course.not_specified_worth|floatformat:'-2' }} %</td>
                 </tr>
             {% endif %}
             {% cycle rowcolors %}

@@ -96,6 +96,8 @@ class Course(models.Model):
                                    default=NONE_YET)
     gpa_points = models.FloatField(default=0)
 
+    not_specified_worth = models.FloatField(default=100)
+
     def __unicode__(self):
         return self.number + ' - ' + self.name
 
