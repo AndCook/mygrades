@@ -1,32 +1,52 @@
 <div id='categories_wrapper'>
     <table id='categories_table' cellspacing='0'>
         <thead>
-            <tr class='category_table_row' id='category_first_row'>
+            <tr class='categories_table_row' id='categories_table_first_row'>
                 <td>Category</td>
-                <td colspan='3'>Worth</td>
+                <td>Worth</td>
+                <td>Points Earned / <br>Total Points</td>
+                <td>Percentage<br>of category</td>
+                <td>Weighted <br>Percentage</td>
+                <td><!-- edit --></td>
+                <td><!-- delete --></td>
             </tr>
         </thead>
         <tbody>
             {% cycle 'dark_row' 'light_row' as rowcolors silent%}
             {% for category in categories %}
                 {% cycle rowcolors %}
-                <tr class='category_table_row {{ rowcolors }}' id='category_{{ category.id }}'>
+                <tr class='categories_table_row {{ rowcolors }}' id='category_{{ category.id }}'>
                     <td id='category_name'>{{ category.name }}</td>
                     <td id='category_worth'>{{ category.worth|floatformat:'-2' }} %</td>
-                    <td class='mini_link' id='edit_category_button'>edit</td>
-                    <td class='mini_link' id='delete_category_button'>delete</td>
+                    <td>{{ category.actual_points_earned|floatformat:'-2' }} / {{ category.actual_total_points|floatformat:'-2' }}</td>
+                    <td>
+                        {% if category.actual_points_earned == 0 %}--
+                        {% else %}{{ category.category_percentage|floatformat:'-2' }} %{% endif %}
+                    </td>
+                    <td>
+                        {% if category.actual_points_earned == 0 %}--
+                        {% else %}{{ category.category_weighted_percentage|floatformat:'-2' }} %{% endif %}
+                    </td>
+                    <td>
+                        <p class='mini_link' id='edit_category_button'>edit</p>
+                    </td>
+                    <td>
+                        <p class='mini_link' id='delete_category_button'>delete</p>
+                    </td>
                 </tr>
             {% endfor %}
             {% if not_specified_category.worth != 0 %}
                 {% cycle rowcolors %}
-                <tr class='category_table_row {{ rowcolors }}'>
+                <tr class='categories_table_row {{ rowcolors }}'>
                     <td>Not Specified</td>
-                    <td colspan='3'>{{ not_specified_category.worth|floatformat:'-2' }} %</td>
+                    <td colspan='6'>{{ not_specified_category.worth|floatformat:'-2' }} %</td>
                 </tr>
             {% endif %}
             {% cycle rowcolors %}
-            <tr class='category_table_row {{ rowcolors }}' id='category_last_row'>
-                <td colspan='4' class='mini_link' id='add_category_button'>+ add category</td>
+            <tr class='categories_table_row {{ rowcolors }}' id='categories_table_last_row'>
+                <td  colspan='7'>
+                    <p class='mini_link' id='add_category_button'>+ add category</p>
+                </td>
             </tr>
         </tbody>
     </table>

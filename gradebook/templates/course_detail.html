@@ -6,13 +6,16 @@
     <script type="text/javascript" src="/static/jqwidgets/jqxbuttons.js"></script>
     <script type="text/javascript" src="/static/jqwidgets/jqxtree.js"></script>
     <script type="text/javascript" src="/static/jqwidgets/jqxpanel.js"></script>
+    <script type="text/javascript" src="/static/jqwidgets/jqxcheckbox.js"></script>
 
     <link rel='stylesheet' type='text/css' href='/static/css/course_detail_stylesheet.css' />
     <link rel='stylesheet' type='text/css' href='/static/css/course_categories_stylesheet.css' />
+    <link rel='stylesheet' type='text/css' href='/static/css/course_assignments_stylesheet.css' />
     <script src='/static/javascript/course_detail_script.js'></script>
     <script src='/static/javascript/course_categories_script.js'></script>
+    <script src='/static/javascript/course_assignments_script.js'></script>
 
-    <script type='text/javascript' src='/static/javascript/jquery-tablesorter.js'></script>
+    <!--script type='text/javascript' src='/static/javascript/jquery-tablesorter.js'></script-->
 {% endblock %}
 
 {% block base_content %}
@@ -47,7 +50,7 @@
         </form>
     </div>
 
-    {% include 'course_categories.html' with categories=categories %}
+    {% include 'course_categories_assignments.html' with categories=categories  not_specified_category=not_specified_category %}
 
     <div id='add_category_dialog_box'>
         <form id='add_category_form'>
@@ -80,6 +83,75 @@
             <h2 class='form_title'>Delete Category</h2>
             <p>
                 Are you sure you want to delete this category?
+            </p>
+        </form>
+    </div>
+
+    <div id='add_assignment_dialog_box'>
+        <form id='add_assignment_form'>
+
+            <h2 class='form_title'>Add Assignment</h2>
+
+            <label for='name_input'></label>
+            <input type='text' id='name_input' autocomplete='off' placeholder='Assignment Name'/>
+
+            <p style='display: inline-block; margin: 0 0 0 10%; width: 75px; vertical-align: middle' >Category: </p>
+
+            <div id='add_category_input' style='margin: auto; display: inline-block; vertical-align: middle'>
+                <div id='add_category_tree'>
+                    <ul>
+                        {% for category in categories %}
+                            <li><div id='category_{{ category.id }}'>{{ category.name }}</div></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div id='grade_unknown_input' style='margin: 10px auto 0 10%'>Grade is unknown</div>
+
+            <label for='points_earned_input'></label>
+            <input type='text' id='points_earned_input' autocomplete='off'  placeholder='Points Earned'/>
+
+            <label for='total_points_input'></label>
+            <input type='text' id='total_points_input' autocomplete='off'  placeholder='Total Possible Points'/>
+        </form>
+    </div>
+
+    <div id='edit_assignment_dialog_box'>
+        <form id='edit_assignment_form'>
+
+            <h2 class='form_title'>Edit Assignment</h2>
+
+            <label for='name_input'></label>
+            <input type='text' id='name_input' autocomplete='off' placeholder='Assignment Name'/>
+
+            <p style='display: inline-block; margin: 0 0 0 10%; vertical-align: middle'>Category: </p>
+
+            <div id='edit_category_input' style='margin: auto; display: inline-block; vertical-align: middle'>
+                <div id='edit_category_tree'>
+                    <ul>
+                        {% for category in categories %}
+                            <li id='{{ category_name }}'><div id='category_{{ category_id }}'>{{ category_name }}</div></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div id='grade_unknown_input' style='margin: 10px auto 0 10%'>Grade is unknown</div>
+
+            <label for='points_earned_input'></label>
+            <input type='text' id='points_earned_input' autocomplete='off'  placeholder='Points Earned'/>
+
+            <label for='total_points_input'></label>
+            <input type='text' id='total_points_input' autocomplete='off'  placeholder='Total Possible Points'/>
+        </form>
+    </div>
+
+    <div id='delete_assignment_dialog_box' title='Delete Assignment'>
+        <form id='delete_assignment_form'>
+            <h2 class='form_title'>Delete Assignment</h2>
+            <p>
+                Are you sure you want to delete this assignment?
             </p>
         </form>
     </div>

@@ -66,7 +66,6 @@ $(document).ready(function() {
 	      	},
 		  	Cancel: function() {
 	  			add_course_dialog.dialog('close');
-                clear_course_form_contents();
 		  	}
         },
         close: function() {
@@ -173,7 +172,6 @@ $(document).ready(function() {
 	      	},
 		  	Cancel: function() {
 	  			edit_course_dialog.dialog('close');
-                clear_course_form_contents();
 		  	}
         },
         close: function() {

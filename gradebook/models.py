@@ -1,5 +1,4 @@
 from django.db import models
-from decimal import Decimal
 from django.contrib.auth.models import User
 from django import forms
 import datetime
@@ -98,7 +97,7 @@ class Course(models.Model):
     gpa_points = models.FloatField(default=0)
 
     def __unicode__(self):
-        return self.number + " - " + self.name
+        return self.number + ' - ' + self.name
 
 
 class CourseForm(forms.ModelForm):
@@ -117,24 +116,62 @@ class Category(models.Model):
     name = models.CharField(max_length=200)
     worth = models.FloatField()
     course = models.ForeignKey(Course)
+    
+    actual_points_earned = models.FloatField(default=0)
+    actual_total_points = models.FloatField(default=0)
+    category_percentage = models.FloatField(default=0)
+    category_weighted_percentage = models.FloatField(default=0)
+    
+    max_points_earned = models.FloatField(default=0)
+    total_points = models.FloatField(default=0)
+    min_category_percentage = models.FloatField(default=0)
+    max_category_percentage = models.FloatField(default=0)
+    min_category_weighted_percentage = models.FloatField(default=0)
+    max_category_weighted_percentage = models.FloatField(default=0)
+    
+    def save(self, *args, **kwargs):
+        # actual
+        if self.actual_total_points == 0:
+            self.category_percentage = 0
+            self.category_weighted_percentage = 0
+        else:
+            self.category_percentage = self.actual_points_earned / self.actual_total_points * 100
+            self.category_weighted_percentage = self.category_percentage * self.worth / 100
+            
+        # minimum and maximum
+        if self.total_points == 0:
+            self.min_category_percentage = 0
+            self.max_category_percentage = 0
+            self.min_category_weighted_percentage = 0
+            self.max_category_weighted_percentage = 0
+        else:
+            self.min_category_percentage = self.actual_points_earned / self.total_points * 100
+            self.max_category_percentage = self.max_points_earned / self.total_points * 100
+            self.min_category_weighted_percentage = self.min_category_percentage * self.worth / 100
+            self.max_category_weighted_percentage = self.max_category_percentage * self.worth / 100
+
+        super(Category, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.course.number + " - " + self.name + " - %" + str(self.worth)
+        return self.name
 
 
 class Assignment(models.Model):
     name = models.CharField(max_length=200)
-    awardedPoints = models.DecimalField(max_digits=5, decimal_places=2)
-    possiblePoints = models.DecimalField(max_digits=5, decimal_places=2)
-    percentage = models.DecimalField(max_digits=5, decimal_places=2, editable=False)
     category = models.ForeignKey(Category)
+    
+    grade_unknown = models.BooleanField(default=False)
+    
+    points_earned = models.FloatField(default=0)
+    total_points = models.FloatField(default=0)
+    percentage = models.FloatField(default=0)
 
     def save(self, *args, **kwargs):
         #calculate assignment percentage
-        if self.possiblePoints == 0:
+        if self.total_points == 0:
             self.percentage = 0
         else:
-            self.percentage = self.awardedPoints / self.possiblePoints * Decimal(100)
+            self.percentage = self.points_earned / self.total_points * 100
 
         super(Assignment, self).save(*args, **kwargs)
 

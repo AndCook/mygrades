@@ -13,11 +13,17 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'worth', 'course']
+    list_display = ['name', 'worth', 'course',
+                    'actual_points_earned', 'actual_total_points',
+                    'category_percentage', 'category_weighted_percentage',
+                    'max_points_earned', 'total_points',
+                    'min_category_percentage', 'max_category_percentage',
+                    'min_category_weighted_percentage', 'max_category_weighted_percentage']
 
 
 class AssignmentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'awardedPoints', 'possiblePoints', 'percentage', 'category']
+    list_display = ['name', 'category', 'grade_unknown',
+                    'points_earned', 'total_points', 'percentage']
 
 
 admin.site.register(Semester, SemesterAdmin)

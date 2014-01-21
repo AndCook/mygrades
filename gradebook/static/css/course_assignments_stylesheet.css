@@ -1,29 +1,29 @@
-#categories_table {
+#assignments_table {
   width: 100%; }
 
-#categories_wrapper {
+#assignments_wrapper {
   width: 95%;
   margin: .5em auto; }
 
-#categories_table_first_row {
+#assignments_table_first_row {
   background-color: #890000;
   border: 1px solid #890000; }
-  #categories_table_first_row > td:first-child {
+  #assignments_table_first_row > td:first-child {
     border-top-left-radius: 5px; }
-  #categories_table_first_row > td:last-child {
+  #assignments_table_first_row > td:last-child {
     border-top-right-radius: 5px; }
 
-#categories_table_last_row {
+#assignments_table_last_row {
   border: 1px solid; }
-  #categories_table_last_row > td:first-child {
+  #assignments_table_last_row > td:first-child {
     border-bottom-left-radius: 5px; }
-  #categories_table_last_row > td:last-child {
+  #assignments_table_last_row > td:last-child {
     border-bottom-right-radius: 5px; }
 
-.categories_table_row {
+.assignments_table_row {
   color: #f9fcef;
   line-height: 1em; }
-  .categories_table_row td {
+  .assignments_table_row td {
     padding: 4px; }
 
 .dark_row {

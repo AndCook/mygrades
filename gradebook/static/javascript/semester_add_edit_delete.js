@@ -111,8 +111,7 @@ $(document).ready(function() {
                 }
 	      	},
 		  	Cancel: function() {
-	  			add_semester_dialog.dialog('close');
-                reset_add_semester_form();
+	  			add_semester_dialog.dialog('close')
 		  	}
         },
         close: function() {
@@ -179,7 +178,6 @@ $(document).ready(function() {
 	      	},
 		  	Cancel: function() {
 	  			rename_semester_dialog.dialog('close');
-                $('#rename_semester_form').find('#id_name').val('');
 		  	}
         },
         close: function() {
@@ -322,7 +320,6 @@ $(document).ready(function() {
 	      	},
 		  	Cancel: function() {
 	  			change_dates_dialog.dialog('close');
-                reset_change_dates_form();
 		  	}
         },
         close: function() {

@@ -1,15 +1,15 @@
 @import '../../../mygrades/static/css/global_variables.scss';
 
-#categories_table {
+#assignments_table {
     width: 100%;
 }
 
-#categories_wrapper {
+#assignments_wrapper {
     width: 95%;
     margin: .5em auto;
 }
 
-#categories_table_first_row {
+#assignments_table_first_row {
     background-color: $dark_red;
 
     border: 1px solid $dark_red;
@@ -21,7 +21,7 @@
     }
 }
 
-#categories_table_last_row {
+#assignments_table_last_row {
     border: 1px solid;
     > td:first-child {
         border-bottom-left-radius: 5px;
@@ -31,7 +31,7 @@
     }
 }
 
-.categories_table_row {
+.assignments_table_row {
     color: $white_text;
     line-height: 1em;
 

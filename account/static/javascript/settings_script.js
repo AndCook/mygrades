@@ -14,10 +14,10 @@ $(document).ready(function() {
     change_form.jqxValidator({
         focus: false,
         rules: [
-            { input: '#change_settings_form #id_email', message: 'Invalid e-mail address', action: 'keyup', rule: 'email' },
+            { input: '#change_settings_form #id_email', message: 'Invalid e-mail address', action: 'blur', rule: 'email' },
             {
                 input: '#change_settings_form #id_email', message: 'An account is already associated\nwith this email address',
-                    action: 'keyup', rule: function (input) {
+                    action: 'blur', rule: function (input) {
                         var result = false;
                         $.ajax({
                             type:'GET',

@@ -1,0 +1,43 @@
+<div id='assignments_wrapper'>
+    <table id='assignments_table' cellspacing='0'>
+        <thead>
+            <tr class='assignments_table_row' id='assignments_table_first_row'>
+                <td>Assignment</td>
+                <td>Category</td>
+                <td>Points Earned / Points Possible</td>
+                <td colspan='3'>Percentage</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% cycle 'dark_row' 'light_row' as rowcolors silent%}
+            {% for category in categories %}
+                {% for assignment in category.assignments %}
+                    {% cycle rowcolors %}
+                    <tr class='assignments_table_row {{ rowcolors }}' id='assignment_{{ assignment.id }}'>
+                        <td id='assignment_name'>{{ assignment.name }}</td>
+                        <td id='assignment_category'>{{ assignment.category }}</td>
+                        <td id='assignment_points'>
+                            {% if assignment.grade_unknown %}?
+                            {% else %}{{ assignment.points_earned|floatformat:'-2' }}{% endif %} / {{ assignment.total_points|floatformat:'-2' }}
+                        </td>
+                        <td>
+                            {% if assignment.grade_unknown %}--
+                            {% else %}{{ assignment.percentage|floatformat:'-2' }} %{% endif %}</td>
+                        <td>
+                            <p class='mini_link' id='edit_assignment_button'>edit</p>
+                        </td>
+                        <td>
+                            <p class='mini_link' id='delete_assignment_button'>delete</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            {% cycle rowcolors %}
+            <tr class='assignments_table_row {{ rowcolors }}' id='assignments_table_last_row'>
+                <td colspan='6'>
+                    <p class='mini_link' id='add_assignment_button'>+ add assignment</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
