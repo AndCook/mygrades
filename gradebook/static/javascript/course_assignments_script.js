@@ -21,7 +21,8 @@ $(document).ready(function() {
             add_points_earned_input.prop('disabled', false);
         });
     var add_category_input = $('#add_category_input');
-    var add_category_tree = $('#add_category_tree');
+    var add_category_tree = add_category_input.find('#category_tree');
+    // add additional identifying id
     add_category_input.jqxDropDownButton({ width: 185, height: 25 });
     add_category_tree.on('select', function (event) {
         var args = event.args;
@@ -141,7 +142,7 @@ $(document).ready(function() {
             edit_points_earned_input.prop('disabled', false);
         });
     var edit_category_input = $('#edit_category_input');
-    var edit_category_tree = $('#edit_category_tree');
+    var edit_category_tree = edit_category_input.find('#category_tree');
     edit_category_input.jqxDropDownButton({ width: 185, height: 25 });
     edit_category_tree.on('select', function (event) {
         var args = event.args;

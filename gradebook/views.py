@@ -281,6 +281,14 @@ def course_detail(request, course_id):
                     is_valid = is_number(original_worth) and is_number(new_worth) and \
                         float(new_worth) <= float(original_worth) + course.not_specified_worth
                     return HttpResponse(json.dumps({'is_valid': is_valid}), mimetype='application/json')
+            if get_action == 'get_category_tree':
+                courses = Course.objects.filter(id=course_id)
+                if courses.__len__() == 1:
+                    course = courses[0]
+                    categories = Category.objects.filter(course=course)
+                    return render_to_response('category_tree.html',
+                                              {'categories': categories},
+                                              RequestContext(request))
         ##### normal page load #####
         courses = Course.objects.filter(id=course_id)
         # make sure course_id is valid
@@ -372,8 +380,10 @@ def course_detail(request, course_id):
                     course.save()
 
                     categories = Category.objects.filter(course=course)
+                    for category in categories:
+                        category.assignments = Assignment.objects.filter(category=category)
 
-                    return render_to_response('course_categories.html',
+                    return render_to_response('course_categories_assignments.html',
                                               {'course': course,
                                                'categories': categories},
                                               RequestContext(request))
@@ -391,6 +401,8 @@ def course_detail(request, course_id):
                 course.save()
 
                 categories = Category.objects.filter(course=course)
+                for category in categories:
+                    category.assignments = Assignment.objects.filter(category=category)
 
                 return render_to_response('course_categories_assignments.html',
                                           {'course': course,

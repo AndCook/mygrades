@@ -1,0 +1,7 @@
+<div id='category_tree'>
+    <ul>
+        {% for category in categories %}
+            <li><div id='category_{{ category.id }}'>{{ category.name }}</div></li>
+        {% endfor %}
+    </ul>
+</div>
