@@ -21,20 +21,6 @@ $(document).ready(function() {
             add_points_earned_input.prop('disabled', false);
         });
     var add_category_input = $('#add_category_input');
-    var add_category_tree = add_category_input.find('#category_tree');
-    // add additional identifying id
-    add_category_input.jqxDropDownButton({ width: 185, height: 25 });
-    add_category_tree.on('select', function (event) {
-        var args = event.args;
-        var item = add_category_tree.jqxTree('getItem', args.element);
-        if (item !== null) {
-            var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
-            add_category_input.jqxDropDownButton('setContent', dropDownContent);
-        }
-        add_category_input.jqxDropDownButton('close');
-    });
-    add_category_tree.jqxTree({ width: 185, height: 150 });
-    add_category_tree.jqxTree('selectItem', add_category_tree.find('li:first')[0]);
     var add_assignment_form_is_validated = false;
     add_assignment_form.jqxValidator({
         focus: false,
@@ -78,10 +64,7 @@ $(document).ready(function() {
                         return;
                     var name = add_name_input.val();
 
-                    var val = add_category_tree.jqxTree('getSelectedItem').element.innerHTML;
-                    var id_index = val.indexOf('id="category_') + 13;
-                    var end_id_index = val.indexOf('">', id_index);
-                    var category_id = val.substring(id_index, end_id_index);
+                    var category_id = add_category_input.jqxDropDownList('getSelectedItem').value;
 
                     var grade_unknown = add_grade_unknown_button.val();
                     var points_earned = add_points_earned_input.val();
@@ -142,19 +125,6 @@ $(document).ready(function() {
             edit_points_earned_input.prop('disabled', false);
         });
     var edit_category_input = $('#edit_category_input');
-    var edit_category_tree = edit_category_input.find('#category_tree');
-    edit_category_input.jqxDropDownButton({ width: 185, height: 25 });
-    edit_category_tree.on('select', function (event) {
-        var args = event.args;
-        var item = edit_category_tree.jqxTree('getItem', args.element);
-        if (item !== null) {
-            var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
-            edit_category_input.jqxDropDownButton('setContent', dropDownContent);
-        }
-        edit_category_input.jqxDropDownButton('close');
-    });
-    edit_category_tree.jqxTree({ width: 185, height: 150 });
-    edit_category_tree.jqxTree('selectItem', edit_category_tree.find('li:first')[0]);
     var edit_assignment_form_is_validated = false;
     edit_assignment_form.jqxValidator({
         focus: false,
@@ -187,8 +157,8 @@ $(document).ready(function() {
         assignment_id = assignments_table_row.attr('id').split('_').pop();
         edit_name_input.val(assignments_table_row.find('#assignment_name').text().trim());
 
-        var current_category = assignments_table_row.find('#assignment_category').text().trim();
-        edit_category_tree.jqxTree('selectItem', $('#' + current_category)[0]);
+        var current_category_id = assignments_table_row.find('.assignment_category').attr('id');
+        edit_category_input.jqxDropDownList('selectItem', edit_category_input.jqxDropDownList('getItemByValue', current_category_id ));
 
         var assignment_points = assignments_table_row.find('#assignment_points').text().split(' / ');
         var points_earned = assignment_points[0].trim();
@@ -216,10 +186,7 @@ $(document).ready(function() {
                         return;
                     var name = edit_name_input.val();
 
-                    var val = edit_category_tree.jqxTree('getSelectedItem').element.innerHTML;
-                    var id_index = val.indexOf('id="category_') + 13;
-                    var end_id_index = val.indexOf('">', id_index);
-                    var category_id = val.substring(id_index, end_id_index);
+                    var category_id = edit_category_input.jqxDropDownList('getSelectedItem').value;
 
                     var grade_unknown = edit_grade_unknown_button.val();
                     var points_earned = edit_points_earned_input.val();

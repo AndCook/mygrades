@@ -7,13 +7,12 @@
     <script type="text/javascript" src="/static/jqwidgets/jqxtree.js"></script>
     <script type="text/javascript" src="/static/jqwidgets/jqxpanel.js"></script>
     <script type="text/javascript" src="/static/jqwidgets/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="/static/jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="/static/jqwidgets/jqxlistbox.js"></script>
 
     <link rel='stylesheet' type='text/css' href='/static/css/course_detail_stylesheet.css' />
     <link rel='stylesheet' type='text/css' href='/static/css/course_categories_stylesheet.css' />
     <link rel='stylesheet' type='text/css' href='/static/css/course_assignments_stylesheet.css' />
-    <script src='/static/javascript/course_detail_script.js'></script>
-    <script src='/static/javascript/course_categories_script.js'></script>
-    <script src='/static/javascript/course_assignments_script.js'></script>
 
     <!--script type='text/javascript' src='/static/javascript/jquery-tablesorter.js'></script-->
 {% endblock %}
@@ -97,9 +96,7 @@
 
             <p style='display: inline-block; margin: 0 0 0 10%; width: 75px; vertical-align: middle'>Category: </p>
 
-            <div id='add_category_input' style='margin: auto; display: inline-block; vertical-align: middle'>
-                {% include 'category_tree.html' %}
-            </div>
+            <div id='add_category_input' style='margin: auto; display: inline-block; vertical-align: middle'></div>
 
             <div id='grade_unknown_input' style='margin: 10px auto 0 10%'>Grade is unknown</div>
 
@@ -121,9 +118,7 @@
 
             <p style='display: inline-block; margin: 0 0 0 10%; width: 75px; vertical-align: middle'>Category: </p>
 
-            <div id='edit_category_input' style='margin: auto; display: inline-block; vertical-align: middle'>
-                {% include 'category_tree.html' %}
-            </div>
+            <div id='edit_category_input' style='margin: auto; display: inline-block; vertical-align: middle'></div>
 
             <div id='grade_unknown_input' style='margin: 10px auto 0 10%'>Grade is unknown</div>
 
@@ -143,5 +138,25 @@
             </p>
         </form>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            var source = [
+                {% for category in categories %}
+                    { label: '{{ category.name }}', value: '{{ category.id }}'},
+                {% endfor %}
+            ];
+            var add_category_input = $('#add_category_input');
+            add_category_input.jqxDropDownList({ source: source, width: '185px' , height: '25px'});
+            add_category_input.jqxDropDownList('selectIndex', 0);
+            var edit_category_input = $('#edit_category_input');
+            edit_category_input.jqxDropDownList({ source: source, width: '185px' , height: '25px'});
+            edit_category_input.jqxDropDownList('selectIndex', 0);
+        });
+    </script>
+
+    <script src='/static/javascript/course_detail_script.js'></script>
+    <script src='/static/javascript/course_categories_script.js'></script>
+    <script src='/static/javascript/course_assignments_script.js'></script>
 
 {% endblock %}

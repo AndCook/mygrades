@@ -1,6 +1,8 @@
 $(document).ready(function() {
     var categories_wrapper = $('#categories_wrapper');
-    var categories_assignments_wrapper = $('#categories_assignments_wrapper')
+    var categories_assignments_wrapper = $('#categories_assignments_wrapper');
+    var add_category_input = $('#add_category_input');
+    var edit_category_input = $('#edit_category_input');
     ////////////////////// adding categories //////////////////////
     var add_category_dialog = $('#add_category_dialog_box');
     var add_category_form = $('#add_category_form');
@@ -78,20 +80,20 @@ $(document).ready(function() {
                             add_category_dialog.dialog('close');
                             clear_add_category_form_contents();
                             var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
-                            categories_wrapper.html(data_inside);
+                            categories_assignments_wrapper.html(data_inside);
 
                             $.ajax({
                                 type:'GET',
-                                async: false,
+                                async: true,
                                 url: '/gradebook/course_detail/' + id + '/',
                                 contentType: 'application/x-www-form-urlencoded',
                                 data: {
-                                    'get_action': 'get_category_tree'
+                                    'get_action': 'get_category_id',
+                                    'category_name': category_name
                                 },
                                 success: function(data) {
-                                    var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
-                                    $('#add_category_tree').html(data_inside);
-                                    $('#edit_category_tree').html(data_inside);
+                                    add_category_input.jqxDropDownList('addItem', { label: category_name, value: data.category_id} );
+                                    edit_category_input.jqxDropDownList('addItem', { label: category_name, value: data.category_id} );
                                 }
                             });
                         }
@@ -198,49 +200,8 @@ $(document).ready(function() {
                             var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
                             categories_assignments_wrapper.html(data_inside);
 
-                            $.ajax({
-                                type:'GET',
-                                async: false,
-                                url: '/gradebook/course_detail/' + id + '/',
-                                contentType: 'application/x-www-form-urlencoded',
-                                data: {
-                                    'get_action': 'get_category_tree'
-                                },
-                                success: function(data) {
-                                    var add_category_input = $('#add_category_input');
-                                    var add_category_tree = add_category_input.find('#category_tree');
-                                    console.log(add_category_tree);
-                                    add_category_tree.replaceWith(data);
-                                    console.log(add_category_tree);
-                                    add_category_tree = add_category_input.find('#category_tree');
-                                    add_category_tree.on('select', function (event) {
-                                        var args = event.args;
-                                        var item = add_category_tree.jqxTree('getItem', args.element);
-                                        if (item !== null) {
-                                            var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
-                                            add_category_input.jqxDropDownButton('setContent', dropDownContent);
-                                        }
-                                        add_category_input.jqxDropDownButton('close');
-                                    });
-                                    add_category_tree.jqxTree({ width: 185, height: 150 });
-                                    add_category_tree.jqxTree('selectItem', add_category_tree.find('li:first')[0]);
-                                    var edit_category_input = $('#edit_category_input');
-                                    var edit_category_tree = edit_category_input.find('#category_tree');
-                                    edit_category_tree.replaceWith(data);
-                                    edit_category_tree = edit_category_input.find('#category_tree');
-                                    edit_category_tree.on('select', function (event) {
-                                        var args = event.args;
-                                        var item = edit_category_tree.jqxTree('getItem', args.element);
-                                        if (item !== null) {
-                                            var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
-                                            edit_category_input.jqxDropDownButton('setContent', dropDownContent);
-                                        }
-                                        edit_category_input.jqxDropDownButton('close');
-                                    });
-                                    edit_category_tree.jqxTree({ width: 185, height: 150 });
-                                    edit_category_tree.jqxTree('selectItem', edit_category_tree.find('li:first')[0]);
-                                }
-                            });
+                            add_category_input.jqxDropDownList('updateItem', category_name, category_id);
+                            edit_category_input.jqxDropDownList('updateItem', category_name, category_id);
                         }
                     });
                 }
@@ -283,6 +244,9 @@ $(document).ready(function() {
                             delete_category_dialog.dialog('close');
                             var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
                             categories_assignments_wrapper.html(data_inside);
+
+                            add_category_input.jqxDropDownList('removeItem', category_id);
+                            edit_category_input.jqxDropDownList('removeItem', category_id);
                         }
                     });
                 }

@@ -15,7 +15,7 @@
                     {% cycle rowcolors %}
                     <tr class='assignments_table_row {{ rowcolors }}' id='assignment_{{ assignment.id }}'>
                         <td id='assignment_name'>{{ assignment.name }}</td>
-                        <td id='assignment_category'>{{ assignment.category }}</td>
+                        <td class='assignment_category' id='{{ assignment.category.id }}'>{{ assignment.category }}</td>
                         <td id='assignment_points'>
                             {% if assignment.grade_unknown %}?
                             {% else %}{{ assignment.points_earned|floatformat:'-2' }}{% endif %} / {{ assignment.total_points|floatformat:'-2' }}
