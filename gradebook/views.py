@@ -21,6 +21,8 @@ def overview(request):
         #    recount_hours(semester)
         #for user in User.objects.all():  # import User from account.models
         #    recalculate_cumulative_gpa(user)
+        #for course in Course.objects.all():
+        #    recalculate_course_grade(course)
 
         semesters = Semester.objects.filter(user=request.user)
         semesters = semesters.order_by('start_date')
@@ -221,6 +223,19 @@ def recalculate_cumulative_gpa(user):
         semester.save()
 
 
+def recalculate_course_grade(course):
+    for category in Category.objects.filter(course=course):
+        if category.actual_total_points != 0:
+            course.total_weighted_percentage += category.category_weighted_percentage
+            course.total_worth_used += category.worth
+        course.course_min_grade += category.min_category_weighted_percentage
+        if category.total_points == 0:
+            course.course_max_grade += category.worth
+        else:
+            course.course_max_grade += category.max_category_weighted_percentage
+    course.save()
+
+
 @csrf_protect
 @login_required
 def current_courses(request):
@@ -419,22 +434,13 @@ def course_detail(request, course_id):
                 grade_unknown = request.POST['assignment_grade_unknown'] == u'true'
                 assign = Assignment(name=request.POST['assignment_name'],
                                     category=category,
-                                    grade_unknown=grade_unknown,
-                                    total_points=float(request.POST['assignment_total_points']))
+                                    grade_unknown=grade_unknown)
                 if grade_unknown:
-                    assign.points_earned = 0
-                    # assign.category.actual_points_earned  # doesn't change
-                    # assign.category.actual_total_points  # doesn't change
-                    assign.category.max_points_earned += assign.total_points
-                    assign.category.total_points += assign.total_points
+                    points_earned = 0
                 else:
-                    assign.points_earned = float(request.POST['assignment_points_earned'])
-                    assign.category.actual_points_earned += assign.points_earned
-                    assign.category.actual_total_points += assign.total_points
-                    assign.category.max_points_earned += assign.points_earned
-                    assign.category.total_points += assign.total_points
-                assign.save()
-                assign.category.save()
+                    points_earned = float(request.POST['assignment_points_earned'])
+                total_points = float(request.POST['assignment_total_points'])
+                assign.set_points(grade_unknown, points_earned, total_points)  # save included
 
                 categories = Category.objects.filter(course=course)
                 for category in categories:
@@ -451,40 +457,20 @@ def course_detail(request, course_id):
                 course = courses[0]
                 assign = assignments[0]
 
-                if assign.grade_unknown:
-                    # assign.category.actual_points_earned  # doesn't change
-                    # assign.category.actual_total_points  # doesn't change
-                    assign.category.max_points_earned -= assign.total_points
-                    assign.category.total_points -= assign.total_points
-                else:
-                    assign.category.actual_points_earned -= assign.points_earned
-                    assign.category.actual_total_points -= assign.total_points
-                    assign.category.max_points_earned -= assign.points_earned
-                    assign.category.total_points -= assign.total_points
-                assign.category.save()
-
                 assign.name = request.POST['new_name']
                 categories = Category.objects.filter(id=request.POST['new_category_id'])
                 if categories.__len__() != 1:
                     return Http404
-                assign.category = categories[0]
-                assign.grade_unknown = request.POST['new_grade_unknown'] == u'true'
-                assign.total_points = float(request.POST['new_total_points'])
+                if assign.category != categories[0]:
+                    assign.change_category(categories[0])
 
-                if assign.grade_unknown:
-                    assign.points_earned = 0
-                    # assign.category.actual_points_earned  # doesn't change
-                    # assign.category.actual_total_points  # doesn't change
-                    assign.category.max_points_earned += assign.total_points
-                    assign.category.total_points += assign.total_points
+                grade_unknown = request.POST['new_grade_unknown'] == u'true'
+                if grade_unknown:
+                    points_earned = 0
                 else:
-                    assign.points_earned = float(request.POST['new_points_earned'])
-                    assign.category.actual_points_earned += assign.points_earned
-                    assign.category.actual_total_points += assign.total_points
-                    assign.category.max_points_earned += assign.points_earned
-                    assign.category.total_points += assign.total_points
-                assign.save()
-                assign.category.save()
+                    points_earned = float(request.POST['new_points_earned'])
+                total_points = float(request.POST['new_total_points'])
+                assign.set_points(grade_unknown, points_earned, total_points)  # save included
 
                 categories = Category.objects.filter(course=course)
                 for category in categories:
@@ -501,17 +487,7 @@ def course_detail(request, course_id):
                 course = courses[0]
                 assign = assignments[0]
 
-                if assign.grade_unknown:
-                    # assign.category.actual_points_earned  # doesn't change
-                    # assign.category.actual_total_points  # doesn't change
-                    assign.category.max_points_earned -= assign.total_points
-                    assign.category.total_points -= assign.total_points
-                else:
-                    assign.category.actual_points_earned -= assign.points_earned
-                    assign.category.actual_total_points -= assign.total_points
-                    assign.category.max_points_earned -= assign.points_earned
-                    assign.category.total_points -= assign.total_points
-                assign.category.save()
+                assign.set_points(assign.grade_unknown, 0, 0)
                 assign.delete()
 
                 categories = Category.objects.filter(course=course)

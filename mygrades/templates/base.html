@@ -100,7 +100,7 @@
             </div>
         </div><!-- end header -->
 
-        <div id='login_dialog_box' title='Login'>
+        <div id='login_dialog_box' title='Login' style='display: none'>
             <form id='login_dialog_form' method='post' action='/account/login/' name='login_form'>{% csrf_token %}
                 <h2 class='form_title'>Login</h2>
 
@@ -121,7 +121,7 @@
             </form>
         </div><!-- end login_dialog_box div -->
 
-        <div id='signup_dialog_box' title='Sign up'>
+        <div id='signup_dialog_box' title='Sign up' style='display: none'>
             <form id='signup_dialog_form' method='post' action='/account/signup/' name='signup_form'>{% csrf_token %}
                 <h2 class='form_title'>Sign Up</h2>
                 {% for field in signup_form %}

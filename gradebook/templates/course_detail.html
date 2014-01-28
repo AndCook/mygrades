@@ -25,22 +25,6 @@
         {% include 'course_selector.html' with course=course %}
     {% endif %}
 
-    {% if not course.semester.is_future %}
-        <div id='report_final_grade_div'>
-            <p style='font-size: 1em'>Final Grade</p>
-            <p id='final_grade' style='font-size: 1.5em; margin: 5px'>
-                {{ course.final_grade }}
-            </p>
-            <div id='report_final_grade' style='font-size: .8em'>
-                {% if course.final_grade == '#' %}
-                    Report Final Grade
-                {% else %}
-                    Change Final Grade
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
-
     <div id='report_final_grade_dialog_box' title='Report Final Grade'>
         <form id='report_final_grade_form'>
             <h2 class='form_title'>Report Final Grade</h2>

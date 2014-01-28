@@ -13,7 +13,11 @@
         {% if course.semester.is_future %}
             ---
         {% elif course.final_grade == '#'%}
-            94.7%
+            {% if course.total_worth_used == 0 %}
+                --
+            {% else %}
+                {{ course.course_grade|floatformat:'-2' }}
+            {% endif %}
         {% else %}
             {{ course.final_grade }}
         {% endif %}

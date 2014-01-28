@@ -1,5 +1,37 @@
 <div id='categories_assignments_wrapper'>
 
+    {% if not course.semester.is_future %}
+        <div id='course_grade_div' style='float:left'>
+            <p style='font-size: 1em'>Course Grade</p>
+            <p id='final_grade' style='font-size: 1.5em; margin: 5px'>
+                {% if course.total_worth_used == 0 %}
+                    --
+                {% else %}
+                    {{ course.course_grade|floatformat:'-2' }} %
+                {% endif %}
+            </p>
+            <p class='min_max_grade_text'>minimum</p>
+            <p class='min_max_grade_number'>{{ course.course_min_grade|floatformat:'-2' }} %</p>
+            <br>
+            <p class='min_max_grade_text'>maximum</p>
+            <p class='min_max_grade_number'>{{ course.course_max_grade|floatformat:'-2' }} %</p>
+        </div>
+
+        <div id='report_final_grade_div' style='float:right'>
+            <p style='font-size: 1em'>Final Grade</p>
+            <p id='final_grade' style='font-size: 1.5em; margin: 5px'>
+                {{ course.final_grade }}
+            </p>
+            <div id='report_final_grade' style='font-size: .8em'>
+                {% if course.final_grade == '#' %}
+                    Report Final Grade
+                {% else %}
+                    Change Final Grade
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
     {% include 'course_categories.html' %}
 
     {% include 'course_assignments.html' %}

@@ -16,9 +16,9 @@ import json
 
 
 def my_login(request):
-    # if the user is already logged in, send them to the overview page
+    # if the user is already logged in, send them to the current_courses page
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/gradebook/overview/')
+        return HttpResponseRedirect('/gradebook/current_courses/')
 
     if request.is_ajax():
         get_action = request.GET['get_action']
@@ -37,7 +37,7 @@ def my_login(request):
 
             user = authenticate(username=email, password=password)
             login(request, user)
-            return HttpResponseRedirect('/gradebook/overview/')
+            return HttpResponseRedirect('/gradebook/current_courses/')
     else:
         form = MyLoginForm()
     return render_to_response('login_page.html',
@@ -46,9 +46,9 @@ def my_login(request):
 
 
 def my_signup(request):
-    # if the user is already logged in, send them to the overview page
+    # if the user is already logged in, send them to the current_courses page
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/gradebook/overview/')
+        return HttpResponseRedirect('/gradebook/current_courses/')
 
     if request.is_ajax():
         get_action = request.GET['get_action']

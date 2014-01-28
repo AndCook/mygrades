@@ -98,8 +98,43 @@ class Course(models.Model):
 
     not_specified_worth = models.FloatField(default=100)
 
+    total_weighted_percentage = models.FloatField(default=0)
+    total_worth_used = models.FloatField(default=0)
+    course_grade = models.FloatField(default=0)
+    course_min_grade = models.FloatField(default=0)
+    course_max_grade = models.FloatField(default=0)
+
+    def save(self, *args, **kwargs):
+        if self.total_worth_used == 0:
+            self.course_grade = 0
+        else:
+            self.course_grade = self.total_weighted_percentage / self.total_worth_used * 100
+        super(Course, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return self.number + ' - ' + self.name
+
+    def remove_points(self, category):
+        if category.actual_total_points != 0:
+            self.total_weighted_percentage -= category.category_weighted_percentage
+            self.total_worth_used -= category.worth
+        self.course_min_grade -= category.min_category_weighted_percentage
+        if category.total_points == 0:
+            self.course_max_grade -= category.worth
+        else:
+            self.course_max_grade -= category.max_category_weighted_percentage
+        self.save()
+
+    def add_points(self, category):
+        if category.actual_total_points != 0:
+            self.total_weighted_percentage += category.category_weighted_percentage
+            self.total_worth_used += category.worth
+        self.course_min_grade += category.min_category_weighted_percentage
+        if category.total_points == 0:
+            self.course_max_grade += category.worth
+        else:
+            self.course_max_grade += category.max_category_weighted_percentage
+        self.save()
 
 
 class CourseForm(forms.ModelForm):
@@ -154,6 +189,34 @@ class Category(models.Model):
 
         super(Category, self).save(*args, **kwargs)
 
+    def remove_points(self, assign):
+        self.course.remove_points(category=self)
+        if assign.grade_unknown:
+            # self.actual_points_earned  # doesn't change
+            # self.actual_total_points  # doesn't change
+            self.max_points_earned -= assign.total_points
+            self.total_points -= assign.total_points
+        else:
+            self.actual_points_earned -= assign.points_earned
+            self.actual_total_points -= assign.total_points
+            self.max_points_earned -= assign.points_earned
+            self.total_points -= assign.total_points
+        self.save()
+
+    def add_points(self, assign):
+        if assign.grade_unknown:
+            # self.actual_points_earned  # doesn't change
+            # self.actual_total_points  # doesn't change
+            self.max_points_earned += assign.total_points
+            self.total_points += assign.total_points
+        else:
+            self.actual_points_earned += assign.points_earned
+            self.actual_total_points += assign.total_points
+            self.max_points_earned += assign.points_earned
+            self.total_points += assign.total_points
+        self.save()
+        self.course.add_points(category=self)
+
     def __unicode__(self):
         return self.name
 
@@ -176,6 +239,20 @@ class Assignment(models.Model):
             self.percentage = self.points_earned / self.total_points * 100
 
         super(Assignment, self).save(*args, **kwargs)
+
+    def set_points(self, grade_unknown=False, points_earned=0, total_points=0):
+        self.category.remove_points(assign=self)
+        self.grade_unknown = grade_unknown
+        self.points_earned = points_earned
+        self.total_points = total_points
+        self.save()
+        self.category.add_points(assign=self)
+
+    def change_category(self, category):
+        self.category.remove_points(assign=self)
+        self.category = category
+        self.save()
+        self.category.add_points(assign=self)
 
     def __unicode__(self):
         return self.name

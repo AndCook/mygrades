@@ -18,9 +18,10 @@
 #course_selector_go_button {
   display: inline-block; }
 
-#report_final_grade_div {
+#report_final_grade_div, #course_grade_div {
+  height: 95px;
   padding: 5px 15px;
-  margin: .75em;
+  margin: .75em 0;
   text-align: center;
   border: 1px #aaaaaa solid;
   border-radius: 3px;
@@ -33,3 +34,16 @@
 .mini_link {
   display: inline-block;
   font-size: .75em; }
+
+.min_max_grade_text {
+  font-size: .8em;
+  display: inline-block;
+  vertical-align: middle; }
+
+.min_max_grade_number {
+  font-size: 1em;
+  display: inline-block;
+  vertical-align: middle; }
+
+#categories_assignments_wrapper {
+  padding: 0 2.5%; }
