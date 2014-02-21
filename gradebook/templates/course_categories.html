@@ -13,7 +13,7 @@
         </thead>
         <tbody>
             {% cycle 'dark_row' 'light_row' as rowcolors silent%}
-            {% for category in categories %}
+            {% for category in course.category_set.all %}
                 {% cycle rowcolors %}
                 <tr class='categories_table_row {{ rowcolors }}' id='category_{{ category.id }}'>
                     <td id='category_name'>{{ category.name }}</td>
@@ -34,20 +34,18 @@
                         <p class='mini_link' id='delete_category_button'>delete</p>
                     </td>
                 </tr>
-                {% if category.actual_total_points != category.total_points %}
-                    <tr class='categories_table_row {{ rowcolors }}'>
-                        <td colspan='2' style='text-align: right'>minimum</td>
-                        <td>{{ category.actual_points_earned|floatformat:'-2' }} / {{ category.total_points|floatformat:'-2' }}</td>
-                        <td>{{ category.min_category_percentage|floatformat:'-2' }} %</td>
-                        <td colspan='3'>{{ category.min_category_weighted_percentage|floatformat:'-2' }} %</td>
-                    </tr>
-                    <tr class='categories_table_row {{ rowcolors }}'>
-                        <td colspan='2' style='text-align: right'>maximum</td>
-                        <td>{{ category.max_points_earned|floatformat:'-2' }} / {{ category.total_points|floatformat:'-2' }}</td>
-                        <td>{{ category.max_category_percentage|floatformat:'-2' }} %</td>
-                        <td colspan='3'>{{ category.max_category_weighted_percentage|floatformat:'-2' }} %</td>
-                    </tr>
-                {% endif %}
+                <tr class='categories_table_row {{ rowcolors }}'>
+                    <td colspan='2' style='text-align: right'>minimum</td>
+                    <td>{{ category.actual_points_earned|floatformat:'-2' }} / {{ category.total_points|floatformat:'-2' }}</td>
+                    <td>{{ category.min_category_percentage|floatformat:'-2' }} %</td>
+                    <td colspan='3'>{{ category.min_category_weighted_percentage|floatformat:'-2' }} %</td>
+                </tr>
+                <tr class='categories_table_row {{ rowcolors }}'>
+                    <td colspan='2' style='text-align: right'>maximum</td>
+                    <td>{{ category.max_points_earned|floatformat:'-2' }} / {{ category.total_points|floatformat:'-2' }}</td>
+                    <td>{{ category.max_category_percentage|floatformat:'-2' }} %</td>
+                    <td colspan='3'>{{ category.max_category_weighted_percentage|floatformat:'-2' }} %</td>
+                </tr>
             {% endfor %}
             {% if course.not_specified_worth != 0 %}
                 {% cycle rowcolors %}

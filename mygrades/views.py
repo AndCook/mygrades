@@ -8,7 +8,8 @@ from mygrades.settings import EMAIL_HOST_USER
 
 
 def home(request):
-    return render_to_response('home.html', RequestContext(request))
+    return render_to_response('home.html',
+                              RequestContext(request))
 
 
 def about(request):

@@ -15,8 +15,8 @@
     </div>
 
     <table class='semester_square_course_table'><tbody>
-        {% if semester.courses %}
-            {% for course in semester.courses %}
+        {% if semester.course_set %}
+            {% for course in semester.course_set.all %}
                 {% include 'course_table_row.html' with course=course%}
             {% endfor %}
         {% endif %}
@@ -37,16 +37,16 @@
             {% if semester.gpa_hours != 0 %}
                 <tr class='hidden_in_s_s_table_row'>
                     <td class='s_s_table_data'>GPA Points</td>
-                    <td class='s_s_table_data'>{{ semester.gpa_points }}</td>
+                    <td class='s_s_table_data'>{{ semester.final_grade_points }}</td>
                 </tr>
             {% endif %}
             <tr>
                 <td class='s_s_table_data' style='width: 80%'>Semester GPA</td>
                 <td class='s_s_table_data' style='font-size: 1.2em'>
-                    {% if semester.final_gpa == -1.0 %}
-                        ---
+                    {% if semester.final_grade_points == 0 %}
+                        --
                     {% else %}
-                        {{ semester.final_gpa }}
+                        {{ semester.final_gpa|floatformat:'-3' }}
                     {% endif %}
                 </td>
             </tr>
@@ -57,10 +57,10 @@
             <tr>
                 <td class='s_s_table_data'>Cumulative GPA</td>
                 <td class='s_s_table_data' style='font-size: 1.2em'>
-                    {% if semester.cumulative_gpa == -1.0 %}
-                        ---
+                    {% if semester.cumulative_gpa_hours == 0 %}
+                        --
                     {% else %}
-                        {{ semester.cumulative_gpa }}
+                        {{ semester.cumulative_gpa|floatformat:'-3' }}
                     {% endif %}
                 </td>
             </tr>
@@ -74,9 +74,9 @@
                 </td>
             </tr>
             <tr>
-                <td class='s_s_table_data gpa_data_number'>2.60</td>
-                <td class='s_s_table_data gpa_data_number'>3.84</td>
-                <td class='s_s_table_data gpa_data_number'>3.92</td>
+                <td class='s_s_table_data gpa_data_number'>{{ semester.potential_min_gpa|floatformat:'-2' }}</td>
+                <td class='s_s_table_data gpa_data_number'>{{ semester.potential_gpa|floatformat:'-2' }}</td>
+                <td class='s_s_table_data gpa_data_number'>{{ semester.potential_max_gpa|floatformat:'-2' }}</td>
             </tr>
             <tr>
                 <td class='s_s_table_data gpa_data_name'>minimum</td>

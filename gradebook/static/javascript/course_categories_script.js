@@ -10,7 +10,31 @@ $(document).ready(function() {
     add_category_form.jqxValidator({
         focus: false,
         rules: [
-            { input: '#add_category_form #name_input', message: 'Name is required', action: 'keyup, blur', rule: 'required' },
+            { input: '#add_category_form #name_input', message: 'Name is required', action: 'keyup', rule: 'required' },
+            { input: '#add_category_form #name_input', message: 'Name must be unique',
+                action: 'keyup', rule: function (input) {
+                    if (input.val() === '')
+                        return false;
+                    var result = false;
+                    var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
+                    var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
+                    $.ajax({
+                        type:'GET',
+                        async: false,
+                        url: '/gradebook/course_detail/' + id + '/',
+                        contentType: 'application/x-www-form-urlencoded',
+                        data: {
+                            'get_action': 'add_category_name_unique',
+                            'name': input.val()
+                        },
+                        success: function(data) {
+                            result = data.is_unique;
+                        }
+                    });
+                    console.log(result);
+                    return result;
+                }
+            },
             { input: '#add_category_form #worth_input', message: 'Worth is required', action: 'keyup, blur', rule: 'required' },
             { input: '#add_category_form #worth_input', message: 'Worth must be a number', action: 'keyup', rule: 'number' },
             {
@@ -121,6 +145,30 @@ $(document).ready(function() {
         focus: false,
         rules: [
             { input: '#edit_category_form #name_input', message: 'Name is required', action: 'keyup, blur', rule: 'required' },
+            { input: '#edit_category_form #name_input', message: 'Name must be unique',
+                action: 'keyup', rule: function (input) {
+                    if (input.val() === '')
+                        return false;
+                    var result = false;
+                    var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
+                    var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
+                    $.ajax({
+                        type:'GET',
+                        async: false,
+                        url: '/gradebook/course_detail/' + id + '/',
+                        contentType: 'application/x-www-form-urlencoded',
+                        data: {
+                            'get_action': 'edit_category_name_unique',
+                            'name': input.val()
+                        },
+                        success: function(data) {
+                            result = data.is_unique;
+                        }
+                    });
+                    console.log(result);
+                    return result || original_category_name === input.val();
+                }
+            },
             { input: '#edit_category_form #worth_input', message: 'Worth is required', action: 'keyup, blur', rule: 'required' },
             { input: '#edit_category_form #worth_input', message: 'Worth must be a number', action: 'keyup', rule: 'number' },
             {
@@ -161,10 +209,12 @@ $(document).ready(function() {
     });
     var category_id;
     var original_category_worth;
+    var original_category_name;
     categories_assignments_wrapper.on('click', '#edit_category_button', function() {
         var categories_table_row = $(this).closest('.categories_table_row');
         category_id = categories_table_row.attr('id').split('_').pop();
-        edit_category_form.find('#name_input').val(categories_table_row.find('#category_name').text().split(' ')[0]);
+        original_category_name = categories_table_row.find('#category_name').text().trim();
+        edit_category_form.find('#name_input').val(original_category_name);
         original_category_worth = categories_table_row.find('#category_worth').text().split(' ')[0];
         edit_category_form.find('#worth_input').val(original_category_worth);
         edit_category_dialog.dialog('open');

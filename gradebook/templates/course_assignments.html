@@ -10,8 +10,8 @@
         </thead>
         <tbody>
             {% cycle 'dark_row' 'light_row' as rowcolors silent%}
-            {% for category in categories %}
-                {% for assignment in category.assignments %}
+            {% for category in course.category_set.all %}
+                {% for assignment in category.assignment_set.all %}
                     {% cycle rowcolors %}
                     <tr class='assignments_table_row {{ rowcolors }}' id='assignment_{{ assignment.id }}'>
                         <td id='assignment_name'>{{ assignment.name }}</td>

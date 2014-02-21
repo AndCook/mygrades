@@ -46,7 +46,7 @@
                 <li item-expanded='true'>
                     <div class='course_selector_tree_item'>{{ course.semester.name }}</div>
                     <ul>
-                        {% for course_ in course.semester.courses %}
+                        {% for course_ in course.semester.course_set.all %}
                             <li {% if course == course_ %}item-selected='true'{% endif %}>
                                 <div class='course_selector_tree_item' id='course_{{ course_.id }}'>
                                     {{ course_.name }}
@@ -56,11 +56,11 @@
                     </ul>
                 </li>
                 {% for semester in all_other_semesters %}
-                    {% if semester.courses|length >= 1 %}
+                    {% if semester.course_set.all|length >= 1 %}
                         <li>
                             <div class='course_selector_tree_item'>{{ semester.name }}</div>
                             <ul>
-                                {% for course_ in semester.courses %}
+                                {% for course_ in semester.course_set.all %}
                                     <li>
                                         <div class='course_selector_tree_item' id='course_{{ course_.id }}'>
                                             {{ course_.name }}

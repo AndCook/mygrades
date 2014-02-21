@@ -13,8 +13,6 @@
     <link rel='stylesheet' type='text/css' href='/static/css/course_detail_stylesheet.css' />
     <link rel='stylesheet' type='text/css' href='/static/css/course_categories_stylesheet.css' />
     <link rel='stylesheet' type='text/css' href='/static/css/course_assignments_stylesheet.css' />
-
-    <!--script type='text/javascript' src='/static/javascript/jquery-tablesorter.js'></script-->
 {% endblock %}
 
 {% block base_content %}
@@ -126,7 +124,7 @@
     <script>
         $(document).ready(function() {
             var source = [
-                {% for category in categories %}
+                {% for category in course.category_set.all %}
                     { label: '{{ category.name }}', value: '{{ category.id }}'},
                 {% endfor %}
             ];

@@ -40,9 +40,7 @@ def my_login(request):
             return HttpResponseRedirect('/gradebook/current_courses/')
     else:
         form = MyLoginForm()
-    return render_to_response('login_page.html',
-                              {'login_form': form},
-                              RequestContext(request))
+    return HttpResponseRedirect('/')
 
 
 def my_signup(request):
@@ -84,9 +82,7 @@ def my_signup(request):
             return HttpResponseRedirect('/account/settings/')
     else:
         form = MyUserCreationForm()
-    return render_to_response('signup_page.html',
-                              {'signup_form': form},
-                              RequestContext(request))
+    return HttpResponseRedirect('/')
 
 
 @login_required

@@ -12,22 +12,22 @@ class Migration(SchemaMigration):
         # Changing field 'Semester.final_gpa'
         db.alter_column(u'gradebook_semester', 'final_gpa', self.gf('django.db.models.fields.FloatField')())
 
-        # Changing field 'Semester.gpa_points'
-        db.alter_column(u'gradebook_semester', 'gpa_points', self.gf('django.db.models.fields.FloatField')())
+        # Changing field 'Semester.grade_points'
+        db.alter_column(u'gradebook_semester', 'grade_points', self.gf('django.db.models.fields.FloatField')())
 
-        # Changing field 'Course.gpa_points'
-        db.alter_column(u'gradebook_course', 'gpa_points', self.gf('django.db.models.fields.FloatField')())
+        # Changing field 'Course.grade_points'
+        db.alter_column(u'gradebook_course', 'grade_points', self.gf('django.db.models.fields.FloatField')())
 
     def backwards(self, orm):
 
         # Changing field 'Semester.final_gpa'
         db.alter_column(u'gradebook_semester', 'final_gpa', self.gf('django.db.models.fields.DecimalField')(max_digits=4, decimal_places=3))
 
-        # Changing field 'Semester.gpa_points'
-        db.alter_column(u'gradebook_semester', 'gpa_points', self.gf('django.db.models.fields.DecimalField')(max_digits=5, decimal_places=2))
+        # Changing field 'Semester.grade_points'
+        db.alter_column(u'gradebook_semester', 'grade_points', self.gf('django.db.models.fields.DecimalField')(max_digits=5, decimal_places=2))
 
-        # Changing field 'Course.gpa_points'
-        db.alter_column(u'gradebook_course', 'gpa_points', self.gf('django.db.models.fields.DecimalField')(max_digits=4, decimal_places=2))
+        # Changing field 'Course.grade_points'
+        db.alter_column(u'gradebook_course', 'grade_points', self.gf('django.db.models.fields.DecimalField')(max_digits=4, decimal_places=2))
 
     models = {
         u'auth.group': {
@@ -85,7 +85,7 @@ class Migration(SchemaMigration):
         u'gradebook.course': {
             'Meta': {'object_name': 'Course'},
             'final_grade': ('django.db.models.fields.CharField', [], {'default': "'#'", 'max_length': '2'}),
-            'gpa_points': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'grade_points': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'hours': ('django.db.models.fields.IntegerField', [], {'default': '3'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'instructor': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
@@ -98,7 +98,7 @@ class Migration(SchemaMigration):
             'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date.today'}),
             'final_gpa': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'gpa_hours': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'gpa_points': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'grade_points': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'hours_passed': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'hours_planned': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),

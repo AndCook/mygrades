@@ -75,7 +75,7 @@ class Migration(SchemaMigration):
         u'gradebook.course': {
             'Meta': {'object_name': 'Course'},
             'final_grade': ('django.db.models.fields.CharField', [], {'default': "'#'", 'max_length': '2'}),
-            'gpa_points': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'grade_points': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'hours': ('django.db.models.fields.IntegerField', [], {'default': '3'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'instructor': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
@@ -90,7 +90,7 @@ class Migration(SchemaMigration):
             'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date.today'}),
             'final_gpa': ('django.db.models.fields.FloatField', [], {'default': '-1.0'}),
             'gpa_hours': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'gpa_points': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'grade_points': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'hours_passed': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'hours_planned': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),

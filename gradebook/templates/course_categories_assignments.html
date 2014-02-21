@@ -3,7 +3,7 @@
     {% if not course.semester.is_future %}
         <div id='course_grade_div' style='float:left'>
             <p style='font-size: 1em'>Course Grade</p>
-            <p id='final_grade' style='font-size: 1.5em; margin: 5px'>
+            <p style='font-size: 1.5em; margin: 5px'>
                 {% if course.total_worth_used == 0 %}
                     --
                 {% else %}

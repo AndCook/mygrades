@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Course.gpa_points'
-        db.add_column(u'gradebook_course', 'gpa_points',
+        # Adding field 'Course.grade_points'
+        db.add_column(u'gradebook_course', 'grade_points',
                       self.gf('django.db.models.fields.FloatField')(default=0.0),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Course.gpa_points'
-        db.delete_column(u'gradebook_course', 'gpa_points')
+        # Deleting field 'Course.grade_points'
+        db.delete_column(u'gradebook_course', 'grade_points')
 
 
     models = {
@@ -75,7 +75,7 @@ class Migration(SchemaMigration):
         u'gradebook.course': {
             'Meta': {'object_name': 'Course'},
             'final_grade': ('django.db.models.fields.CharField', [], {'default': "'#'", 'max_length': '2'}),
-            'gpa_points': ('django.db.models.fields.DecimalField', [], {'default': '0.0', 'max_digits': '3', 'decimal_places': '2'}),
+            'grade_points': ('django.db.models.fields.DecimalField', [], {'default': '0.0', 'max_digits': '3', 'decimal_places': '2'}),
             'hours': ('django.db.models.fields.IntegerField', [], {'default': '3'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'instructor': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
