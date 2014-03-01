@@ -2,9 +2,7 @@
     <form id='add_semester_form' style='text-align: center'>
         <h2 class='form_title'>Add Semester</h2>
 
-        <p>Semester Name (ex. "Fall 2014") (required)</p>
-        <p class='validation_tips' style='display: none; color: darkred'></p>
-        {{ semester_form.name }}
+        <label><input type='text' id='add_semester_name' autocomplete='off' placeholder='Semester Name (ex "Fall 2014")'/></label>
         <p>Start Date (required but estimating is okay)</p>
         <label><input id='add_semester_start_date' style='display: none'/></label>
         <p>End Date (required but estimating is okay)</p>
@@ -16,9 +14,7 @@
     <form id='rename_semester_form'>
         <h2 class='form_title'>Rename Semester</h2>
 
-        <p>Enter a new name for this semester (ex. "Fall 2014") (required)</p>
-        <p class='validation_tips' style='display: none; color: darkred'></p>
-        {{ semester_form.name }}
+        <label><input type='text' id='rename_semester_name' autocomplete='off' placeholder='Semester Name (ex "Fall 2014")'/></label>
 
     </form>
 </div>

@@ -1,10 +1,10 @@
 from django.shortcuts import render_to_response
-from gradebook.models import Semester, SemesterForm, Course, CourseForm, Category, Assignment
+from gradebook.models import Semester, Course, Category, Assignment
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_protect
 import json
-from datetime import datetime
+import datetime
 from gradebook.models import sanity_check_all, recalculate_cumulative_gpa
 from django.shortcuts import get_object_or_404
 
@@ -26,9 +26,7 @@ def overview(request):
             if not semester.is_finished:
                 semester.recheck_dates()
         return render_to_response('overview.html',
-                                  {'semesters': semesters,
-                                   'semester_form': SemesterForm(),
-                                   'course_form': CourseForm()},
+                                  {'semesters': semesters},
                                   RequestContext(request))
 
     if request.is_ajax():
@@ -37,14 +35,14 @@ def overview(request):
             semester_name = request.POST['semester_name']
             start_date_string = request.POST['start_date']
             if start_date_string != '':
-                start_date = datetime.strptime(start_date_string, '%b %d, %Y')
+                start_date = datetime.datetime.strptime(start_date_string, '%b %d, %Y').date()
             else:
-                start_date = datetime.today()
+                start_date = datetime.date.today()
             end_date_string = request.POST['end_date']
             if end_date_string != '':
-                end_date = datetime.strptime(end_date_string, '%b %d, %Y')
+                end_date = datetime.datetime.strptime(end_date_string, '%b %d, %Y').date()
             else:
-                end_date = datetime.today()
+                end_date = datetime.date.today()
             semester = Semester(name=semester_name, user=request.user,
                                 start_date=start_date, end_date=end_date)
             semester.recheck_dates()  # save included
@@ -67,10 +65,10 @@ def overview(request):
             semester = Semester.objects.get(id=semester_id)
             new_start_date_string = request.POST['new_start_date']
             if new_start_date_string != '':
-                semester.start_date = datetime.strptime(new_start_date_string, '%b %d, %Y')
+                semester.start_date = datetime.datetime.strptime(new_start_date_string, '%b %d, %Y')
             new_end_date_string = request.POST['new_end_date']
             if new_end_date_string != '':
-                semester.end_date = datetime.strptime(new_end_date_string, '%b %d, %Y')
+                semester.end_date = datetime.datetime.strptime(new_end_date_string, '%b %d, %Y')
             semester.recheck_dates()  # save included
             recalculate_cumulative_gpa(request.user)
             return render_to_response('semester_square.html', {'semester': semester}, RequestContext(request))
@@ -128,9 +126,7 @@ def current_courses(request):
         semesters = semesters.filter(is_current=True)
         semesters = semesters.order_by('start_date')
         return render_to_response('current_courses.html',
-                                  {'semesters': semesters,
-                                   'semester_form': SemesterForm(),
-                                   'course_form': CourseForm()},
+                                  {'semesters': semesters},
                                   RequestContext(request))
 
 
@@ -191,8 +187,7 @@ def course_detail(request, course_id):
         semesters = semesters.exclude(id=course.semester.id)
         return render_to_response('course_detail.html',
                                   {'course': course,
-                                   'all_other_semesters': semesters,
-                                   'course_form': CourseForm()},
+                                   'all_other_semesters': semesters},
                                   RequestContext(request))
 
     if request.is_ajax():

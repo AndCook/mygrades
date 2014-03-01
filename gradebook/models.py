@@ -111,18 +111,6 @@ class Semester(models.Model):
     def __unicode__(self):
         return self.name
 
-
-class SemesterForm(forms.ModelForm):
-    class Meta:
-        model = Semester
-        fields = ['name', 'start_date', 'end_date']
-        widgets = {'name': forms.TextInput(attrs={'autocomplete': 'off'}),
-                   'start_date': forms.DateInput(format='%b %d, %Y',
-                                                 attrs={'class': 'start_date_input'}),
-                   'end_date': forms.DateInput(format='%b %d, %Y',
-                                               attrs={'class': 'end_date_input'})
-                   }
-
 NONE_YET = '#'
 GRADE_CHOICES = (
     (NONE_YET, 'None Yet'),
@@ -207,7 +195,7 @@ def recalculate_cumulative_gpa(user):
         if cumulative_gpa_hours != 0:
             semester.cumulative_gpa = cumulative_gpa_points / cumulative_gpa_hours
         else:
-            semester.cumulative_gpa = -1.0
+            semester.cumulative_gpa = 0
         semester.cumulative_gpa_hours = cumulative_gpa_hours
         semester.cumulative_hours_passed = cumulative_hours_passed
         semester.save()
@@ -330,18 +318,6 @@ class Course(models.Model):
 
     def __unicode__(self):
         return self.number + ' - ' + self.name
-
-
-class CourseForm(forms.ModelForm):
-    hours = forms.ChoiceField(choices=[(i, i) for i in range(8)])
-
-    class Meta:
-        model = Course
-        fields = ['name', 'number', 'instructor', 'final_grade']
-        widgets = {'name': forms.TextInput(attrs={'autocomplete': 'off'}),
-                   'number': forms.TextInput(attrs={'autocomplete': 'off'}),
-                   'instructor': forms.TextInput(attrs={'autocomplete': 'off'}),
-                   }
 
 
 class Category(models.Model):

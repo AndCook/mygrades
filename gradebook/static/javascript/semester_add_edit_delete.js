@@ -1,6 +1,17 @@
 $(document).ready(function() {
     var semwrap = $('#semester_squares_wrapper');
     ////////////////////// adding semesters //////////////////////
+    var add_semester_form = $('#add_semester_form');
+    var add_semester_name = $('#add_semester_name');
+    var add_semester_form_is_validated = false;
+    add_semester_form.jqxValidator({
+        focus: false,
+        rules: [
+            { input: add_semester_name, message: 'Name is required', action: 'keyup, blur', rule: 'required' }
+        ],
+        onError: function() {add_semester_form_is_validated = false;},
+        onSuccess: function() {add_semester_form_is_validated = true;}
+    });
     var add_semester_start_date_button = $('#add_semester_start_date');
     var add_semester_end_date_button = $('#add_semester_end_date');
     add_semester_start_date_button.datepicker({
@@ -80,17 +91,13 @@ $(document).ready(function() {
 			'Add Semester': {
                 text: 'Add Semester',
                 click: function() {
-                    var form = $('#add_semester_form');
-                    var semester_name = form.find('#id_name').val();
+                    add_semester_form.jqxValidator('validate');
+                    if (!add_semester_form_is_validated)
+                        return;
+
+                    var semester_name = add_semester_name.val();
                     var start_date = add_semester_start_date_button.val();
                     var end_date = add_semester_end_date_button.val();
-
-                    if (semester_name === '') {
-                        var val = form.find('.validation_tips');
-                        val.css('display', 'block');
-                        val.text('Semester name is required - try again');
-                        return;
-                    }
 
                     $.ajax({
                         type:"POST",
@@ -119,7 +126,7 @@ $(document).ready(function() {
         }
 	});
     function reset_add_semester_form() {
-        $('#add_semester_form').find('#id_name').val('');
+        add_semester_name.val('');
         add_semester_start_date_button.val(getDateFormatted());
         add_semester_start_date_button.datepicker('option', 'buttonText', getDateFormatted());
         add_semester_start_date_button.datepicker('option', 'minDate', '-6Y');
