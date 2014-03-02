@@ -5,10 +5,10 @@
 #*.pyc
 
 # ignore these files used by server
-manage.py
-RUN
+# manage.py
+# RUN
 
 # these files are used for testing on local machine
-test_database
+# test_database
 # this file should be manually updated when necessary
-mygrades/settings.py
+# mygrades/settings.py

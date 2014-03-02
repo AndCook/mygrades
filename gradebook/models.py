@@ -77,17 +77,18 @@ class Semester(models.Model):
             self.hours_passed += course.hours
         if course.final_grade in GPA_GRADES:
             self.gpa_hours += course.hours
-        self.final_grade_points += course.final_grade_points
-        if course.final_grade != '#':
-            self.potential_min_grade_points += course.final_grade_points
-            self.potential_grade_points += course.final_grade_points
-            self.potential_max_grade_points += course.final_grade_points
-            self.potential_hours_counted += course.hours
-        elif course.total_worth_used != 0:
-            self.potential_min_grade_points += course.course_min_grade_points
-            self.potential_grade_points += course.course_grade_points
-            self.potential_max_grade_points += course.course_max_grade_points
-            self.potential_hours_counted += course.hours
+        if course.hours != 0:
+            self.final_grade_points += course.final_grade_points
+            if course.final_grade != '#':
+                self.potential_min_grade_points += course.final_grade_points
+                self.potential_grade_points += course.final_grade_points
+                self.potential_max_grade_points += course.final_grade_points
+                self.potential_hours_counted += course.hours
+            elif course.total_worth_used != 0:
+                self.potential_min_grade_points += course.course_min_grade_points
+                self.potential_grade_points += course.course_grade_points
+                self.potential_max_grade_points += course.course_max_grade_points
+                self.potential_hours_counted += course.hours
         ### Calculate current semester's gpa'sif semester.final_grade_points == 0:
         self.final_gpa = 0
         if self.final_grade_points == 0:
@@ -576,17 +577,18 @@ def sanity_check_semesters():
                 semester.hours_passed += course.hours
             if course.final_grade in GPA_GRADES:
                 semester.gpa_hours += course.hours
-            semester.final_grade_points += course.final_grade_points
-            if course.final_grade != '#':
-                semester.potential_min_grade_points += course.final_grade_points
-                semester.potential_grade_points += course.final_grade_points
-                semester.potential_max_grade_points += course.final_grade_points
-                semester.potential_hours_counted += course.hours
-            elif course.total_worth_used != 0:
-                semester.potential_min_grade_points += course.course_min_grade_points
-                semester.potential_grade_points += course.course_grade_points
-                semester.potential_max_grade_points += course.course_max_grade_points
-                semester.potential_hours_counted += course.hours
+            if course.hours != 0:
+                semester.final_grade_points += course.final_grade_points
+                if course.final_grade != '#':
+                    semester.potential_min_grade_points += course.final_grade_points
+                    semester.potential_grade_points += course.final_grade_points
+                    semester.potential_max_grade_points += course.final_grade_points
+                    semester.potential_hours_counted += course.hours
+                elif course.total_worth_used != 0:
+                    semester.potential_min_grade_points += course.course_min_grade_points
+                    semester.potential_grade_points += course.course_grade_points
+                    semester.potential_max_grade_points += course.course_max_grade_points
+                    semester.potential_hours_counted += course.hours
         ### Calculate semester's gpa's
         if semester.final_grade_points == 0:
             semester.final_gpa = 0
