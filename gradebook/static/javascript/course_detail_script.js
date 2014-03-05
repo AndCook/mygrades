@@ -1,5 +1,9 @@
 $(document).ready(function() {
     var report_final_grade_dialog = $('#report_final_grade_dialog_box');
+    var final_grade_dropdown = $('#final_grade_dropdown');
+    var grades = ['#', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+',
+        'C', 'C-', 'D+', 'D', 'D-', 'F', 'CR', 'NC', 'P', 'FL', 'W'];
+    final_grade_dropdown.jqxDropDownList({ source: grades, selectedIndex: 0, width: '50', height: '25'});
     $('#report_final_grade').button().click(function() {
         report_final_grade_dialog.dialog('open');
     });
@@ -14,7 +18,8 @@ $(document).ready(function() {
                 click: function() {
 
                     var course_id = $('.course_name').attr('id').split('_').pop();
-                    var final_grade = $('#report_final_grade_form').find('#id_final_grade').val();
+                    var final_grade = final_grade_dropdown.val();
+                    console.log(final_grade);
 
                     $.ajax({
                         type:"POST",

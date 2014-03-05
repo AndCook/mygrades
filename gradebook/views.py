@@ -195,7 +195,7 @@ def course_detail(request, course_id):
         if post_action == 'report_final_grade':
             course = Course.objects.get(id=course_id)
 
-            course.change_final_grade(request.POST['final_grade'])  # save included
+            course.set_final_grade(request.POST['final_grade'])  # save included
 
             return HttpResponse(json.dumps({}), mimetype='application/json')
         if post_action == 'add_category':

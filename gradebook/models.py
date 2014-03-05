@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django import forms
 import datetime
 
 
@@ -112,6 +111,7 @@ class Semester(models.Model):
     def __unicode__(self):
         return self.name
 
+### When editing these, also edit dropdownlist final_grade_dropdown in course_detail_script.js
 NONE_YET = '#'
 GRADE_CHOICES = (
     (NONE_YET, 'None Yet'),
@@ -213,7 +213,7 @@ class Course(models.Model):
     instructor = models.CharField(max_length=200)
     semester = models.ForeignKey(Semester)
 
-    hours = models.IntegerField(default=3)
+    hours = models.IntegerField(default=0)
 
     final_grade = models.CharField(max_length=2,
                                    choices=GRADE_CHOICES,

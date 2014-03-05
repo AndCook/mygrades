@@ -3,10 +3,14 @@ $(document).ready(function() {
     var semester_id;
     ////////////////////// adding courses //////////////////////
     var add_course_dialog = $('#add_course_dialog_box');
+    var add_course_name = $('#add_course_name');
+    var add_course_number = $('#add_course_number');
+    var add_course_instructor = $('#add_course_instructor');
+    var add_course_hours = $('#add_course_hours');
+    add_course_hours.jqxDropDownList({ source: [7,6,5,4,3,2,1,0], selectedIndex: 4, width: '50', height: '25'});
     semwrap.on('click', '.add_course', function() {
         semester_id = $(this).closest('.large_semester_square').attr('id').split("_").pop();
         add_course_dialog.dialog('open');
-        $('#id_hours').val(3);
     });
 	add_course_dialog.dialog({
 		autoOpen: false,
@@ -17,18 +21,11 @@ $(document).ready(function() {
 			'Add Course': {
                 text: 'Add Course',
                 click: function() {
-                    var form = $('#add_course_form');
-                    var course_name = form.find('#id_name').val();
-                    var course_number = form.find('#id_number').val();
-                    var course_instructor = form.find('#id_instructor').val();
-                    var course_hours = form.find('#id_hours').val();
-
-                    if (course_name === '') {
-                        var val = form.find('.validation_tips');
-                        val.css('display', 'block');
-                        val.text('Course name is required - try again');
-                        return;
-                    }
+                    var course_name = add_course_name.val();
+                    var course_number = add_course_number.val();
+                    var course_instructor = add_course_instructor.val();
+                    var course_hours = add_course_hours.val();
+                    console.log(course_hours);
 
                     if (course_number === '')
                         course_number = ' ';
@@ -49,7 +46,6 @@ $(document).ready(function() {
                         },
                         success: function(data) {
                             add_course_dialog.dialog('close');
-                            clear_course_form_contents();
                             var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
                             var small_square = $('#semester_' + semester_id + '.semester_square');
                             small_square.html(data_inside);
@@ -69,15 +65,13 @@ $(document).ready(function() {
 		  	}
         },
         close: function() {
-            clear_course_form_contents();
+            // clear course form contents
+            add_course_name.val('');
+            add_course_number.val('');
+            add_course_instructor.val('');
+            add_course_hours.val(3);
         }
 	});
-    function clear_course_form_contents() {
-        var form = $('#add_course_form');
-        form.find('#id_name').val('');
-        form.find('#id_number').val('');
-        form.find('#id_instructor').val('');
-    }
     function resize_course_table_columns() {
         var big_square = $('.large_semester_square');
         big_square.find('.course_number').css('width', '13%');
@@ -90,6 +84,11 @@ $(document).ready(function() {
     }
     ////////////////////// editing courses //////////////////////
     var edit_course_dialog = $('#edit_course_dialog_box');
+    var edit_course_name = $('#edit_course_name');
+    var edit_course_number = $('#edit_course_number');
+    var edit_course_instructor = $('#edit_course_instructor');
+    var edit_course_hours = $('#edit_course_hours');
+    edit_course_hours.jqxDropDownList({ source: [7,6,5,4,3,2,1,0], selectedIndex: 4, width: '50', height: '25'});
     var course_id = -1;
     semwrap.on('click', '.course_edit', function() {
         semester_id = $(this).closest('.large_semester_square').attr('id').split("_").pop();
@@ -101,14 +100,10 @@ $(document).ready(function() {
         var course_instructor = course_tr.find('.course_instructor').text().trim();
         var course_hours = course_tr.find('.course_hours').text().trim().substr(0,1);
 
-        edit_course_dialog.find('#id_name').val(course_name);
-        edit_course_dialog.find('#id_number').val(course_number);
-        edit_course_dialog.find('#id_instructor').val(course_instructor);
-        edit_course_dialog.find('#id_hours').val(course_hours);
-
-        edit_course_dialog.find('#id_name').css('color', '#222222');
-        edit_course_dialog.find('#id_number').css('color', '#222222');
-        edit_course_dialog.find('#id_instructor').css('color', '#222222');
+        edit_course_name.val(course_name);
+        edit_course_number.val(course_number);
+        edit_course_instructor.val(course_instructor);
+        edit_course_hours.val(course_hours);
 
         edit_course_dialog.find('a').attr('href', '/gradebook/course_detail/' + course_id + '/');
 
@@ -123,18 +118,10 @@ $(document).ready(function() {
 			'Edit Course': {
                 text: 'Save',
                 click: function() {
-                    var form = $('#edit_course_form');
-                    var course_name = form.find('#id_name').val();
-                    var course_number = form.find('#id_number').val();
-                    var course_instructor = form.find('#id_instructor').val();
-                    var course_hours = form.find('#id_hours').val();
-
-                    if (course_name === '') {
-                        var val = form.find('.validation_tips');
-                        val.css('display', 'block');
-                        val.text('Course name is required - try again');
-                        return;
-                    }
+                    var course_name = edit_course_name.val();
+                    var course_number = edit_course_number.val();
+                    var course_instructor = edit_course_instructor.val();
+                    var course_hours = edit_course_hours.val();
 
                     if (course_number === '')
                         course_number = ' ';
@@ -155,7 +142,6 @@ $(document).ready(function() {
                         },
                         success: function(data) {
                             edit_course_dialog.dialog('close');
-                            clear_course_form_contents();
                             var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
                             var small_square = $('#semester_' + semester_id + '.semester_square');
                             small_square.html(data_inside);
@@ -174,9 +160,7 @@ $(document).ready(function() {
 	  			edit_course_dialog.dialog('close');
 		  	}
         },
-        close: function() {
-            clear_course_form_contents();
-        }
+        close: function() {/* No need to clear course form contents because they are filled when dialog opens */ }
 	});
     ////////////////////// deleting courses //////////////////////
     var delete_course_dialog = $('#delete_course_dialog_box');
@@ -184,6 +168,8 @@ $(document).ready(function() {
         semester_id = $(this).closest('.large_semester_square').attr('id').split("_").pop();
         var course_tr = $(this).closest('.course_table_row');
         course_id = course_tr.attr('id').split('_').pop();
+        var course_name = course_tr.find('.course_name').text().trim();
+        delete_course_dialog.find('#course_name').text(course_name);
         delete_course_dialog.dialog('open');
     });
 	delete_course_dialog.dialog({

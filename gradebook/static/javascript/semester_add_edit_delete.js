@@ -142,8 +142,7 @@ $(document).ready(function() {
     semwrap.on('click', '.s_s_rename', function() {
         semester_id = $(this).closest('.large_semester_square').attr('id').split("_").pop();
         var semester_name = $(this).closest('.s_s_name_div').find('.s_s_name').text().trim();
-        rename_semester_dialog.find('#id_name').val(semester_name);
-        rename_semester_dialog.find('#id_name').css('color', '#222222');
+        rename_semester_dialog.find('#rename_semester_name').val(semester_name);
         rename_semester_dialog.dialog('open');
     });
 	rename_semester_dialog.dialog({
@@ -195,6 +194,8 @@ $(document).ready(function() {
     var delete_semester_dialog = $('#delete_semester_dialog_box');
     semwrap.on('click', '.s_s_delete', function() {
         semester_id = $(this).closest('.large_semester_square').attr('id').split("_").pop();
+        var semester_name = $(this).closest('.s_s_name_div').find('.s_s_name').text().trim();
+        delete_semester_dialog.find('#semester_name').text(semester_name);
         delete_semester_dialog.dialog('open');
     });
     delete_semester_dialog.dialog({
@@ -276,6 +277,8 @@ $(document).ready(function() {
     var change_dates_dialog = $('#change_dates_dialog_box');
     semwrap.on('click', '.s_s_change_dates', function() {
         semester_id = $(this).closest('.large_semester_square').attr('id').split("_").pop();
+        var semester_name = $(this).closest('.large_semester_square').find('.s_s_name').text().trim();
+        change_dates_dialog.find('#semester_name').text(semester_name);
         var dates = $(this).closest('.large_semester_square').find('.s_s_dates').text();
         var start_date = dates.substring(0, dates.indexOf(' to ')).trim();
         var end_date = dates.substring(dates.indexOf(' to ') + 4).trim();

@@ -24,7 +24,7 @@
     white-space: normal;
     font-size: 1em; }
 
-form p, form label {
+form p, form label, .dialog_p {
   width: 80%;
   margin: 10px auto;
   overflow: visible;
