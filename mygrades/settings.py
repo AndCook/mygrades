@@ -2,30 +2,20 @@
 # Django settings for mygrades project.
 
 import os.path
+import secret
 
 BASE_PATH = os.path.dirname(__file__)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-SERVER_EMAIL = 'alexredna@gmail.com'
+SERVER_EMAIL = secret.SERVER_EMAIL
 
-ADMINS = (
-    (u'Nicholas Walther', 'alexredna@gmail.com'),
-)
+ADMINS = secret.ADMINS
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test_database',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
-}
+DATABASES = secret.DATABASES
 
 CACHES = {
     'default': {
@@ -82,7 +72,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'x-wtq@2^uv2^hj!*@y(h2a1)(itc-+npq+34%q%6w1cn-$kw^b'
+SECRET_KEY = secret.SECRET_KEY
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -144,8 +134,8 @@ FORCE_SCRIPT_NAME = ''
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = "587"
-EMAIL_HOST_USER = 'mygrades.emailhost@gmail.com'
-EMAIL_HOST_PASSWORD = 'djangoeurope'
+EMAIL_HOST_USER = secret.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = secret.EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 

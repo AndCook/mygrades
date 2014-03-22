@@ -1,14 +1,4 @@
 # ignore .idea directory
 /.idea
 
-# ignore all compiled python files
-#*.pyc
-
-# ignore these files used by server
-# manage.py
-# RUN
-
-# these files are used for testing on local machine
-# test_database
-# this file should be manually updated when necessary
-# mygrades/settings.py
+secret.py

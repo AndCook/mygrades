@@ -12,9 +12,9 @@
         var charts_list_combo_box = $('#charts_list_combo_box');
         var chart_div = $('#chart_div');
 
-        charts_list_combo_box.jqxComboBox({
-            selectedIndex: 0,
+        charts_list_combo_box.jqxDropDownList({
             source: list_of_charts,
+            selectedIndex: 0,
             width: 250,
             height: 25
         });
@@ -46,7 +46,7 @@
 ////////////////////// Cumulative GPA over Time //////////////////////
         var cumulative_gpa_data = [
             {% for semester in semesters %}
-                {% if semester.cumulative_gpa != -1.0 %}
+                {% if semester.gpa_hours != 0 and semester.is_finished %}
                     { 'Semester': '{{ semester.name }}', 'GPA': {{ semester.cumulative_gpa }} },
                 {% endif %}
             {% endfor %}
@@ -211,8 +211,11 @@
                 for (i = 0; i < grades.length; i++)
                     hours_count.push(0);
                 {% for course in semester.courses %}
+                    console.log({{ course.final_grade }});
                     hours_count[grades.indexOf('{{ course.final_grade }}')] += {{ course.hours }};
                 {% endfor %}
+
+                console.log(hours_count);
 
                 var dict = {Semester: '{{ semester.name }}'};
                 for (i = 0; i < grades.length; i++) {
@@ -258,7 +261,7 @@
 ////////////////////// GPA per Semester //////////////////////
         var gpa_per_semester_data = [
             {% for semester in semesters %}
-                {% if semester.is_finished and semester.final_gpa != -1.0 %}
+                {% if semester.gpa_hours != 0 and semester.is_finished%}
                     {Semester: '{{ semester.name }}', GPA: {{semester.final_gpa}}},
                 {% endif %}
             {% endfor %}
