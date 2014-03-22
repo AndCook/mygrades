@@ -54,7 +54,7 @@ MEDIA_URL = '/media/'
 
 # The absolute path to the directory where collectstatic will collect static files for deployment.
 # Example: "/home/example.com/static/"
-STATIC_ROOT = BASE_PATH + '/staticFiles/'
+STATIC_ROOT = secret.STATIC_ROOT
 
 # URL to use when referring to static files located in STATIC_ROOT.
 # Examples: "/static/", "http://static.example.com/"
