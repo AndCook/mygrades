@@ -24,7 +24,7 @@
     <div id='semester_squares_wrapper'>
 
         {% for semester in semesters %}
-            {% include 'semester_square.html' with semester=semester %}
+            {% include 'semester_square.html' %}
         {% endfor %}
 
         <div id='add_semester_button'>
@@ -36,9 +36,9 @@
     </div> <!-- end semester_squares_wrapper -->
 
     {% if semesters %}
-        {% include 'overview_charts.html' with semesters=semesters %}
+        {% include 'overview_charts.html' %}
     {% endif %}
 
-    {% include 'course_semester_add_edit_delete_dialogs.html' with semesters=semesters %}
+    {% include 'course_semester_add_edit_delete_dialogs.html' %}
 
 {%  endblock %}

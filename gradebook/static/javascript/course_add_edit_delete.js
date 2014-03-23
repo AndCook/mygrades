@@ -8,6 +8,16 @@ $(document).ready(function() {
     var add_course_instructor = $('#add_course_instructor');
     var add_course_hours = $('#add_course_hours');
     add_course_hours.jqxDropDownList({ source: [7,6,5,4,3,2,1,0], selectedIndex: 4, width: '50', height: '25'});
+    var add_course_form = $('#add_course_form');
+    var add_course_form_is_validated = false;
+    add_course_form.jqxValidator({
+        focus: false,
+        rules: [
+            { input: add_course_name, message: 'Name is required', action: 'keyup, blur', rule: 'required' }
+        ],
+        onError: function() {add_course_form_is_validated = false;},
+        onSuccess: function() {add_course_form_is_validated = true;}
+    });
     semwrap.on('click', '.add_course', function() {
         semester_id = $(this).closest('.large_semester_square').attr('id').split("_").pop();
         add_course_dialog.dialog('open');
@@ -21,11 +31,14 @@ $(document).ready(function() {
 			'Add Course': {
                 text: 'Add Course',
                 click: function() {
+                    add_course_form.jqxValidator('validate');
+                    if (!add_course_form_is_validated)
+                        return;
+
                     var course_name = add_course_name.val();
                     var course_number = add_course_number.val();
                     var course_instructor = add_course_instructor.val();
                     var course_hours = add_course_hours.val();
-                    console.log(course_hours);
 
                     if (course_number === '')
                         course_number = ' ';
@@ -70,6 +83,8 @@ $(document).ready(function() {
             add_course_number.val('');
             add_course_instructor.val('');
             add_course_hours.val(3);
+            // clear any visible validators
+            add_course_form.jqxValidator('hide');
         }
 	});
     function resize_course_table_columns() {
@@ -89,6 +104,16 @@ $(document).ready(function() {
     var edit_course_instructor = $('#edit_course_instructor');
     var edit_course_hours = $('#edit_course_hours');
     edit_course_hours.jqxDropDownList({ source: [7,6,5,4,3,2,1,0], selectedIndex: 4, width: '50', height: '25'});
+    var edit_course_form = $('#edit_course_form');
+    var edit_course_form_is_validated = false;
+    edit_course_form.jqxValidator({
+        focus: false,
+        rules: [
+            { input: edit_course_name, message: 'Name is required', action: 'keyup, blur', rule: 'required' }
+        ],
+        onError: function() {edit_course_form_is_validated = false;},
+        onSuccess: function() {edit_course_form_is_validated = true;}
+    });
     var course_id = -1;
     semwrap.on('click', '.course_edit', function() {
         semester_id = $(this).closest('.large_semester_square').attr('id').split("_").pop();
@@ -118,6 +143,10 @@ $(document).ready(function() {
 			'Edit Course': {
                 text: 'Save',
                 click: function() {
+                    edit_course_form.jqxValidator('validate');
+                    if (!edit_course_form_is_validated)
+                        return;
+
                     var course_name = edit_course_name.val();
                     var course_number = edit_course_number.val();
                     var course_instructor = edit_course_instructor.val();

@@ -35,7 +35,11 @@
             {% cycle rowcolors %}
             <tr class='assignments_table_row {{ rowcolors }}' id='assignments_table_last_row'>
                 <td colspan='6'>
-                    <p class='mini_link' id='add_assignment_button'>+ add assignment</p>
+                    {% if course.category_set.count > 0 %}
+                        <p class='mini_link' id='add_assignment_button'>+ add assignment</p>
+                    {% else %}
+                        Add a category before adding an assignment.
+                    {% endif %}
                 </td>
             </tr>
         </tbody>

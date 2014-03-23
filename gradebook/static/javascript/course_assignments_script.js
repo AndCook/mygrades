@@ -25,21 +25,21 @@ $(document).ready(function() {
     add_assignment_form.jqxValidator({
         focus: false,
         rules: [
-            { input: add_name_input, message: 'Name is required', action: 'keyup', rule: 'required' },
-            { input: add_points_earned_input, message: 'Points earned must be a number', action: 'keyup', rule: 'number' },
+            { input: add_name_input, message: 'Name is required', action: 'keyup, blur', rule: 'required' },
+            { input: add_points_earned_input, message: 'Points earned must be a number', action: 'keyup, blur', rule: 'number' },
             {
                 input: add_points_earned_input,  message: 'Points earned or grade unknown is required',
-                action: 'blur', rule: function (input) {
+                action: 'keyup, blur', rule: function (input) {
                     var grade_unknown = add_grade_unknown_button.val();
                     var points_entered = input.val().length > 0;
                     return xor(grade_unknown, points_entered);
                 }
             },
-            { input: add_total_points_input, message: 'Total points is required', action: 'keyup', rule: 'required' },
-            { input: add_total_points_input, message: 'Total points must be a number', action: 'keyup', rule: 'number' },
+            { input: add_total_points_input, message: 'Total points is required', action: 'keyup, blur', rule: 'required' },
+            { input: add_total_points_input, message: 'Total points must be a number', action: 'keyup, blur', rule: 'number' },
             {
                 input: add_total_points_input, message: 'Total points can\'t be negative',
-                action: 'blur', rule: function(input) {
+                action: 'keyup, blur', rule: function(input) {
                    return input.val().length === 0 || parseFloat(input.val()) >= 0;
                 }
             }
@@ -85,7 +85,6 @@ $(document).ready(function() {
                         },
                         success: function(data) {
                             add_assignment_dialog.dialog('close');
-                            clear_add_assignment_form_contents();
                             var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
                             categories_assignments_wrapper.html(data_inside);
                         }
@@ -97,16 +96,15 @@ $(document).ready(function() {
 		  	}
         },
         close: function() {
-            clear_add_assignment_form_contents();
+            // clear assignment form contents
+            add_name_input.val('');
+            add_grade_unknown_button.val(false);
+            add_points_earned_input.val('');
+            add_total_points_input.val('');
+            // clear any visible validators
             add_assignment_form.jqxValidator('hide');
         }
 	});
-    function clear_add_assignment_form_contents() {
-        add_name_input.val('');
-        add_grade_unknown_button.val(false);
-        add_points_earned_input.val('');
-        add_total_points_input.val('');
-    }
     ////////////////////// editing assignments //////////////////////
     var edit_assignment_dialog = $('#edit_assignment_dialog_box');
     var edit_assignment_form = $('#edit_assignment_form');
@@ -129,21 +127,21 @@ $(document).ready(function() {
     edit_assignment_form.jqxValidator({
         focus: false,
         rules: [
-            { input: edit_name_input, message: 'Name is required', action: 'keyup', rule: 'required' },
-            { input: edit_points_earned_input, message: 'Points earned must be a number', action: 'keyup', rule: 'number' },
+            { input: edit_name_input, message: 'Name is required', action: 'keyup, blur', rule: 'required' },
+            { input: edit_points_earned_input, message: 'Points earned must be a number', action: 'keyup, blur', rule: 'number' },
             {
                 input: edit_points_earned_input, message: 'Points earned or grade unknown is required',
-                action: 'blur', rule: function (input) {
+                action: 'keyup, blur', rule: function (input) {
                     var grade_unknown = edit_grade_unknown_button.val();
                     var points_entered = input.val().length > 0;
                     return xor(grade_unknown, points_entered);
                 }
             },
-            { input: edit_total_points_input, message: 'Total points is required', action: 'keyup', rule: 'required' },
-            { input: edit_total_points_input, message: 'Total points must be a number', action: 'keyup', rule: 'number' },
+            { input: edit_total_points_input, message: 'Total points is required', action: 'keyup, blur', rule: 'required' },
+            { input: edit_total_points_input, message: 'Total points must be a number', action: 'keyup, blur', rule: 'number' },
             {
                 input: edit_total_points_input, message: 'Total points can\'t be negative',
-                action: 'blur', rule: function(input) {
+                action: 'keyup, blur', rule: function(input) {
                    return input.val().length === 0 || parseFloat(input.val()) >= 0;
                 }
             }
@@ -227,6 +225,8 @@ $(document).ready(function() {
     categories_assignments_wrapper.on('click', '#delete_assignment_button', function() {
         var assignments_table_row = $(this).closest('.assignments_table_row');
         assignment_id = assignments_table_row.attr('id').split('_').pop();
+        var assignment_name = assignments_table_row.find('#assignment_name').text().trim();
+        delete_assignment_dialog.find('#assignment_name').text(assignment_name);
         delete_assignment_dialog.dialog('open');
     });
 	delete_assignment_dialog.dialog({

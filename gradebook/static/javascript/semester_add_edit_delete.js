@@ -111,7 +111,6 @@ $(document).ready(function() {
                         },
                         success: function(data) {
                             add_semester_dialog.dialog('close');
-                            reset_add_semester_form();
                             $('#add_semester_button').before(data);
                         }
                     });
@@ -122,22 +121,33 @@ $(document).ready(function() {
 		  	}
         },
         close: function() {
-            reset_add_semester_form();
+            // clear course form contents
+            add_semester_name.val('');
+            add_semester_start_date_button.val(getDateFormatted());
+            add_semester_start_date_button.datepicker('option', 'buttonText', getDateFormatted());
+            add_semester_start_date_button.datepicker('option', 'minDate', '-6Y');
+            add_semester_start_date_button.datepicker('option', 'maxDate', '+6Y');
+            add_semester_end_date_button.val(getDateFormatted());
+            add_semester_end_date_button.datepicker('option', 'buttonText', getDateFormatted());
+            add_semester_end_date_button.datepicker('option', 'minDate', '-6Y');
+            add_semester_end_date_button.datepicker('option', 'maxDate', '+6Y');
+            // clear any visible validators
+            add_semester_form.jqxValidator('hide');
         }
 	});
-    function reset_add_semester_form() {
-        add_semester_name.val('');
-        add_semester_start_date_button.val(getDateFormatted());
-        add_semester_start_date_button.datepicker('option', 'buttonText', getDateFormatted());
-        add_semester_start_date_button.datepicker('option', 'minDate', '-6Y');
-        add_semester_start_date_button.datepicker('option', 'maxDate', '+6Y');
-        add_semester_end_date_button.val(getDateFormatted());
-        add_semester_end_date_button.datepicker('option', 'buttonText', getDateFormatted());
-        add_semester_end_date_button.datepicker('option', 'minDate', '-6Y');
-        add_semester_end_date_button.datepicker('option', 'maxDate', '+6Y');
-    }
     ////////////////////// renaming semesters //////////////////////
     var rename_semester_dialog = $('#rename_semester_dialog_box');
+    var rename_semester_form = $('#rename_semester_form');
+    var rename_semester_name = $('#rename_semester_name');
+    var rename_semester_form_is_validated = false;
+    rename_semester_form.jqxValidator({
+        focus: false,
+        rules: [
+            { input: rename_semester_name, message: 'Name is required', action: 'keyup, blur', rule: 'required' }
+        ],
+        onError: function() {rename_semester_form_is_validated = false;},
+        onSuccess: function() {rename_semester_form_is_validated = true;}
+    });
     var semester_id;
     semwrap.on('click', '.s_s_rename', function() {
         semester_id = $(this).closest('.large_semester_square').attr('id').split("_").pop();
@@ -154,15 +164,11 @@ $(document).ready(function() {
 			'Rename Semester': {
                 text: 'Save',
                 click: function() {
-                    var form = $('#rename_semester_form');
-                    var new_name = form.find('#id_name').val();
-
-                    if (new_name === '') {
-                        var val = form.find('.validation_tips');
-                        val.css('display', 'block');
-                        val.text('Semester name is required - try again');
+                    rename_semester_form.jqxValidator('validate');
+                    if (!rename_semester_form_is_validated)
                         return;
-                    }
+
+                    var new_name = rename_semester_name.val();
 
                     $.ajax({
                         type:"POST",
@@ -175,7 +181,6 @@ $(document).ready(function() {
                         },
                         success: function() {
                             rename_semester_dialog.dialog('close');
-                            $('#rename_semester_form').find('#id_name').val('');
                             $('#semester_' + semester_id).find('.s_s_name').text(new_name);
                             $('#semester_' + semester_id + '.large_semester_square').find('.s_s_name').text(new_name);
                         }
@@ -187,7 +192,7 @@ $(document).ready(function() {
 		  	}
         },
         close: function() {
-            $('#rename_semester_form').find('#id_name').val('');
+            rename_semester_form.jqxValidator('hide');
         }
 	});
     ////////////////////// deleting semesters //////////////////////

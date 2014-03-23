@@ -6,13 +6,15 @@ $(document).ready(function() {
     ////////////////////// adding categories //////////////////////
     var add_category_dialog = $('#add_category_dialog_box');
     var add_category_form = $('#add_category_form');
+    var add_category_name = add_category_form.find('#name_input');
+    var add_category_worth = add_category_form.find('#worth_input');
     var add_category_form_is_validated = false;
     add_category_form.jqxValidator({
         focus: false,
         rules: [
-            { input: '#add_category_form #name_input', message: 'Name is required', action: 'keyup', rule: 'required' },
-            { input: '#add_category_form #name_input', message: 'Name must be unique',
-                action: 'keyup', rule: function (input) {
+            { input: add_category_name, message: 'Name is required', action: 'keyup, blur', rule: 'required' },
+            { input: add_category_name, message: 'Name must be unique',
+                action: 'keyup, blur', rule: function (input) {
                     if (input.val() === '')
                         return false;
                     var result = false;
@@ -35,18 +37,18 @@ $(document).ready(function() {
                     return result;
                 }
             },
-            { input: '#add_category_form #worth_input', message: 'Worth is required', action: 'keyup, blur', rule: 'required' },
-            { input: '#add_category_form #worth_input', message: 'Worth must be a number', action: 'keyup', rule: 'number' },
+            { input: add_category_worth, message: 'Worth is required', action: 'keyup, blur', rule: 'required' },
+            { input: add_category_worth, message: 'Worth must be a number', action: 'keyup, blur', rule: 'number' },
             {
-                input: '#add_category_form #worth_input', message: 'Worth must be between 0 and 100',
-                    action: 'keyup', rule: function (input) {
+                input: add_category_worth, message: 'Worth must be between 0 and 100',
+                    action: 'keyup, blur', rule: function (input) {
                         input = parseFloat(input.val());
                         return input >= 0  && input <= 100;
                     }
             },
             {
-                input: '#add_category_form #worth_input', message: 'Worth is too large',
-                    action: 'keyup', rule: function (input) {
+                input: add_category_worth, message: 'Worth is too large',
+                    action: 'keyup, blur', rule: function (input) {
                         if (input.val() === '')
                             return false;
                         var result = false;
@@ -87,8 +89,8 @@ $(document).ready(function() {
                     add_category_form.jqxValidator('validate');
                     if (!add_category_form_is_validated)
                         return;
-                    var category_name = add_category_form.find('#name_input').val();
-                    var category_worth = add_category_form.find('#worth_input').val();
+                    var category_name = add_category_name.val();
+                    var category_worth = add_category_worth.val();
                     var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
                     var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
                     $.ajax({
@@ -102,7 +104,6 @@ $(document).ready(function() {
                         },
                         success: function(data) {
                             add_category_dialog.dialog('close');
-                            clear_add_category_form_contents();
                             var data_inside = data.substring(data.indexOf('>') + 1, data.lastIndexOf('<'));
                             categories_assignments_wrapper.html(data_inside);
 
@@ -129,24 +130,25 @@ $(document).ready(function() {
 		  	}
         },
         close: function() {
-            clear_add_category_form_contents();
+            // clear category form contents
+            add_category_name.val('');
+            add_category_worth.val('');
+            // clear any visible validators
             add_category_form.jqxValidator('hide');
         }
 	});
-    function clear_add_category_form_contents() {
-        add_category_form.find('#name_input').val('');
-        add_category_form.find('#worth_input').val('');
-    }
     ////////////////////// editing categories //////////////////////
     var edit_category_dialog = $('#edit_category_dialog_box');
     var edit_category_form = $('#edit_category_form');
+    var edit_category_name = edit_category_form.find('#name_input');
+    var edit_category_worth = edit_category_form.find('#worth_input');
     var edit_category_form_is_validated = false;
     edit_category_form.jqxValidator({
         focus: false,
         rules: [
-            { input: '#edit_category_form #name_input', message: 'Name is required', action: 'keyup, blur', rule: 'required' },
-            { input: '#edit_category_form #name_input', message: 'Name must be unique',
-                action: 'keyup', rule: function (input) {
+            { input: edit_category_name, message: 'Name is required', action: 'keyup, blur', rule: 'required' },
+            { input: edit_category_name, message: 'Name must be unique',
+                action: 'keyup, blur', rule: function (input) {
                     if (input.val() === '')
                         return false;
                     var result = false;
@@ -169,18 +171,18 @@ $(document).ready(function() {
                     return result || original_category_name === input.val();
                 }
             },
-            { input: '#edit_category_form #worth_input', message: 'Worth is required', action: 'keyup, blur', rule: 'required' },
-            { input: '#edit_category_form #worth_input', message: 'Worth must be a number', action: 'keyup', rule: 'number' },
+            { input: edit_category_worth, message: 'Worth is required', action: 'keyup, blur', rule: 'required' },
+            { input: edit_category_worth, message: 'Worth must be a number', action: 'keyup, blur', rule: 'number' },
             {
                 input: '#edit_category_form #worth_input', message: 'Worth must be between 0 and 100',
-                    action: 'keyup', rule: function (input) {
+                    action: 'keyup, blur', rule: function (input) {
                         input = parseFloat(input.val());
                         return input >= 0  && input <= 100;
                     }
             },
             {
-                input: '#edit_category_form #worth_input', message: 'Worth is too large',
-                    action: 'keyup', rule: function (input) {
+                input: edit_category_worth, message: 'Worth is too large',
+                    action: 'keyup, blur', rule: function (input) {
                         if (input.val() === '')
                             return false;
                         var result = false;
@@ -214,9 +216,9 @@ $(document).ready(function() {
         var categories_table_row = $(this).closest('.categories_table_row');
         category_id = categories_table_row.attr('id').split('_').pop();
         original_category_name = categories_table_row.find('#category_name').text().trim();
-        edit_category_form.find('#name_input').val(original_category_name);
+        edit_category_name.val(original_category_name);
         original_category_worth = categories_table_row.find('#category_worth').text().split(' ')[0];
-        edit_category_form.find('#worth_input').val(original_category_worth);
+        edit_category_worth.val(original_category_worth);
         edit_category_dialog.dialog('open');
     });
 	edit_category_dialog.dialog({
@@ -231,8 +233,8 @@ $(document).ready(function() {
                     edit_category_form.jqxValidator('validate');
                     if (!edit_category_form_is_validated)
                         return;
-                    var category_name = edit_category_form.find('#name_input').val();
-                    var category_worth = edit_category_form.find('#worth_input').val();
+                    var category_name = edit_category_name.val();
+                    var category_worth = edit_category_worth.val();
                     var backslash_index = window.location.href.lastIndexOf('/', window.location.href.length-2);
                     var id = window.location.href.substring(backslash_index + 1, window.location.href.length-1);
                     $.ajax({
@@ -269,6 +271,8 @@ $(document).ready(function() {
     categories_assignments_wrapper.on('click', '#delete_category_button', function() {
         var categories_table_row = $(this).closest('.categories_table_row');
         category_id = categories_table_row.attr('id').split('_').pop();
+        var category_name = categories_table_row.find('#category_name').text().trim();
+        delete_category_dialog.find('#category_name').text(category_name);
         delete_category_dialog.dialog('open');
     });
 	delete_category_dialog.dialog({
