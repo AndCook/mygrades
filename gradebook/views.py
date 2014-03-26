@@ -18,7 +18,7 @@ def overview(request):
         return HttpResponseRedirect('/account/settings/')
 
     if request.method == 'GET':
-        sanity_check_all()
+        # sanity_check_all()
 
         semesters = request.user.semester_set
         semesters = semesters.order_by('start_date')

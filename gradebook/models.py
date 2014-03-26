@@ -458,13 +458,16 @@ class Assignment(models.Model):
         print '1.5'
 
     def change_category(self, category):
-        ### Remove current assignment from category
-        self.category.remove_assignment(assignment=self)
-        ### Change data
+        grade_unknown = self.grade_unknown
+        points_earned = self.points_earned
+        total_points = self.total_points
+
+        self.set_points(True, 0, 0)
+        ### Now that total_points is 0, this assignment has no effect on the category it is contained in
+        ### So the category can be safely changed and the current data added back
         self.category = category
-        ### Add current assignment back to category
-        self.category.add_assignment(assignment=self)
-        ### Save current assignment and return
+        self.set_points(grade_unknown, points_earned, total_points)
+
         self.save()
 
     def __unicode__(self):
