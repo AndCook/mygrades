@@ -34,6 +34,7 @@
                 button.css('display', 'none');
         });
         tree.jqxTree({ width: 250, height: 220 });
+        tree.css('display', 'inline-block');
     });
 </script>
 
@@ -41,7 +42,7 @@
     <p id='course_selector_label'>Change<br>course: </p>
 
     <div id='course_selector_drop_down_button'>
-        <div style="border: none;" id='course_selector_tree'>
+        <div style='border: none; display: none;' id='course_selector_tree'>
             <ul>
                 <li item-expanded='true'>
                     <div class='course_selector_tree_item'>{{ course.semester.name }}</div>

@@ -62,6 +62,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     BASE_PATH + '/static/',
+    BASE_PATH + '../mygrades/static/',
     BASE_PATH + '../gradebook/static/',
     BASE_PATH + '../account/static/',
 )

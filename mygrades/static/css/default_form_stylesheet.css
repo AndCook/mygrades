@@ -95,3 +95,6 @@ fieldset {
   border-top: 1px #aaaaaa solid;
   width: 98%;
   margin: 0 auto; }
+
+.hidden_on_page_load {
+  display: none; }

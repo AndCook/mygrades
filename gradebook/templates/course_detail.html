@@ -23,7 +23,7 @@
         {% include 'course_selector.html' %}
     {% endif %}
 
-    <div id='report_final_grade_dialog_box' title='Report Final Grade'>
+    <div id='report_final_grade_dialog_box' title='Report Final Grade' class='hidden_on_page_load'>
         <form id='report_final_grade_form'>
             <h2 class='form_title'>Report Final Grade</h2>
             <p>Choose your final grade. If you don't see what you want here, then too bad.</p>
@@ -33,7 +33,7 @@
 
     {% include 'course_categories_assignments.html' %}
 
-    <div id='add_category_dialog_box'>
+    <div id='add_category_dialog_box' class='hidden_on_page_load'>
         <form id='add_category_form'>
 
             <h2 class='form_title'>Add Category</h2>
@@ -46,7 +46,7 @@
         </form>
     </div>
 
-    <div id='edit_category_dialog_box'>
+    <div id='edit_category_dialog_box' class='hidden_on_page_load'>
         <form id='edit_category_form'>
 
             <h2 class='form_title'>Edit Category</h2>
@@ -59,7 +59,7 @@
         </form>
     </div>
 
-    <div id='delete_category_dialog_box' title='Delete Category'>
+    <div id='delete_category_dialog_box' title='Delete Category' class='hidden_on_page_load'>
         <h2 class='form_title'>Delete Category</h2>
         <p class='dialog_p'>
             Are you sure you want to delete this category:
@@ -70,7 +70,7 @@
         </p>
     </div>
 
-    <div id='add_assignment_dialog_box'>
+    <div id='add_assignment_dialog_box' class='hidden_on_page_load'>
         <form id='add_assignment_form'>
 
             <h2 class='form_title'>Add Assignment</h2>
@@ -92,7 +92,7 @@
         </form>
     </div>
 
-    <div id='edit_assignment_dialog_box'>
+    <div id='edit_assignment_dialog_box' class='hidden_on_page_load'>
         <form id='edit_assignment_form'>
 
             <h2 class='form_title'>Edit Assignment</h2>
@@ -114,7 +114,7 @@
         </form>
     </div>
 
-    <div id='delete_assignment_dialog_box' title='Delete Assignment'>
+    <div id='delete_assignment_dialog_box' title='Delete Assignment' class='hidden_on_page_load'>
         <h2 class='form_title'>Delete Assignment</h2>
         <p class='dialog_p'>
             Are you sure you want to delete this assignment:
