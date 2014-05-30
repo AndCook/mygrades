@@ -5,8 +5,10 @@ from django.http import HttpResponse
 import json
 from django.core.mail import EmailMessage
 from mygrades.settings import EMAIL_HOST_USER
+from minidetector import detect_mobile
 
 
+@detect_mobile
 def home(request):
     if request.mobile:
         template = 'm_home.html'
