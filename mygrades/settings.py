@@ -90,7 +90,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'mobi.middleware.MobileDetectionMiddleware'
+    #'mobi.middleware.MobileDetectionMiddleware',
+    'mobi.middleware.MobileRedirectMiddleware'
     # 'minidetector.Middleware'
 )
 
