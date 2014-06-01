@@ -4,4 +4,8 @@
 
     <h1>Hello, desktop user.</h1>
 
+    {% if request.mobile %}
+        <p> Or maybe mobile ... idk</p>
+    {% endif %}
+
 {% endblock %}
